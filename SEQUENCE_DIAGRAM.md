@@ -2,7 +2,7 @@
 
 ## SEQUENCE DIAGRAM 
 
-### 유저 대기열 토큰 발급
+### 멤버 대기열 토큰 발급
 ![콘서트 대기열의 복사본 drawio](https://github.com/user-attachments/assets/b20aded9-2670-4ee7-a5cc-ade3baec8a01)
 
 ### 예약 가능 날짜 / 좌석 API 
