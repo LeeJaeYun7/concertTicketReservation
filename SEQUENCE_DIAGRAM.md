@@ -3,6 +3,7 @@
 ## SEQUENCE DIAGRAM 
 
 ### 유저 대기열 토큰 발급
+![image](https://github.com/user-attachments/assets/dd22e0e1-e0b2-45bd-a3cf-267505a473a6)
 
 ### 예약 가능 날짜 / 좌석 API 
 
