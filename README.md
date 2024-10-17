@@ -7,7 +7,7 @@
 ### 2. [시퀀스 다이어그램](https://github.com/LeeJaeYun7/concertTicket/blob/master/SEQUENCE_DIAGRAM.md)
 ### 3. [ERD](https://github.com/LeeJaeYun7/concertTicket/blob/master/DB_DIAGRAM.md) 
 ### 4. [API 명세 문서] 
-### 5. [Swagger] 
+### 5. [Swagger](https://github.com/LeeJaeYun7/concertTicket/blob/master/swagger.md) 
 ### 6. [대기열 설계를 위한 조사] 
 ### 7. [대기열 처리를 위한 조사] 
 ### 8. [동시성 제어 보고서] 
