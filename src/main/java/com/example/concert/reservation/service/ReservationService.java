@@ -2,12 +2,10 @@ package com.example.concert.reservation.service;
 
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.reservation.domain.Reservation;
-import com.example.concert.reservation.dto.ReservationResponse;
 import com.example.concert.reservation.repository.ReservationRepository;
 import com.example.concert.seat.domain.Seat;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Service

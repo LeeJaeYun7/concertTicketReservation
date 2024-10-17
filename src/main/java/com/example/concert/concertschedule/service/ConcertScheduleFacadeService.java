@@ -8,7 +8,6 @@ import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TokenValidator;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

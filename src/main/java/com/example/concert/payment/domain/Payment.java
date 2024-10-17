@@ -1,6 +1,5 @@
 package com.example.concert.payment.domain;
 
-import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;

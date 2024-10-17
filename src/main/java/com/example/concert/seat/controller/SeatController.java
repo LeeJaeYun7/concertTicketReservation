@@ -1,10 +1,7 @@
 package com.example.concert.seat.controller;
 
-import com.example.concert.reservation.dto.ReservationRequest;
-import com.example.concert.reservation.dto.ReservationResponse;
 import com.example.concert.seat.dto.request.SeatReservationRequest;
 import com.example.concert.seat.service.SeatFacadeService;
-import com.example.concert.seat.service.SeatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
