@@ -15,12 +15,12 @@ import java.util.UUID;
 import static java.lang.Math.max;
 
 @Service
-public class WaitingQueueFacadeService {
+public class WaitingQueueFacade {
 
     private final ConcertService concertService;
     private final WaitingQueueService waitingQueueService;
 
-    public WaitingQueueFacadeService(ConcertService concertService, WaitingQueueService waitingQueueService){
+    public WaitingQueueFacade(ConcertService concertService, WaitingQueueService waitingQueueService){
         this.concertService = concertService;
         this.waitingQueueService = waitingQueueService;
     }

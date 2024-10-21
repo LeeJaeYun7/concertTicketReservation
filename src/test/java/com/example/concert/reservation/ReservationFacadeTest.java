@@ -9,7 +9,7 @@ import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.payment.service.PaymentService;
 import com.example.concert.reservation.dto.ReservationResponse;
-import com.example.concert.reservation.service.ReservationFacadeService;
+import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
@@ -27,18 +27,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ReservationFacadeServiceTest {
+public class ReservationFacadeTest {
 
     @Mock
     private TimeProvider timeProvider;
@@ -68,7 +65,7 @@ public class ReservationFacadeServiceTest {
 
 
     @InjectMocks
-    private ReservationFacadeService sut;
+    private ReservationFacade sut;
 
     @Nested
     @DisplayName("예약을 생성할 때")

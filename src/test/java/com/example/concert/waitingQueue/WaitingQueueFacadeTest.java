@@ -6,7 +6,7 @@ import com.example.concert.concert.service.ConcertService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.dto.response.TokenResponse;
-import com.example.concert.waitingQueue.service.WaitingQueueFacadeService;
+import com.example.concert.waitingQueue.service.WaitingQueueFacade;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class WaitingQueueFacadeServiceTest {
+public class WaitingQueueFacadeTest {
 
     @Mock
     private ConcertService concertService;
@@ -37,7 +37,7 @@ public class WaitingQueueFacadeServiceTest {
     private WaitingQueueService waitingQueueService;
 
     @InjectMocks
-    private WaitingQueueFacadeService sut;
+    private WaitingQueueFacade sut;
 
 
 

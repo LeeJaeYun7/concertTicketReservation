@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class ReservationFacadeService {
+public class ReservationFacade {
 
     private final TimeProvider timeProvider;
 
@@ -37,7 +37,7 @@ public class ReservationFacadeService {
 
     private final WaitingQueueService waitingQueueService;
 
-    public ReservationFacadeService(TimeProvider timProvider, TokenValidator tokenValidator, MemberService memberService, ReservationService reservationService, SeatService seatService, ConcertService concertService, ConcertScheduleService concertScheduleService, PaymentService paymentService, WaitingQueueService waitingQueueService){
+    public ReservationFacade(TimeProvider timProvider, TokenValidator tokenValidator, MemberService memberService, ReservationService reservationService, SeatService seatService, ConcertService concertService, ConcertScheduleService concertScheduleService, PaymentService paymentService, WaitingQueueService waitingQueueService){
         this.timeProvider = timProvider;
         this.tokenValidator = tokenValidator;
         this.memberService = memberService;

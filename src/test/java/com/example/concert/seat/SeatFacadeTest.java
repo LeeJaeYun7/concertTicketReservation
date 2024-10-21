@@ -7,7 +7,7 @@ import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
-import com.example.concert.seat.service.SeatFacadeService;
+import com.example.concert.seat.service.SeatFacade;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.utils.TimeProvider;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class SeatFacadeServiceTest {
+public class SeatFacadeTest {
     @Mock
     private TimeProvider timeProvider;
     @Mock
@@ -42,7 +42,7 @@ public class SeatFacadeServiceTest {
     private SeatService seatService;
 
     @InjectMocks
-    private SeatFacadeService sut;
+    private SeatFacade sut;
 
     @Nested
     @DisplayName("좌석 예약을 할 때")

@@ -2,7 +2,7 @@ package com.example.concert.charge.controller;
 
 import com.example.concert.charge.dto.request.ChargeRequest;
 import com.example.concert.charge.dto.response.ChargeResponse;
-import com.example.concert.charge.service.ChargeFacadeService;
+import com.example.concert.charge.service.ChargeFacade;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +14,10 @@ import java.util.UUID;
 @RestController
 public class ChargeController {
 
-    private final ChargeFacadeService chargeFacadeService;
+    private final ChargeFacade chargeFacade;
 
-    public ChargeController(ChargeFacadeService chargeFacadeService){
-        this.chargeFacadeService = chargeFacadeService;
+    public ChargeController(ChargeFacade chargeFacade){
+        this.chargeFacade = chargeFacade;
     }
 
 
@@ -26,7 +26,7 @@ public class ChargeController {
         UUID uuid = chargeRequest.getUuid();
         long amount = chargeRequest.getAmount();
 
-        ChargeResponse chargeResponse = chargeFacadeService.chargeBalance(uuid, amount);
+        ChargeResponse chargeResponse = chargeFacade.chargeBalance(uuid, amount);
         return ResponseEntity.status(HttpStatus.OK).body(chargeResponse);
     }
 }

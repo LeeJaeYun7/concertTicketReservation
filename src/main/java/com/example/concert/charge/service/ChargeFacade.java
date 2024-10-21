@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class ChargeFacadeService {
+public class ChargeFacade {
 
     private final MemberService memberService;
     private final ChargeService chargeService;
 
-    public ChargeFacadeService(MemberService memberService, ChargeService chargeService){
+    public ChargeFacade(MemberService memberService, ChargeService chargeService){
         this.memberService = memberService;
         this.chargeService = chargeService;
     }

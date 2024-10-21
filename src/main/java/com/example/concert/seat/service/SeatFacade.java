@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class SeatFacadeService {
+public class SeatFacade {
 
     private final TimeProvider timeProvider;
     private final TokenValidator tokenValidator;
@@ -23,7 +23,7 @@ public class SeatFacadeService {
 
     private final SeatService seatService;
 
-    public SeatFacadeService(TimeProvider timeProvider, TokenValidator tokenValidator, MemberService memberService, ConcertScheduleService concertScheduleService, SeatService seatService){
+    public SeatFacade(TimeProvider timeProvider, TokenValidator tokenValidator, MemberService memberService, ConcertScheduleService concertScheduleService, SeatService seatService){
         this.timeProvider = timeProvider;
         this.tokenValidator = tokenValidator;
         this.memberService = memberService;

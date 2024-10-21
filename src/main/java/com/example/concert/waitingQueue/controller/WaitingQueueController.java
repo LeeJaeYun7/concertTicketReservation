@@ -3,7 +3,7 @@ package com.example.concert.waitingQueue.controller;
 import com.example.concert.waitingQueue.dto.request.TokenRequest;
 import com.example.concert.waitingQueue.dto.response.WaitingNumberResponse;
 import com.example.concert.waitingQueue.dto.response.TokenResponse;
-import com.example.concert.waitingQueue.service.WaitingQueueFacadeService;
+import com.example.concert.waitingQueue.service.WaitingQueueFacade;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +14,11 @@ import java.util.UUID;
 @RestController
 public class WaitingQueueController {
 
-    private final WaitingQueueFacadeService waitingQueueFacadeService;
+    private final WaitingQueueFacade waitingQueueFacade;
     private final WaitingQueueService waitingQueueService;
 
-    public WaitingQueueController(WaitingQueueFacadeService waitingQueueFacadeService, WaitingQueueService waitingQueueService){
-        this.waitingQueueFacadeService = waitingQueueFacadeService;
+    public WaitingQueueController(WaitingQueueFacade waitingQueueFacade, WaitingQueueService waitingQueueService){
+        this.waitingQueueFacade = waitingQueueFacade;
         this.waitingQueueService = waitingQueueService;
     }
 
@@ -26,7 +26,7 @@ public class WaitingQueueController {
     public ResponseEntity<TokenResponse> createToken(@RequestBody TokenRequest tokenRequest) throws Exception {
         long concertId = tokenRequest.getConcertId();
         UUID uuid = tokenRequest.getUuid();
-        TokenResponse tokenResponse = waitingQueueFacadeService.createToken(concertId, uuid);
+        TokenResponse tokenResponse = waitingQueueFacade.createToken(concertId, uuid);
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
     }
 

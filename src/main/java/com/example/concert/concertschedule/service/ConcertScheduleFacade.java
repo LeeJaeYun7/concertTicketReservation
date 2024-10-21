@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ConcertScheduleFacadeService {
+public class ConcertScheduleFacade {
 
     private final TokenValidator tokenValidator;
     private final ConcertScheduleService concertScheduleService;
     private final SeatService seatService;
 
-    public ConcertScheduleFacadeService(TokenValidator tokenValidator, ConcertScheduleService concertScheduleService, SeatService seatService){
+    public ConcertScheduleFacade(TokenValidator tokenValidator, ConcertScheduleService concertScheduleService, SeatService seatService){
         this.tokenValidator = tokenValidator;
         this.concertScheduleService = concertScheduleService;
         this.seatService = seatService;
