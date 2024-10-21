@@ -49,11 +49,10 @@ public Member getMemberByUuidWithLock(UUID uuid) throws Exception {
         return memberRepository.findByUuidWithLock(uuid).orElseThrow(Exception::new);
 }
 ```
+```
 @Lock(LockModeType.PESSIMISTIC_READ)
     @Query("SELECT m from Member m WHERE m.uuid = :uuid")
     Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
-```
-
 ```
 
 ### 2) 좌석 예약 요청 
