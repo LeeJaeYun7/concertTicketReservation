@@ -6,7 +6,7 @@
 
 ### 1) 잔액 충전
 - 한 명의 사용자가 잔액을 충전할 때, 같은 요청을 여러 번 호출 할 수 있음
--> 이러한 경우, 1번의 요청만 승인되도록 해야 하며, 이를 멱등성 처리(https://docs.tosspayments.com/blog/what-is-idempotency)라고 합니다. 
+-> 이러한 경우, 1번의 요청만 승인되도록 해야 하며, 이를 멱등성 처리(https://docs.tosspayments.com/blog/what-is-idempotency) 라고 합니다. 
 
 
 ### 2) 좌석 예약 요청
