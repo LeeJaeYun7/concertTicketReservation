@@ -29,7 +29,32 @@
 
 ### 1) 잔액 충전
 
+**코드**
+```
+public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
+        validateMember(uuid);
 
+        Member member = memberService.getMemberByUuidWithLock(uuid);
+        long balance = member.getBalance();
+        long updatedBalance = balance + amount;
+        member.updateBalance(updatedBalance);
+
+        chargeService.createCharge(uuid, amount);
+
+        return ChargeResponse.of(updatedBalance);
+}
+```
+```
+public Member getMemberByUuidWithLock(UUID uuid) throws Exception {
+        return memberRepository.findByUuidWithLock(uuid).orElseThrow(Exception::new);
+}
+```
+@Lock(LockModeType.PESSIMISTIC_READ)
+    @Query("SELECT m from Member m WHERE m.uuid = :uuid")
+    Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
+```
+
+```
 
 ### 2) 좌석 예약 요청 
 
