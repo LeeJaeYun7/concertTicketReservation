@@ -132,3 +132,7 @@ public void decreaseBalance(UUID uuid, long price) throws Exception {
 @Query("SELECT m from Member m WHERE m.uuid = :uuid")
 Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 ```
+
+## 3. 동시성 테스트
+
+
