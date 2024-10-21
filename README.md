@@ -10,5 +10,5 @@
 ### 5. [Swagger](https://github.com/LeeJaeYun7/concertTicket/blob/master/swagger.md) 
 ### 6. [대기열 설계를 위한 조사] 
 ### 7. [대기열 처리를 위한 조사] 
-### 8. [동시성 제어 보고서] 
+### 8. [동시성 제어 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/CONCURRENCY_REPORT.md) 
 
