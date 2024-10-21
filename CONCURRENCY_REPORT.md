@@ -53,10 +53,29 @@ public Member getMemberByUuidWithLock(UUID uuid) throws Exception {
 ```
 ```
 @Lock(LockModeType.PESSIMISTIC_READ)
-    @Query("SELECT m from Member m WHERE m.uuid = :uuid")
-    Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
+@Query("SELECT m from Member m WHERE m.uuid = :uuid")
+Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 ```
 
 ### 2) 좌석 예약 요청 
+**(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
 
+```
+public void changeUpdatedAt(long concertScheduleId, long number) throws Exception {
+        Seat seat = getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number);
+        LocalDateTime now = timeProvider.now();
+        seat.changeUpdatedAt(now);
+}
 
+```
+```
+public Seat getSeatByConcertScheduleIdAndNumberWithLock(long concertScheduleId, long number) throws Exception {
+        return seatRepository.findByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)
+                             .orElseThrow(Exception::new);
+}
+```
+```
+@Lock(LockModeType.PESSIMISTIC_READ)
+@Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
+Optional<Seat> findByConcertScheduleIdAndNumberWithLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
+```
