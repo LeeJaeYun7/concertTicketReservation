@@ -5,7 +5,6 @@ import com.example.concert.concert.fixtures.ConcertFixtureFactory;
 import com.example.concert.concert.service.ConcertService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.dto.response.TokenResponse;
 import com.example.concert.waitingQueue.service.WaitingQueueFacade;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
 import com.example.concert.waitingQueue.vo.TokenVO;

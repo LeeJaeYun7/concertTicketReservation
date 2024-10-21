@@ -3,7 +3,6 @@ package com.example.concert.waitingQueue.service;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
-import com.example.concert.waitingQueue.dto.response.WaitingNumberResponse;
 import com.example.concert.waitingQueue.repository.WaitingQueueRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

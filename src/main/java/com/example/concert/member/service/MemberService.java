@@ -1,7 +1,6 @@
 package com.example.concert.member.service;
 
 import com.example.concert.member.domain.Member;
-import com.example.concert.member.dto.response.MemberBalanceResponse;
 import com.example.concert.member.dto.response.MemberResponse;
 import com.example.concert.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;

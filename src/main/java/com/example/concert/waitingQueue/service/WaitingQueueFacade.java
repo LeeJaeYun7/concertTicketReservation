@@ -4,7 +4,6 @@ import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.service.ConcertService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.dto.response.TokenResponse;
 import com.example.concert.waitingQueue.vo.TokenVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

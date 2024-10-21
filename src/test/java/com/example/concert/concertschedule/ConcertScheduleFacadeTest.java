@@ -2,7 +2,6 @@ package com.example.concert.concertschedule;
 
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
-import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.concertschedule.service.ConcertScheduleFacade;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.seat.domain.Seat;

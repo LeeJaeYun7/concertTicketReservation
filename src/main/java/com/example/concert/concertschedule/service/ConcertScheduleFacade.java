@@ -1,9 +1,7 @@
 package com.example.concert.concertschedule.service;
 
 import com.example.concert.concertschedule.domain.ConcertSchedule;
-import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.dto.response.SeatNumbersResponse;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TokenValidator;
 import org.springframework.stereotype.Service;
