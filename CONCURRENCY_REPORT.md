@@ -89,6 +89,9 @@ public Seat getSeatByConcertScheduleIdAndNumberWithLock(long concertScheduleId, 
 Optional<Seat> findByConcertScheduleIdAndNumberWithLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
 
+**(2) 낙관적 락(Optimistic Lock)을 활용한 동시성 제어 <br>**
+
+
 ### 3) 결제 요청 
 **(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
 
