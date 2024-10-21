@@ -25,7 +25,7 @@ public class ConcertScheduleFacade {
         this.seatService = seatService;
     }
 
-    public ConcertScheduleResponse getAvailableDateTimes(String token, long concertId) throws Exception {
+    public List<LocalDateTime> getAvailableDateTimes(String token, long concertId) throws Exception {
 
         validateToken(token);
 
@@ -41,10 +41,10 @@ public class ConcertScheduleFacade {
                 availableDateTimes.add(concertSchedule.getDateTime());
             }
         }
-        return ConcertScheduleResponse.of(availableDateTimes);
+        return availableDateTimes;
     }
 
-    public SeatNumbersResponse getAvailableSeatNumbers(String token, long concertScheduleId) throws Exception {
+    public List<Long> getAvailableSeatNumbers(String token, long concertScheduleId) throws Exception {
 
         validateToken(token);
 
@@ -55,7 +55,7 @@ public class ConcertScheduleFacade {
             availableSeatNumbers.add(seat.getNumber());
         }
 
-        return SeatNumbersResponse.of(availableSeatNumbers);
+        return availableSeatNumbers;
     }
 
     private void validateToken(String token) throws Exception {

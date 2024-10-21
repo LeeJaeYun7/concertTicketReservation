@@ -8,9 +8,9 @@ import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.payment.service.PaymentService;
-import com.example.concert.reservation.dto.ReservationResponse;
 import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.reservation.service.ReservationService;
+import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.service.SeatService;
@@ -100,12 +100,12 @@ public class ReservationFacadeTest {
             element.updateWaitingNumber();
 
             given(concertService.getConcertById(1L)).willReturn(concert);
-            ReservationResponse reservationResponse = sut.createReservation(token, uuid, concertScheduleId, seatNumber);
+            ReservationVO reservationVO = sut.createReservation(token, uuid, concertScheduleId, seatNumber);
 
-            assertEquals("Tom Cruise", reservationResponse.getName());
-            assertEquals("박효신 콘서트", reservationResponse.getConcertName());
-            assertEquals(concertSchedule.getDateTime(), reservationResponse.getDateTime());
-            assertEquals(concertSchedule.getPrice(), reservationResponse.getPrice());
+            assertEquals("Tom Cruise", reservationVO.getName());
+            assertEquals("박효신 콘서트", reservationVO.getConcertName());
+            assertEquals(concertSchedule.getDateTime(), reservationVO.getDateTime());
+            assertEquals(concertSchedule.getPrice(), reservationVO.getPrice());
         }
     }
 }

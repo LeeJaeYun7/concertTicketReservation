@@ -65,8 +65,8 @@ public class ConcertScheduleFacadeTest {
             given(seatService.getAllAvailableSeats(concertSchedule1.getId())).willReturn(List.of(seat1, seat2));
             given(seatService.getAllAvailableSeats(concertSchedule2.getId())).willReturn(List.of(seat3, seat4));
 
-            ConcertScheduleResponse concertScheduleResponse = sut.getAvailableDateTimes(token, 1L);
-            assertEquals(2, concertScheduleResponse.getAvailableDateTimes().size());
+            List<LocalDateTime> availableDateTimes = sut.getAvailableDateTimes(token, 1L);
+            assertEquals(2, availableDateTimes.size());
         }
 
         @Test
@@ -86,8 +86,8 @@ public class ConcertScheduleFacadeTest {
             given(seatService.getAllAvailableSeats(concertSchedule1.getId())).willReturn(List.of());
             given(seatService.getAllAvailableSeats(concertSchedule2.getId())).willReturn(List.of());
 
-            ConcertScheduleResponse concertScheduleResponse = sut.getAvailableDateTimes(token, 1L);
-            assertEquals(0, concertScheduleResponse.getAvailableDateTimes().size());
+            List<LocalDateTime> availableDateTimes = sut.getAvailableDateTimes(token, 1L);
+            assertEquals(0, availableDateTimes.size());
         }
     }
 }

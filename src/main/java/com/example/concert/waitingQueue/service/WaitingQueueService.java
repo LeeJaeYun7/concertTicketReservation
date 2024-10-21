@@ -27,7 +27,7 @@ public class WaitingQueueService {
         this.waitingQueueRepository = waitingQueueRepository;
     }
 
-    public WaitingNumberResponse getWaitingNumber(String token) throws Exception {
+    public long getWaitingNumber(String token) throws Exception {
         Optional<WaitingQueue> tokenOpt = waitingQueueRepository.findByToken(token);
 
         if(tokenOpt.isEmpty()){
@@ -36,8 +36,7 @@ public class WaitingQueueService {
 
         WaitingQueue foundToken = tokenOpt.get();
 
-        long waitingNumber = foundToken.getWaitingNumber();
-        return WaitingNumberResponse.of(waitingNumber);
+        return foundToken.getWaitingNumber();
     }
 
     @Transactional

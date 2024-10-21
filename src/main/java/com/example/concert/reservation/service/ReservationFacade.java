@@ -7,7 +7,7 @@ import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.payment.service.PaymentService;
-import com.example.concert.reservation.dto.ReservationResponse;
+import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.service.SeatService;
@@ -50,7 +50,7 @@ public class ReservationFacade {
     }
 
     @Transactional
-    public ReservationResponse createReservation(String token, UUID uuid, long concertScheduleId, long seatNumber) throws Exception {
+    public ReservationVO createReservation(String token, UUID uuid, long concertScheduleId, long seatNumber) throws Exception {
         validateToken(token);
         validateSeatReservation(concertScheduleId, seatNumber);
         checkBalanceOverPrice(uuid, concertScheduleId);
@@ -69,7 +69,7 @@ public class ReservationFacade {
         String concertName = getConcert(concertScheduleId).getName();
         LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
 
-        return ReservationResponse.of(name, concertName, dateTime, price);
+        return ReservationVO.of(name, concertName, dateTime, price);
     }
 
     private void updateStatus(String token, long concertScheduleId, long seatNumber) throws Exception {

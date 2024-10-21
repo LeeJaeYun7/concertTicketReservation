@@ -1,4 +1,4 @@
-package com.example.concert.reservation.dto;
+package com.example.concert.reservation.dto.request;
 
 import lombok.Getter;
 

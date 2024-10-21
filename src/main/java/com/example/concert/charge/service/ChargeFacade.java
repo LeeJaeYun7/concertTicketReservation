@@ -18,7 +18,7 @@ public class ChargeFacade {
         this.chargeService = chargeService;
     }
 
-    public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
+    public long chargeBalance(UUID uuid, long amount) throws Exception {
         validateMember(uuid);
 
         Member member = memberService.getMemberByUuidWithLock(uuid);
@@ -28,7 +28,7 @@ public class ChargeFacade {
 
         chargeService.createCharge(uuid, amount);
 
-        return ChargeResponse.of(updatedBalance);
+        return updatedBalance;
     }
     public void validateMember(UUID uuid) throws Exception {
         memberService.getMemberByUuid(uuid);

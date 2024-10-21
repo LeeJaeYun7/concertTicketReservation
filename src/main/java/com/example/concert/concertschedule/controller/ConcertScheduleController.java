@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 public class ConcertScheduleController {
 
@@ -26,7 +29,9 @@ public class ConcertScheduleController {
         String token = concertScheduleRequest.getToken();
         long concertId = concertScheduleRequest.getConcertId();
 
-        ConcertScheduleResponse concertScheduleResponse = concertScheduleFacade.getAvailableDateTimes(token, concertId);
+        List<LocalDateTime> availableDateTimes = concertScheduleFacade.getAvailableDateTimes(token, concertId);
+        ConcertScheduleResponse concertScheduleResponse = ConcertScheduleResponse.of(availableDateTimes);
+
         return ResponseEntity.status(HttpStatus.OK).body(concertScheduleResponse);
     }
 
@@ -36,7 +41,9 @@ public class ConcertScheduleController {
         String token = seatNumbersRequest.getToken();
         long concertScheduleId = seatNumbersRequest.getConcertScheduleId();
 
-        SeatNumbersResponse seatsResponse = concertScheduleFacade.getAvailableSeatNumbers(token, concertScheduleId);
+        List<Long> availableSeatNumbers = concertScheduleFacade.getAvailableSeatNumbers(token, concertScheduleId);
+        SeatNumbersResponse seatsResponse = SeatNumbersResponse.of(availableSeatNumbers);
+
         return ResponseEntity.status(HttpStatus.OK).body(seatsResponse);
     }
 }

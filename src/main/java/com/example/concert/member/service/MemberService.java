@@ -41,9 +41,8 @@ public class MemberService {
         return memberRepository.findByUuidWithLock(uuid).orElseThrow(Exception::new);
     }
 
-    public MemberBalanceResponse getMemberBalance(UUID uuid) throws Exception {
-        long balance = getMemberByUuidWithLock(uuid).getBalance();
-        return MemberBalanceResponse.of(balance);
+    public long getMemberBalance(UUID uuid) throws Exception {
+        return getMemberByUuidWithLock(uuid).getBalance();
     }
 
     public void decreaseBalance(UUID uuid, long price) throws Exception {

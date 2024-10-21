@@ -35,7 +35,9 @@ public class MemberController {
 
     @GetMapping("/member/balance")
     public ResponseEntity<MemberBalanceResponse> getMemberBalance(@RequestParam(value="uuid") UUID uuid) throws Exception {
-        MemberBalanceResponse memberBalanceResponse = memberService.getMemberBalance(uuid);
+        long balance = memberService.getMemberBalance(uuid);
+        MemberBalanceResponse memberBalanceResponse = MemberBalanceResponse.of(balance);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(memberBalanceResponse);
     }
 }

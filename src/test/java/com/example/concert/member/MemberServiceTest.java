@@ -109,8 +109,8 @@ public class MemberServiceTest {
 
             given(memberRepository.findByUuidWithLock(uuid)).willReturn(Optional.of(member));
 
-            MemberBalanceResponse memberBalanceResponse = sut.getMemberBalance(uuid);
-            assertEquals(memberBalanceResponse.getBalance(), 100);
+            long balance = sut.getMemberBalance(uuid);
+            assertEquals(100, balance);
         }
 
         @Test

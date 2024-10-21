@@ -26,7 +26,9 @@ public class ChargeController {
         UUID uuid = chargeRequest.getUuid();
         long amount = chargeRequest.getAmount();
 
-        ChargeResponse chargeResponse = chargeFacade.chargeBalance(uuid, amount);
+        long updatedBalance = chargeFacade.chargeBalance(uuid, amount);
+        ChargeResponse chargeResponse = ChargeResponse.of(updatedBalance);
+
         return ResponseEntity.status(HttpStatus.OK).body(chargeResponse);
     }
 }

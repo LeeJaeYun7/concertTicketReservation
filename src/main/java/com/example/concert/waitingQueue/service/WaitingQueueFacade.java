@@ -5,6 +5,7 @@ import com.example.concert.concert.service.ConcertService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.dto.response.TokenResponse;
+import com.example.concert.waitingQueue.vo.TokenVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ public class WaitingQueueFacade {
     }
 
     @Transactional
-    public TokenResponse createToken(long concertId, UUID uuid) throws Exception {
+    public TokenVO createToken(long concertId, UUID uuid) throws Exception {
 
         checkQueueExists(concertId, uuid);
 
@@ -45,7 +46,7 @@ public class WaitingQueueFacade {
         WaitingQueue newWaitingQueue = WaitingQueue.of(concert, uuid, newToken, end+1);
         waitingQueueService.save(newWaitingQueue);
 
-        return TokenResponse.of(newToken, end+1);
+        return TokenVO.of(newToken, end+1);
     }
 
     private void checkQueueExists(long concertId, UUID uuid) throws Exception {

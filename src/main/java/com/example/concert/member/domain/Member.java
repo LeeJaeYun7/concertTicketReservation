@@ -40,7 +40,10 @@ public class Member extends BaseTimeEntity {
                      .balance(0)
                      .build();
     }
-    public void updateBalance(long balance){
+    public void updateBalance(long balance) throws Exception {
+        if (balance < 0) {
+            throw new Exception();
+        }
         this.balance = balance;
     }
 }

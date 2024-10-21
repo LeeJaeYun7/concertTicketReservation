@@ -8,6 +8,7 @@ import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.dto.response.TokenResponse;
 import com.example.concert.waitingQueue.service.WaitingQueueFacade;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
+import com.example.concert.waitingQueue.vo.TokenVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -63,9 +64,9 @@ public class WaitingQueueFacadeTest {
             given(concertService.getConcertById(1L)).willReturn(concert1);
             given(waitingQueueService.getAllByConcertId(1L)).willReturn(List.of(element1, element2));
 
-            TokenResponse tokenResponse = sut.createToken(1L, uuid);
+            TokenVO tokenVO = sut.createToken(1L, uuid);
 
-            assertEquals(3, tokenResponse.getWaitingNumber());
+            assertEquals(3, tokenVO.getWaitingNumber());
             verify(waitingQueueService, times(1)).save(any(WaitingQueue.class));
         }
 
@@ -106,9 +107,9 @@ public class WaitingQueueFacadeTest {
             given(concertService.getConcertById(1L)).willReturn(concert1);
             given(waitingQueueService.getAllByConcertId(1L)).willReturn(List.of(element1, element2));
 
-            TokenResponse tokenResponse = sut.createToken(1L, uuid);
+            TokenVO tokenVO = sut.createToken(1L, uuid);
 
-            assertEquals(3, tokenResponse.getWaitingNumber());
+            assertEquals(3, tokenVO.getWaitingNumber());
             verify(waitingQueueService, times(1)).save(any(WaitingQueue.class));
         }
     }

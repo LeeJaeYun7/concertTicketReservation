@@ -5,6 +5,7 @@ import com.example.concert.waitingQueue.dto.response.WaitingNumberResponse;
 import com.example.concert.waitingQueue.dto.response.TokenResponse;
 import com.example.concert.waitingQueue.service.WaitingQueueFacade;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
+import com.example.concert.waitingQueue.vo.TokenVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,18 @@ public class WaitingQueueController {
     public ResponseEntity<TokenResponse> createToken(@RequestBody TokenRequest tokenRequest) throws Exception {
         long concertId = tokenRequest.getConcertId();
         UUID uuid = tokenRequest.getUuid();
-        TokenResponse tokenResponse = waitingQueueFacade.createToken(concertId, uuid);
+
+        TokenVO tokenVO = waitingQueueFacade.createToken(concertId, uuid);
+        TokenResponse tokenResponse = TokenResponse.of(tokenVO.getNewToken(), tokenVO.getWaitingNumber());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
     }
 
     @GetMapping("/waitingQueue/waitingNumber")
     public ResponseEntity<WaitingNumberResponse> retrieveWaitingNumber(@RequestParam(value = "token") String token) throws Exception {
-        WaitingNumberResponse waitingNumberResponse = waitingQueueService.getWaitingNumber(token);
+        long waitingNumber = waitingQueueService.getWaitingNumber(token);
+        WaitingNumberResponse waitingNumberResponse = WaitingNumberResponse.of(waitingNumber);
+
         return ResponseEntity.status(HttpStatus.OK).body(waitingNumberResponse);
     }
 }

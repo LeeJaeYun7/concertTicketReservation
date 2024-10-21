@@ -1,8 +1,9 @@
 package com.example.concert.reservation.controller;
 
-import com.example.concert.reservation.dto.ReservationRequest;
-import com.example.concert.reservation.dto.ReservationResponse;
+import com.example.concert.reservation.dto.request.ReservationRequest;
+import com.example.concert.reservation.dto.response.ReservationResponse;
 import com.example.concert.reservation.service.ReservationFacade;
+import com.example.concert.reservation.vo.ReservationVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,9 @@ public class ReservationController {
         long concertScheduleId = reservationRequest.getConcertScheduleId();
         long seatNumber = reservationRequest.getSeatNumber();
 
-        ReservationResponse reservationResponse = reservationFacade.createReservation(token, uuid, concertScheduleId, seatNumber);
+        ReservationVO reservationVO = reservationFacade.createReservation(token, uuid, concertScheduleId, seatNumber);
+        ReservationResponse reservationResponse = ReservationResponse.of(reservationVO.getName(), reservationVO.getConcertName(), reservationVO.getDateTime(), reservationVO.getPrice());
+
         return ResponseEntity.status(HttpStatus.OK).body(reservationResponse);
     }
 }
