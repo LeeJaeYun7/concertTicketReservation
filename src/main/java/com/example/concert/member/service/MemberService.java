@@ -2,6 +2,7 @@ package com.example.concert.member.service;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.repository.MemberRepository;
 import com.example.concert.member.vo.MemberVO;
@@ -29,18 +30,18 @@ public class MemberService {
 
     public MemberVO getMemberUuid(String name) {
         Member member = memberRepository.findByName(name)
-                                        .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                                        .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
         return MemberVO.of(member.getUuid(), member.getName());
     }
 
     public Member getMemberByUuid(UUID uuid) {
         return memberRepository.findByUuid(uuid)
-                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
     }
 
     public Member getMemberByUuidWithLock(UUID uuid) {
         return memberRepository.findByUuidWithLock(uuid)
-                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
     }
 
     public long getMemberBalance(UUID uuid) {

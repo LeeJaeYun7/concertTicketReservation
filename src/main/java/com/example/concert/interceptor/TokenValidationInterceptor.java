@@ -2,6 +2,7 @@ package com.example.concert.interceptor;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
@@ -30,7 +31,7 @@ public class TokenValidationInterceptor implements HandlerInterceptor {
         String token = request.getHeader("Authorization");
 
         if (token == null || !validateToken(token)) {
-            throw new CustomException(ErrorCode.NOT_VALID_TOKEN);
+            throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.ALWAYS);
         }
 
         return true;

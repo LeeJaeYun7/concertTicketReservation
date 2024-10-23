@@ -2,10 +2,12 @@ package com.example.concert.seat.service;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.utils.TimeProvider;
+import com.mysql.cj.log.Log;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,11 +43,11 @@ public class SeatService {
 
     public Seat getSeatByConcertScheduleIdAndNumber(long concertScheduleId, long number) {
         return seatRepository.findByConcertScheduleIdAndNumber(concertScheduleId, number)
-                             .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND));
+                             .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }
 
     public Seat getSeatByConcertScheduleIdAndNumberWithLock(long concertScheduleId, long number) {
         return seatRepository.findByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)
-                             .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND));
+                             .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }
 }

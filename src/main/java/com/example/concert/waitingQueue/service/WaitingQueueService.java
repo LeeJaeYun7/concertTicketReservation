@@ -2,6 +2,7 @@ package com.example.concert.waitingQueue.service;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
@@ -30,7 +31,7 @@ public class WaitingQueueService {
 
     public long getWaitingNumber(String token) {
         WaitingQueue element = waitingQueueRepository.findByToken(token)
-                                                     .orElseThrow(() -> new CustomException(ErrorCode.WAITING_QUEUE_NOT_FOUND));
+                                                     .orElseThrow(() -> new CustomException(ErrorCode.WAITING_QUEUE_NOT_FOUND, Loggable.NEVER));
 
         return element.getWaitingNumber();
     }
@@ -90,7 +91,7 @@ public class WaitingQueueService {
         }
 
         WaitingQueue firstToken = waitingQueueRepository.findByConcertIdAndWaitingNumber(concertId, 1)
-                                                        .orElseThrow(() -> new CustomException(ErrorCode.WAITING_QUEUE_NOT_FOUND));
+                                                        .orElseThrow(() -> new CustomException(ErrorCode.WAITING_QUEUE_NOT_FOUND, Loggable.NEVER));
         LocalDateTime now = timeProvider.now();
         firstToken.activateToken(now);
         List<WaitingQueue> tokens = waitingQueueRepository.findAllByConcertIdWithLock(concertId);
@@ -102,7 +103,7 @@ public class WaitingQueueService {
 
     public void updateWaitingQueueStatus(String token) {
         WaitingQueue expiredToken = waitingQueueRepository.findByToken(token)
-                                                          .orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
+                                                          .orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND, Loggable.NEVER));
 
         expiredToken.updateWaitingQueueStatus(WaitingQueueStatus.DONE);
         expiredToken.updateWaitingNumber();

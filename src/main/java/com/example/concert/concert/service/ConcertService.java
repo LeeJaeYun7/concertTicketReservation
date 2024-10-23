@@ -2,6 +2,7 @@ package com.example.concert.concert.service;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.repository.ConcertRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ConcertService {
 
     public Concert getConcertById(long concertId) {
         return concertRepository.findById(concertId)
-                                .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND));
+                                .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND, Loggable.ALWAYS));
     }
 
     public List<Long> getAllConcertIds() {

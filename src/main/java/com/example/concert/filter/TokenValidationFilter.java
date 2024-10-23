@@ -2,9 +2,9 @@ package com.example.concert.filter;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
 import com.example.concert.waitingQueue.repository.WaitingQueueRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ public class TokenValidationFilter implements Filter {
         String token = httpRequest.getHeader("Authorization");
 
         if (!validateToken(token)) {
-            throw new CustomException(ErrorCode.NOT_VALID_TOKEN);
+            throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.NEVER);
         }
 
         chain.doFilter(request, response);

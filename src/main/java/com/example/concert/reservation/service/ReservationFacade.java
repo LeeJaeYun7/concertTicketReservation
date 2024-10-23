@@ -2,6 +2,7 @@ package com.example.concert.reservation.service;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.service.ConcertService;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
@@ -78,7 +79,7 @@ public class ReservationFacade {
          Seat seat = seatService.getSeatByConcertScheduleIdAndNumber(concertScheduleId, seatNumber);
 
          if(isFiveMinutesPassed(seat.getUpdatedAt())){
-             throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED);
+             throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED, Loggable.ALWAYS);
          }
     }
 
@@ -87,7 +88,7 @@ public class ReservationFacade {
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
         if(balance - price < 0){
-            throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
+            throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE, Loggable.NEVER);
         }
     }
     private Member getMember(UUID uuid) {

@@ -2,6 +2,7 @@ package com.example.concert.seat.service;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
@@ -38,7 +39,7 @@ public class SeatFacade {
         boolean isReservable = validateSeat(concertScheduleId, number);
 
         if(!isReservable){
-            throw new CustomException(ErrorCode.NOT_VALID_SEAT);
+            throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
         }
 
         seatService.changeUpdatedAt(concertScheduleId, number);

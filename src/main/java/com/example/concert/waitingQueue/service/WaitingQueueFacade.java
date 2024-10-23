@@ -2,6 +2,7 @@ package com.example.concert.waitingQueue.service;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
+import com.example.concert.common.Loggable;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.service.ConcertService;
 import com.example.concert.utils.RandomStringGenerator;
@@ -62,7 +63,7 @@ public class WaitingQueueFacade {
 
         // 같은 대기열에 uuid로 만든 토큰이 존재하는 경우
         if(token.getConcert().getId() == concertId){
-            throw new CustomException(ErrorCode.TOKEN_ALREADY_EXISTS);
+            throw new CustomException(ErrorCode.TOKEN_ALREADY_EXISTS, Loggable.NEVER);
         }
 
         // 다른 대기열에 uuid로 만든 토큰이 존재하는 경우, 삭제해준다
