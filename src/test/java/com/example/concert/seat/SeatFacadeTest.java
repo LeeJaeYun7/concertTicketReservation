@@ -10,9 +10,7 @@ import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.service.SeatFacade;
 import com.example.concert.seat.service.SeatService;
-import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.utils.TimeProvider;
-import com.example.concert.utils.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,8 +29,6 @@ import static org.mockito.BDDMockito.given;
 public class SeatFacadeTest {
     @Mock
     private TimeProvider timeProvider;
-    @Mock
-    private TokenValidator tokenValidator;
     @Mock
     private MemberService memberService;
 
@@ -56,8 +52,6 @@ public class SeatFacadeTest {
             Member member = Member.of("Tom Cruise");
             UUID uuid = member.getUuid();
 
-            String token = RandomStringGenerator.generateRandomString(16);
-
             long concertScheduleId = 1L;
             Concert concert = Concert.of("박효신 콘서트");
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
@@ -67,13 +61,12 @@ public class SeatFacadeTest {
             Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
-            given(tokenValidator.validateToken(token)).willReturn(true);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
             given(seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(6));
 
-            sut.createSeatReservation(token, uuid, concertScheduleId, number);
+            sut.createSeatReservation(uuid, concertScheduleId, number);
         }
 
         @Test
@@ -83,8 +76,6 @@ public class SeatFacadeTest {
             Member member = Member.of("Tom Cruise");
             UUID uuid = member.getUuid();
 
-            String token = RandomStringGenerator.generateRandomString(16);
-
             long concertScheduleId = 1L;
             Concert concert = Concert.of("박효신 콘서트");
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
@@ -94,13 +85,12 @@ public class SeatFacadeTest {
             Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
-            given(tokenValidator.validateToken(token)).willReturn(true);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
             given(seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(4));
 
-            assertThrows(CustomException.class, () -> sut.createSeatReservation(token, uuid, concertScheduleId, number));
+            assertThrows(CustomException.class, () -> sut.createSeatReservation(uuid, concertScheduleId, number));
         }
     }
 }

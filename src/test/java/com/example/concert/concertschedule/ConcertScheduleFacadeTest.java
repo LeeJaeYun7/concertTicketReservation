@@ -7,8 +7,6 @@ import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.service.SeatService;
-import com.example.concert.utils.RandomStringGenerator;
-import com.example.concert.utils.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,9 +23,6 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class ConcertScheduleFacadeTest {
-
-    @Mock
-    private TokenValidator tokenValidator;
 
     @Mock
     private ConcertScheduleService concertScheduleService;
@@ -58,13 +53,11 @@ public class ConcertScheduleFacadeTest {
             Seat seat3 = Seat.of(concertSchedule2, 1, 50000, SeatStatus.AVAILABLE);
             Seat seat4 = Seat.of(concertSchedule2, 2, 50000, SeatStatus.AVAILABLE);
 
-            String token = RandomStringGenerator.generateRandomString(16);
-            given(tokenValidator.validateToken(token)).willReturn(true);
             given(concertScheduleService.getAllConcertSchedulesAfterNowByConcertId(concertId)).willReturn(List.of(concertSchedule1, concertSchedule2));
             given(seatService.getAllAvailableSeats(concertSchedule1.getId())).willReturn(List.of(seat1, seat2));
             given(seatService.getAllAvailableSeats(concertSchedule2.getId())).willReturn(List.of(seat3, seat4));
 
-            List<LocalDateTime> availableDateTimes = sut.getAvailableDateTimes(token, 1L);
+            List<LocalDateTime> availableDateTimes = sut.getAvailableDateTimes(1L);
             assertEquals(2, availableDateTimes.size());
         }
 
@@ -79,13 +72,11 @@ public class ConcertScheduleFacadeTest {
             LocalDateTime dateTime2 = LocalDateTime.of(2024, 10, 18, 22, 30);
             ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert1, dateTime2, 50000);
 
-            String token = RandomStringGenerator.generateRandomString(16);
-            given(tokenValidator.validateToken(token)).willReturn(true);
             given(concertScheduleService.getAllConcertSchedulesAfterNowByConcertId(concertId)).willReturn(List.of(concertSchedule1, concertSchedule2));
             given(seatService.getAllAvailableSeats(concertSchedule1.getId())).willReturn(List.of());
             given(seatService.getAllAvailableSeats(concertSchedule2.getId())).willReturn(List.of());
 
-            List<LocalDateTime> availableDateTimes = sut.getAvailableDateTimes(token, 1L);
+            List<LocalDateTime> availableDateTimes = sut.getAvailableDateTimes(1L);
             assertEquals(0, availableDateTimes.size());
         }
     }

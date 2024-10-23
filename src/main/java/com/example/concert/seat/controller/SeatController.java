@@ -21,12 +21,11 @@ public class SeatController {
 
     @PostMapping("/seat/reservation")
     public ResponseEntity<Void> createSeatReservation(@RequestBody SeatReservationRequest seatReservationRequest) {
-        String token = seatReservationRequest.getToken();
         UUID uuid = seatReservationRequest.getUuid();
         long concertScheduleId = seatReservationRequest.getConcertScheduleId();
         long number = seatReservationRequest.getNumber();
 
-        seatFacade.createSeatReservation(token, uuid, concertScheduleId, number);
+        seatFacade.createSeatReservation(uuid, concertScheduleId, number);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

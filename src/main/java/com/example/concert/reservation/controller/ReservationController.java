@@ -4,6 +4,7 @@ import com.example.concert.reservation.dto.request.ReservationRequest;
 import com.example.concert.reservation.dto.response.ReservationResponse;
 import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.reservation.vo.ReservationVO;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +23,8 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest reservationRequest) {
-        String token = reservationRequest.getToken();
+    public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest reservationRequest, HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
         UUID uuid = reservationRequest.getUuid();
         long concertScheduleId = reservationRequest.getConcertScheduleId();
         long seatNumber = reservationRequest.getSeatNumber();

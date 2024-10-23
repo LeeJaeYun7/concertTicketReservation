@@ -6,6 +6,7 @@ import com.example.concert.waitingQueue.dto.response.TokenResponse;
 import com.example.concert.waitingQueue.service.WaitingQueueFacade;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
 import com.example.concert.waitingQueue.vo.TokenVO;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,8 @@ public class WaitingQueueController {
     }
 
     @GetMapping("/waitingQueue/waitingNumber")
-    public ResponseEntity<WaitingNumberResponse> retrieveWaitingNumber(@RequestParam(value = "token") String token) {
+    public ResponseEntity<WaitingNumberResponse> retrieveWaitingNumber(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
         long waitingNumber = waitingQueueService.getWaitingNumber(token);
         WaitingNumberResponse waitingNumberResponse = WaitingNumberResponse.of(waitingNumber);
 

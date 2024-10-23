@@ -7,7 +7,6 @@ import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.utils.TimeProvider;
-import com.example.concert.utils.TokenValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,25 +18,21 @@ import java.util.UUID;
 public class SeatFacade {
 
     private final TimeProvider timeProvider;
-    private final TokenValidator tokenValidator;
     private final MemberService memberService;
     private final ConcertScheduleService concertScheduleService;
 
     private final SeatService seatService;
 
-    public SeatFacade(TimeProvider timeProvider, TokenValidator tokenValidator, MemberService memberService, ConcertScheduleService concertScheduleService, SeatService seatService){
+    public SeatFacade(TimeProvider timeProvider, MemberService memberService, ConcertScheduleService concertScheduleService, SeatService seatService){
         this.timeProvider = timeProvider;
-        this.tokenValidator = tokenValidator;
         this.memberService = memberService;
         this.concertScheduleService = concertScheduleService;
         this.seatService = seatService;
     }
 
     @Transactional
-    public void createSeatReservation(String token, UUID uuid, long concertScheduleId, long number) {
-
+    public void createSeatReservation(UUID uuid, long concertScheduleId, long number) {
         validateMember(uuid);
-        validateToken(token);
         validateConcertSchedule(concertScheduleId);
 
         boolean isReservable = validateSeat(concertScheduleId, number);
@@ -51,14 +46,6 @@ public class SeatFacade {
 
     private void validateMember(UUID uuid) {
         memberService.getMemberByUuid(uuid);
-    }
-
-    private void validateToken(String token) {
-        boolean isValid = tokenValidator.validateToken(token);
-
-        if(!isValid){
-            throw new CustomException(ErrorCode.NOT_VALID_TOKEN);
-        }
     }
 
     private void validateConcertSchedule(long concertScheduleId) {

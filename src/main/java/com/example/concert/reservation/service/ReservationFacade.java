@@ -14,7 +14,6 @@ import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
-import com.example.concert.utils.TokenValidator;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +26,6 @@ import java.util.UUID;
 public class ReservationFacade {
 
     private final TimeProvider timeProvider;
-
-    private final TokenValidator tokenValidator;
     private final MemberService memberService;
     private final ReservationService reservationService;
     private final SeatService seatService;
@@ -39,9 +36,8 @@ public class ReservationFacade {
 
     private final WaitingQueueService waitingQueueService;
 
-    public ReservationFacade(TimeProvider timProvider, TokenValidator tokenValidator, MemberService memberService, ReservationService reservationService, SeatService seatService, ConcertService concertService, ConcertScheduleService concertScheduleService, PaymentService paymentService, WaitingQueueService waitingQueueService){
-        this.timeProvider = timProvider;
-        this.tokenValidator = tokenValidator;
+    public ReservationFacade(TimeProvider timeProvider, MemberService memberService, ReservationService reservationService, SeatService seatService, ConcertService concertService, ConcertScheduleService concertScheduleService, PaymentService paymentService, WaitingQueueService waitingQueueService){
+        this.timeProvider = timeProvider;
         this.memberService = memberService;
         this.reservationService = reservationService;
         this.seatService = seatService;
@@ -53,7 +49,6 @@ public class ReservationFacade {
 
     @Transactional
     public ReservationVO createReservation(String token, UUID uuid, long concertScheduleId, long seatNumber) {
-        validateToken(token);
         validateSeatReservation(concertScheduleId, seatNumber);
         checkBalanceOverPrice(uuid, concertScheduleId);
 
@@ -77,14 +72,6 @@ public class ReservationFacade {
     private void updateStatus(String token, long concertScheduleId, long seatNumber) {
         seatService.updateSeatStatus(concertScheduleId, seatNumber, SeatStatus.RESERVED);
         waitingQueueService.updateWaitingQueueStatus(token);
-    }
-
-    private void validateToken(String token) {
-        boolean isValid = tokenValidator.validateToken(token);
-
-        if(!isValid){
-            throw new CustomException(ErrorCode.NOT_VALID_TOKEN);
-        }
     }
 
     private void validateSeatReservation(long concertScheduleId, long seatNumber) {

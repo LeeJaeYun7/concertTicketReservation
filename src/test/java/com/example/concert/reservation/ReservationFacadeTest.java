@@ -16,7 +16,6 @@ import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.utils.TimeProvider;
-import com.example.concert.utils.TokenValidator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
@@ -39,9 +38,6 @@ public class ReservationFacadeTest {
 
     @Mock
     private TimeProvider timeProvider;
-    @Mock
-    private TokenValidator tokenValidator;
-
     @Mock
     private MemberService memberService;
 
@@ -90,7 +86,6 @@ public class ReservationFacadeTest {
             Seat seat = Seat.of(concertSchedule, seatNumber, 50000, SeatStatus.AVAILABLE);
             seat.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
 
-            given(tokenValidator.validateToken(token)).willReturn(true);
             given(seatService.getSeatByConcertScheduleIdAndNumber(concertScheduleId, seatNumber)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 3));
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
