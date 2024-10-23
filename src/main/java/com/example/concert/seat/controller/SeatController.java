@@ -20,7 +20,7 @@ public class SeatController {
     }
 
     @PostMapping("/seat/reservation")
-    public ResponseEntity<Void> createSeatReservation(@RequestBody SeatReservationRequest seatReservationRequest) throws Exception {
+    public ResponseEntity<Void> createSeatReservation(@RequestBody SeatReservationRequest seatReservationRequest) {
         String token = seatReservationRequest.getToken();
         UUID uuid = seatReservationRequest.getUuid();
         long concertScheduleId = seatReservationRequest.getConcertScheduleId();

@@ -24,7 +24,7 @@ public class WaitingQueueController {
     }
 
     @PostMapping("/waitingQueue/token")
-    public ResponseEntity<TokenResponse> createToken(@RequestBody TokenRequest tokenRequest) throws Exception {
+    public ResponseEntity<TokenResponse> createToken(@RequestBody TokenRequest tokenRequest) {
         long concertId = tokenRequest.getConcertId();
         UUID uuid = tokenRequest.getUuid();
 
@@ -35,7 +35,7 @@ public class WaitingQueueController {
     }
 
     @GetMapping("/waitingQueue/waitingNumber")
-    public ResponseEntity<WaitingNumberResponse> retrieveWaitingNumber(@RequestParam(value = "token") String token) throws Exception {
+    public ResponseEntity<WaitingNumberResponse> retrieveWaitingNumber(@RequestParam(value = "token") String token) {
         long waitingNumber = waitingQueueService.getWaitingNumber(token);
         WaitingNumberResponse waitingNumberResponse = WaitingNumberResponse.of(waitingNumber);
 

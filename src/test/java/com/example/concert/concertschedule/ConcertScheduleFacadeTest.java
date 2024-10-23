@@ -45,7 +45,7 @@ public class ConcertScheduleFacadeTest {
 
         @Test
         @DisplayName("두 번의 공연 날짜에 대해서, 모두 예약 가능하다")
-        void 두_번의_공연_날짜에_대해서_모두_예약_가능하다() throws Exception {
+        void 두_번의_공연_날짜에_대해서_모두_예약_가능하다() {
             long concertId = 1L;
             Concert concert1 = Concert.of("박효신 콘서트");
             LocalDateTime dateTime1 = LocalDateTime.of(2024, 10, 16, 22, 30);
@@ -70,7 +70,7 @@ public class ConcertScheduleFacadeTest {
 
         @Test
         @DisplayName("두 번의 공연 날짜에_대해서 모두 예약이 불가능하다")
-        void 두_번의_공연_날짜에_대해서_모두_예약이_불가능하다() throws Exception {
+        void 두_번의_공연_날짜에_대해서_모두_예약이_불가능하다() {
             long concertId = 1L;
             Concert concert1 = Concert.of("박효신 콘서트");
             LocalDateTime dateTime1 = LocalDateTime.of(2024, 10, 16, 22, 30);

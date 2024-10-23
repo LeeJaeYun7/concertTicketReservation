@@ -24,7 +24,7 @@ public class ConcertScheduleController {
     }
 
     @GetMapping("/concertSchedule")
-    public ResponseEntity<ConcertScheduleResponse> retrieveAvailableDateTimes(@RequestBody ConcertScheduleRequest concertScheduleRequest) throws Exception {
+    public ResponseEntity<ConcertScheduleResponse> retrieveAvailableDateTimes(@RequestBody ConcertScheduleRequest concertScheduleRequest) {
 
         String token = concertScheduleRequest.getToken();
         long concertId = concertScheduleRequest.getConcertId();
@@ -36,7 +36,7 @@ public class ConcertScheduleController {
     }
 
     @GetMapping("/concertSchedule/seats")
-    public ResponseEntity<SeatNumbersResponse> retrieveAvailableSeats(@RequestBody SeatNumbersRequest seatNumbersRequest) throws Exception {
+    public ResponseEntity<SeatNumbersResponse> retrieveAvailableSeats(@RequestBody SeatNumbersRequest seatNumbersRequest) {
 
         String token = seatNumbersRequest.getToken();
         long concertScheduleId = seatNumbersRequest.getConcertScheduleId();

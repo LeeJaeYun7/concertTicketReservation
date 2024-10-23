@@ -88,7 +88,7 @@ public class WaitingQueueServiceTest {
 
         @Test
         @DisplayName("활성화된 토큰이 10분이 지나지 않았다면 유효하다.")
-        void 활성화된_토큰이_10분이_지나지_않았다면_유효하다() throws Exception {
+        void 활성화된_토큰이_10분이_지나지_않았다면_유효하다() {
             Concert concert = Concert.of("박효신 콘서트");
             UUID uuid = UUID.randomUUID();
             String token = RandomStringGenerator.generateRandomString(16);
@@ -108,7 +108,7 @@ public class WaitingQueueServiceTest {
 
         @Test
         @DisplayName("활성화된 토큰이 10분이 지났다면 무효화하고, 새 토큰을 대기열에서 꺼낸다.")
-        void 활성화된_토큰이_10분이_지났다면_무효화하고_새_토큰을_대기열에서_꺼낸다() throws Exception {
+        void 활성화된_토큰이_10분이_지났다면_무효화하고_새_토큰을_대기열에서_꺼낸다() {
             Concert concert = Concert.of("박효신 콘서트");
             UUID uuid1 = UUID.randomUUID();
             String token1 = RandomStringGenerator.generateRandomString(16);
@@ -140,7 +140,7 @@ public class WaitingQueueServiceTest {
 
         @Test
         @DisplayName("토큰의 상태가 DONE으로 업데이트된다.")
-        void 토큰의_상태가_DONE으로_업데이트된다() throws Exception {
+        void 토큰의_상태가_DONE으로_업데이트된다() {
             Concert concert = Concert.of("박효신 콘서트");
             UUID uuid = UUID.randomUUID();
             String token = RandomStringGenerator.generateRandomString(16);

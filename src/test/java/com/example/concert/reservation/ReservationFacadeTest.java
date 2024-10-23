@@ -72,7 +72,7 @@ public class ReservationFacadeTest {
     class 예약을_생성할때 {
         @Test
         @DisplayName("유효성 검사를 통과하고, 좌석과 대기열의 status를 업데이트한다.")
-        void 유효성_검사를_통과하고_좌석과_대기열의_status를_업데이트한다() throws Exception {
+        void 유효성_검사를_통과하고_좌석과_대기열의_status를_업데이트한다() {
 
             String token = RandomStringGenerator.generateRandomString(16);
 

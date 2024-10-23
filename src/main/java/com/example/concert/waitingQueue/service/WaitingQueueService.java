@@ -1,5 +1,7 @@
 package com.example.concert.waitingQueue.service;
 
+import com.example.concert.common.CustomException;
+import com.example.concert.common.ErrorCode;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
@@ -26,16 +28,11 @@ public class WaitingQueueService {
         this.waitingQueueRepository = waitingQueueRepository;
     }
 
-    public long getWaitingNumber(String token) throws Exception {
-        Optional<WaitingQueue> tokenOpt = waitingQueueRepository.findByToken(token);
+    public long getWaitingNumber(String token) {
+        WaitingQueue element = waitingQueueRepository.findByToken(token)
+                                                     .orElseThrow(() -> new CustomException(ErrorCode.WAITING_QUEUE_NOT_FOUND));
 
-        if(tokenOpt.isEmpty()){
-            throw new Exception();
-        }
-
-        WaitingQueue foundToken = tokenOpt.get();
-
-        return foundToken.getWaitingNumber();
+        return element.getWaitingNumber();
     }
 
     @Transactional
@@ -77,7 +74,7 @@ public class WaitingQueueService {
     }
 
     // 대기열에서 빠져 나와서 활성화된 토큰은 WaitingNumber가 0으로 관리됨
-    public void processNextCustomer(long concertId) throws Exception {
+    public void processNextCustomer(long concertId) {
         Optional<WaitingQueue> activeTokenOpt = waitingQueueRepository.findByConcertIdAndWaitingNumber(concertId, 0);
 
         // 고객 1명이 아직 결제를 끝마치지 않은 상황
@@ -93,7 +90,7 @@ public class WaitingQueueService {
         }
 
         WaitingQueue firstToken = waitingQueueRepository.findByConcertIdAndWaitingNumber(concertId, 1)
-                                                        .orElseThrow(Exception::new);
+                                                        .orElseThrow(() -> new CustomException(ErrorCode.WAITING_QUEUE_NOT_FOUND));
         LocalDateTime now = timeProvider.now();
         firstToken.activateToken(now);
         List<WaitingQueue> tokens = waitingQueueRepository.findAllByConcertIdWithLock(concertId);
@@ -103,9 +100,9 @@ public class WaitingQueueService {
         }
     }
 
-    public void updateWaitingQueueStatus(String token) throws Exception {
+    public void updateWaitingQueueStatus(String token) {
         WaitingQueue expiredToken = waitingQueueRepository.findByToken(token)
-                                                          .orElseThrow(Exception::new);
+                                                          .orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
 
         expiredToken.updateWaitingQueueStatus(WaitingQueueStatus.DONE);
         expiredToken.updateWaitingNumber();

@@ -1,5 +1,6 @@
 package com.example.concert.seat;
 
+import com.example.concert.common.CustomException;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
@@ -50,7 +51,7 @@ public class SeatFacadeTest {
 
         @Test
         @DisplayName("모든 유효성 검사를 통과하고, 좌석 예약이 6분전에 일어났으면 좌석 예약이 가능하다")
-        void 모든_유효성_검사를_통과하고_좌석_예약이_6분전에_일어났으면_좌석_예약이_가능하다() throws Exception {
+        void 모든_유효성_검사를_통과하고_좌석_예약이_6분전에_일어났으면_좌석_예약이_가능하다() {
 
             Member member = Member.of("Tom Cruise");
             UUID uuid = member.getUuid();
@@ -77,7 +78,7 @@ public class SeatFacadeTest {
 
         @Test
         @DisplayName("좌석_예약이_4분전에_일어났으면_좌석_예약이_불가능하다")
-        void 좌석_예약이_4분전에_일어났으면_좌석_예약이_불가능하다() throws Exception {
+        void 좌석_예약이_4분전에_일어났으면_좌석_예약이_불가능하다() {
 
             Member member = Member.of("Tom Cruise");
             UUID uuid = member.getUuid();
@@ -99,7 +100,7 @@ public class SeatFacadeTest {
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(4));
 
-            assertThrows(Exception.class, () -> sut.createSeatReservation(token, uuid, concertScheduleId, number));
+            assertThrows(CustomException.class, () -> sut.createSeatReservation(token, uuid, concertScheduleId, number));
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.concert.reservation.service;
 
+import com.example.concert.common.CustomException;
+import com.example.concert.common.ErrorCode;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.service.ConcertService;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
@@ -50,7 +52,7 @@ public class ReservationFacade {
     }
 
     @Transactional
-    public ReservationVO createReservation(String token, UUID uuid, long concertScheduleId, long seatNumber) throws Exception {
+    public ReservationVO createReservation(String token, UUID uuid, long concertScheduleId, long seatNumber) {
         validateToken(token);
         validateSeatReservation(concertScheduleId, seatNumber);
         checkBalanceOverPrice(uuid, concertScheduleId);
@@ -72,45 +74,45 @@ public class ReservationFacade {
         return ReservationVO.of(name, concertName, dateTime, price);
     }
 
-    private void updateStatus(String token, long concertScheduleId, long seatNumber) throws Exception {
+    private void updateStatus(String token, long concertScheduleId, long seatNumber) {
         seatService.updateSeatStatus(concertScheduleId, seatNumber, SeatStatus.RESERVED);
         waitingQueueService.updateWaitingQueueStatus(token);
     }
 
-    private void validateToken(String token) throws Exception {
+    private void validateToken(String token) {
         boolean isValid = tokenValidator.validateToken(token);
 
         if(!isValid){
-            throw new Exception();
+            throw new CustomException(ErrorCode.NOT_VALID_TOKEN);
         }
     }
 
-    private void validateSeatReservation(long concertScheduleId, long seatNumber) throws Exception {
+    private void validateSeatReservation(long concertScheduleId, long seatNumber) {
          Seat seat = seatService.getSeatByConcertScheduleIdAndNumber(concertScheduleId, seatNumber);
 
          if(isFiveMinutesPassed(seat.getUpdatedAt())){
-             throw new Exception();
+             throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED);
          }
     }
 
-    private void checkBalanceOverPrice(UUID uuid, long concertScheduleId) throws Exception {
+    private void checkBalanceOverPrice(UUID uuid, long concertScheduleId) {
         long balance = getMember(uuid).getBalance();
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
         if(balance - price < 0){
-            throw new Exception();
+            throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
         }
     }
-    private Member getMember(UUID uuid) throws Exception {
+    private Member getMember(UUID uuid) {
         return memberService.getMemberByUuid(uuid);
     }
 
-    private Concert getConcert(long concertScheduleId) throws Exception {
+    private Concert getConcert(long concertScheduleId) {
         ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
         return concertService.getConcertById(concertSchedule.getConcert().getId());
     }
 
-    private ConcertSchedule getConcertSchedule(long concertScheduleId) throws Exception {
+    private ConcertSchedule getConcertSchedule(long concertScheduleId) {
         return concertScheduleService.getConcertScheduleById(concertScheduleId);
     }
 

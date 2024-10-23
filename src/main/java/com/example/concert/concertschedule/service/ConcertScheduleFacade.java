@@ -1,5 +1,7 @@
 package com.example.concert.concertschedule.service;
 
+import com.example.concert.common.CustomException;
+import com.example.concert.common.ErrorCode;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.service.SeatService;
@@ -23,7 +25,7 @@ public class ConcertScheduleFacade {
         this.seatService = seatService;
     }
 
-    public List<LocalDateTime> getAvailableDateTimes(String token, long concertId) throws Exception {
+    public List<LocalDateTime> getAvailableDateTimes(String token, long concertId) {
 
         validateToken(token);
 
@@ -42,7 +44,7 @@ public class ConcertScheduleFacade {
         return availableDateTimes;
     }
 
-    public List<Long> getAvailableSeatNumbers(String token, long concertScheduleId) throws Exception {
+    public List<Long> getAvailableSeatNumbers(String token, long concertScheduleId) {
 
         validateToken(token);
 
@@ -56,11 +58,11 @@ public class ConcertScheduleFacade {
         return availableSeatNumbers;
     }
 
-    private void validateToken(String token) throws Exception {
+    private void validateToken(String token) {
         boolean isValid = tokenValidator.validateToken(token);
 
         if(!isValid){
-            throw new Exception();
+            throw new CustomException(ErrorCode.NOT_VALID_TOKEN);
         }
     }
 }

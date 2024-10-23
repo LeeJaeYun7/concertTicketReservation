@@ -68,7 +68,7 @@ public class SeatServiceTest {
 
         @Test
         @DisplayName("업데이트 시각을 최신화할 때 성공한다")
-        void 업데이트_시각을_최신화할때_성공한다() throws Exception {
+        void 업데이트_시각을_최신화할때_성공한다() {
             Concert concert = Concert.of("박효신 콘서트");
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
@@ -89,7 +89,7 @@ public class SeatServiceTest {
     class 좌석_상태를_업데이트할때 {
         @Test
         @DisplayName("좌석 상태를 업데이트할 때 성공한다")
-        void 좌석_상태를_업데이트할_때_성공한다() throws Exception {
+        void 좌석_상태를_업데이트할_때_성공한다() {
             Concert concert = Concert.of("박효신 콘서트");
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
