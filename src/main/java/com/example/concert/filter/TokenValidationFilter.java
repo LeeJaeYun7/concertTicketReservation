@@ -41,13 +41,6 @@ public class TokenValidationFilter implements Filter {
     private boolean validateToken(String token) {
         Optional<WaitingQueue> waitingQueueOpt = waitingQueueRepository.findByToken(token);
 
-        return waitingQueueOpt.isPresent() && waitingQueueOpt.get().getStatus().equals(WaitingQueueStatus.ACTIVE)
-                && !isTenMinutesPassed(waitingQueueOpt.get().getUpdatedAt());
-    }
-
-    private boolean isTenMinutesPassed(LocalDateTime updatedAt) {
-        LocalDateTime now = timeProvider.now();
-        Duration duration = Duration.between(updatedAt, now);
-        return duration.toMinutes() >= 10;
+        return waitingQueueOpt.isPresent();
     }
 }

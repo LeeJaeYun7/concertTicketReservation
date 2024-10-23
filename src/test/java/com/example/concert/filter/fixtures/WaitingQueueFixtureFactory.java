@@ -15,11 +15,8 @@ public class WaitingQueueFixtureFactory {
 
     public static WaitingQueue createWaitingQueueWithToken(String token){
         WaitingQueue waitingQueue = createWaitingQueue();
-        LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
 
         setField(waitingQueue, "token", token);
-        setField(waitingQueue, "status", WaitingQueueStatus.ACTIVE);
-        setField(waitingQueue, "updatedAt", fiveMinutesAgo);
         return waitingQueue;
     }
 }

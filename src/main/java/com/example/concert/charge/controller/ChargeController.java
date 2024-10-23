@@ -20,7 +20,6 @@ public class ChargeController {
         this.chargeFacade = chargeFacade;
     }
 
-
     @PostMapping("/charge")
     public ResponseEntity<ChargeResponse> chargeBalance(@RequestBody ChargeRequest chargeRequest) {
         UUID uuid = chargeRequest.getUuid();
