@@ -7,7 +7,6 @@ import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.utils.TimeProvider;
-import com.mysql.cj.log.Log;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

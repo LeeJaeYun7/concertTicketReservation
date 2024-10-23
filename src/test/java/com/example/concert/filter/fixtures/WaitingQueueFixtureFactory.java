@@ -1,9 +1,6 @@
 package com.example.concert.filter.fixtures;
 
 import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
-
-import java.time.LocalDateTime;
 
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 

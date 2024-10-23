@@ -1,14 +1,11 @@
 package com.example.concert.concertschedule.controller;
 
-import com.example.concert.concertschedule.dto.request.ConcertScheduleRequest;
-import com.example.concert.concertschedule.dto.request.SeatNumbersRequest;
 import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.concertschedule.service.ConcertScheduleFacade;
 import com.example.concert.seat.dto.response.SeatNumbersResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
