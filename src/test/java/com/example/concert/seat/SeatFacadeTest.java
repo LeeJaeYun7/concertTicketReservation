@@ -31,13 +31,10 @@ public class SeatFacadeTest {
     private TimeProvider timeProvider;
     @Mock
     private MemberService memberService;
-
     @Mock
     private ConcertScheduleService concertScheduleService;
-
     @Mock
     private SeatService seatService;
-
     @InjectMocks
     private SeatFacade sut;
 

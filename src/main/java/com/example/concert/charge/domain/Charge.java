@@ -4,7 +4,7 @@ import com.example.concert.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "charge")
@@ -22,9 +22,12 @@ public class Charge extends BaseTimeEntity {
     public Charge(String uuid, long amount){
         this.uuid = uuid;
         this.amount = amount;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public static Charge of(String uuid, long amount){
+
         return Charge.builder()
                      .uuid(uuid)
                      .amount(amount)

@@ -50,6 +50,7 @@ public class ReservationFacade {
 
     @Transactional
     public ReservationVO createReservation(String token, String uuid, long concertScheduleId, long seatNumber) {
+
         validateSeatReservation(concertScheduleId, seatNumber);
         checkBalanceOverPrice(uuid, concertScheduleId);
 

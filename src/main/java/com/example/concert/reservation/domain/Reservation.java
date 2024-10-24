@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -36,6 +36,8 @@ public class Reservation extends BaseTimeEntity {
         this.uuid = uuid;
         this.seat = seat;
         this.price = price;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public static Reservation of(ConcertSchedule concertSchedule, String uuid, Seat seat, long price){

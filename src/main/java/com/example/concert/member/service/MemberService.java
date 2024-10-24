@@ -35,12 +35,8 @@ public class MemberService {
     }
 
     public Member getMemberByUuid(String uuid) {
-
-        System.out.println("uuid는 멤버를 찾아보자");
-        System.out.println("결과는?" + memberRepository.findByUuid(uuid).isPresent());
-
         return memberRepository.findByUuid(uuid)
-                               .orElseThrow(() -> new RuntimeException("Member not found with uuid: " + uuid));
+                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
     }
 
     public Member getMemberByUuidWithLock(String uuid) {
