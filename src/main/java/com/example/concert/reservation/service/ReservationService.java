@@ -17,7 +17,7 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public Reservation createReservation(ConcertSchedule concertSchedule, UUID uuid, Seat seat, long price) {
+    public Reservation createReservation(ConcertSchedule concertSchedule, String uuid, Seat seat, long price) {
         Reservation reservation = Reservation.of(concertSchedule, uuid, seat, price);
         return reservationRepository.save(reservation);
     }

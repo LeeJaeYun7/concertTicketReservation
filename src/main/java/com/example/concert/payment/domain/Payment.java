@@ -17,17 +17,17 @@ public class Payment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_schedule_id")
     private ConcertSchedule concertSchedule;
-    private UUID uuid;
+    private String uuid;
     private long amount;
 
     @Builder
-    public Payment(ConcertSchedule concertSchedule, UUID uuid, long amount){
+    public Payment(ConcertSchedule concertSchedule, String uuid, long amount){
         this.concertSchedule = concertSchedule;
         this.uuid = uuid;
         this.amount = amount;
     }
 
-    public static Payment of(ConcertSchedule concertSchedule, UUID uuid, long amount){
+    public static Payment of(ConcertSchedule concertSchedule, String uuid, long amount){
         return Payment.builder()
                       .concertSchedule(concertSchedule)
                       .uuid(uuid)

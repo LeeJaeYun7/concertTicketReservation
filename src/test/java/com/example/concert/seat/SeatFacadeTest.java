@@ -50,7 +50,7 @@ public class SeatFacadeTest {
         void 모든_유효성_검사를_통과하고_좌석_예약이_6분전에_일어났으면_좌석_예약이_가능하다() {
 
             Member member = Member.of("Tom Cruise");
-            UUID uuid = member.getUuid();
+            String uuid = member.getUuid().toString();
 
             long concertScheduleId = 1L;
             Concert concert = Concert.of("박효신 콘서트");
@@ -74,7 +74,7 @@ public class SeatFacadeTest {
         void 좌석_예약이_4분전에_일어났으면_좌석_예약이_불가능하다() {
 
             Member member = Member.of("Tom Cruise");
-            UUID uuid = member.getUuid();
+            String uuid = member.getUuid().toString();
 
             long concertScheduleId = 1L;
             Concert concert = Concert.of("박효신 콘서트");

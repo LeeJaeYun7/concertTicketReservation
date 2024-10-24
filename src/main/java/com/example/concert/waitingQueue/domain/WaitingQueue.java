@@ -24,7 +24,7 @@ public class WaitingQueue extends BaseTimeEntity {
     @JoinColumn(name = "concert_id")
     private Concert concert;
 
-    private UUID uuid;
+    private String uuid;
 
     private String token;
 
@@ -35,7 +35,7 @@ public class WaitingQueue extends BaseTimeEntity {
     private WaitingQueueStatus status;
 
     @Builder
-    public WaitingQueue(Concert concert, UUID uuid, String token, long waitingNumber, WaitingQueueStatus status, LocalDateTime createdAt, LocalDateTime updatedAt){
+    public WaitingQueue(Concert concert, String uuid, String token, long waitingNumber, WaitingQueueStatus status, LocalDateTime createdAt, LocalDateTime updatedAt){
         this.concert = concert;
         this.uuid = uuid;
         this.token = token;
@@ -45,7 +45,7 @@ public class WaitingQueue extends BaseTimeEntity {
         this.setUpdatedAt(updatedAt);
     }
 
-    public static WaitingQueue of(Concert concert, UUID uuid, String token, long waitingNumber){
+    public static WaitingQueue of(Concert concert, String uuid, String token, long waitingNumber){
 
         LocalDateTime now = LocalDateTime.now();
         WaitingQueueStatus status = WaitingQueueStatus.WAITING;
