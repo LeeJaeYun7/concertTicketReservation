@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -23,14 +25,28 @@ public class TokenValidationFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        String token = httpRequest.getHeader("Authorization");
+        String requestURI = httpRequest.getRequestURI();
+        if (isTokenValidationRequired(requestURI)) {
+            String token = httpRequest.getHeader("Authorization");
 
-        if (!validateToken(token)) {
-            throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.NEVER);
+            if (!validateToken(token)) {
+                throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.NEVER);
+            }
         }
 
         chain.doFilter(request, response);
     }
+
+    private boolean isTokenValidationRequired(String requestURI) {
+        List<String> validURIs = Arrays.asList(
+                "/concertSchedule",
+                "/reservation",
+                "/seat"
+        );
+
+        return validURIs.stream().anyMatch(requestURI::startsWith);
+    }
+
 
     private boolean validateToken(String token) {
         Optional<WaitingQueue> waitingQueueOpt = waitingQueueRepository.findByToken(token);
