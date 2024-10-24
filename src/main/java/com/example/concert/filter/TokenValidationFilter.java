@@ -47,6 +47,7 @@ public class TokenValidationFilter implements Filter {
         return validURIs.stream().anyMatch(requestURI::startsWith);
     }
 
+
     private boolean validateToken(String token) {
         Optional<WaitingQueue> waitingQueueOpt = waitingQueueRepository.findByToken(token);
 
