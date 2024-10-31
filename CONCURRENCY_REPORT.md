@@ -233,7 +233,9 @@ void 총_50번의_충전_요청_중_1번만_멤버_잔액에_반영된다() thro
             assertEquals(10000, updatedMember.getBalance());
         }
 ```
+![image](https://github.com/user-attachments/assets/f266cc2c-485d-4d8e-9eda-84799249bc49)
 
+<br>
 
 ### 2) 좌석 예약 요청 
 **(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>**
