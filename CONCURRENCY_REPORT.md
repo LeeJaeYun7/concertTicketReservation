@@ -81,6 +81,7 @@ public Seat getSeatByConcertScheduleIdAndNumberWithPessimisticLock(long concertS
 @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
 Optional<Seat> findByConcertScheduleIdAndNumberWithPessimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
+
 <br> 
 
 **(2) 낙관적 락(Optimistic Lock) <br>**
@@ -125,6 +126,7 @@ public Seat getSeatByConcertScheduleIdAndNumberWithOptimisticLock(long concertSc
 @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
 Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
+
 <br>
 
 **(3) 레디스 분산 락(Redis Distributed Lock) <br>**
@@ -188,6 +190,8 @@ public void decreaseBalance(UUID uuid, long price) throws Exception {
 @Query("SELECT m from Member m WHERE m.uuid = :uuid")
 Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 ```
+
+<br>
 
 ## 3. 동시성 테스트
 
