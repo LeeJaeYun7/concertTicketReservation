@@ -59,9 +59,6 @@ public class SeatService {
     }
     @DistributedLock(key = "#concertScheduleId + '_' + #number", waitTime = 60, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
     public Seat getSeatByConcertScheduleIdAndNumberWithDistributedLock(String lockName, long concertScheduleId, long number) {
-
-        System.out.println("getSeatByConcertScheduleIdAndNumberWithDistributedLock 진입");
-
         return seatRepository.findByConcertScheduleIdAndNumberWithDistributedLock(concertScheduleId, number)
                     .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }

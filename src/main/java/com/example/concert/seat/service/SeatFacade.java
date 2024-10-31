@@ -94,9 +94,6 @@ public class SeatFacade {
     }
 
     private boolean validateSeatWithDistributedLock(long concertScheduleId, long number) {
-
-        System.out.println("validateSeatWithDistributedLock 진입");
-
         String lockName = "SEAT_RESERVATION:" + concertScheduleId + ":" + number;
 
         Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithDistributedLock(lockName, concertScheduleId, number);
