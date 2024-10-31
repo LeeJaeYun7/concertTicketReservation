@@ -91,6 +91,21 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithLock(@Param("concertScheduleI
 
 **(2) 낙관적 락(Optimistic Lock)을 활용한 동시성 제어 <br>**
 
+```
+public Seat getSeatByConcertScheduleIdAndNumberWithOptimisticLock(long concertScheduleId, long number) {
+        return seatRepository.findByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, number)
+                .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
+}
+```
+
+```
+@Lock(LockModeType.OPTIMISTIC)
+@Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
+Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
+```
+
+
+
 
 ### 3) 결제 요청 
 **(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
