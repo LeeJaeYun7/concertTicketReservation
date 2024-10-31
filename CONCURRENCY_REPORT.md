@@ -66,7 +66,6 @@ Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 ```
 
 <br> 
-<br> 
 
 ### 2) 좌석 예약 요청 
 **(1) 비관적 락(Pessimistic Lock) <br>**
@@ -82,8 +81,6 @@ public Seat getSeatByConcertScheduleIdAndNumberWithPessimisticLock(long concertS
 @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
 Optional<Seat> findByConcertScheduleIdAndNumberWithPessimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
-
-<br>
 <br> 
 
 **(2) 낙관적 락(Optimistic Lock) <br>**
@@ -128,8 +125,6 @@ public Seat getSeatByConcertScheduleIdAndNumberWithOptimisticLock(long concertSc
 @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
 Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
-
-<br>
 <br>
 
 **(3) 레디스 분산 락(Redis Distributed Lock) <br>**
@@ -147,7 +142,7 @@ public Seat getSeatByConcertScheduleIdAndNumberWithDistributedLock(String lockNa
 Optional<Seat> findByConcertScheduleIdAndNumberWithDistributedLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
 
-
+<br> 
 
 
 ### 3) 결제 요청 
