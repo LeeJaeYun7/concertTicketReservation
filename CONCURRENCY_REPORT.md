@@ -95,6 +95,21 @@ public Seat getSeatByConcertScheduleIdAndNumberWithOptimisticLock(long concertSc
 Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
 
+**(3) 레디스 분산 락(Redis Distributed Lock)을 활용한 동시성 제어 <br>**
+
+```
+@DistributedLock(key = "#concertScheduleId + '_' + #number", waitTime = 500, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
+    public Seat getSeatByConcertScheduleIdAndNumberWithDistributedLock(String lockName, long concertScheduleId, long number) {
+        return seatRepository.findByConcertScheduleIdAndNumberWithDistributedLock(concertScheduleId, number)
+                    .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
+    }
+```
+
+```
+@Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
+Optional<Seat> findByConcertScheduleIdAndNumberWithDistributedLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
+```
+
 
 
 
