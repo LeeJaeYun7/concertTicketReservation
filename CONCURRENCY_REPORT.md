@@ -69,15 +69,15 @@ Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 **(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
 
 ```
-public Seat getSeatByConcertScheduleIdAndNumberWithLock(long concertScheduleId, long number) throws Exception {
-        return seatRepository.findByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)
+public Seat getSeatByConcertScheduleIdAndNumberWithPessimisticLock(long concertScheduleId, long number) throws Exception {
+        return seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)
                              .orElseThrow(Exception::new);
 }
 ```
 ```
-@Lock(LockModeType.PESSIMISTIC_READ)
+@Lock(LockModeType.PESSIMISTIC_WRITE)
 @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
-Optional<Seat> findByConcertScheduleIdAndNumberWithLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
+Optional<Seat> findByConcertScheduleIdAndNumberWithPessimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
 
 **(2) 낙관적 락(Optimistic Lock)을 활용한 동시성 제어 <br>**
