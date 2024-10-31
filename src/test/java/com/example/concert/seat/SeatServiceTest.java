@@ -74,7 +74,7 @@ public class SeatServiceTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
-            when(seatRepository.findByConcertScheduleIdAndNumberWithLock(1L, 1))
+            when(seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(1L, 1))
                     .thenReturn(Optional.of(seat));
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
 
@@ -95,7 +95,7 @@ public class SeatServiceTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
-            when(seatRepository.findByConcertScheduleIdAndNumberWithLock(1L, 1))
+            when(seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(1L, 1))
                     .thenReturn(Optional.of(seat));
 
             sut.updateSeatStatus(1L, 1, SeatStatus.RESERVED);

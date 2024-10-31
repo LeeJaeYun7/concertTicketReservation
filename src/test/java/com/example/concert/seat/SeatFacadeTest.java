@@ -59,11 +59,11 @@ public class SeatFacadeTest {
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)).willReturn(seat);
+            given(seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(6));
 
-            sut.createSeatReservation(uuid, concertScheduleId, number);
+            sut.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number);
         }
 
         @Test
@@ -83,11 +83,11 @@ public class SeatFacadeTest {
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)).willReturn(seat);
+            given(seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(4));
 
-            assertThrows(CustomException.class, () -> sut.createSeatReservation(uuid, concertScheduleId, number));
+            assertThrows(CustomException.class, () -> sut.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number));
         }
     }
 }

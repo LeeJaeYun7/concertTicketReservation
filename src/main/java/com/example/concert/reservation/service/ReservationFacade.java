@@ -55,7 +55,7 @@ public class ReservationFacade {
         checkBalanceOverPrice(uuid, concertScheduleId);
 
         ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, seatNumber);
+        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
         reservationService.createReservation(concertSchedule, uuid, seat, price);

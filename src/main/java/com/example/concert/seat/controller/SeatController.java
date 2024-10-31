@@ -25,7 +25,7 @@ public class SeatController {
         long concertScheduleId = seatReservationRequest.getConcertScheduleId();
         long number = seatReservationRequest.getNumber();
 
-        seatFacade.createSeatReservation(uuid, concertScheduleId, number);
+        seatFacade.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

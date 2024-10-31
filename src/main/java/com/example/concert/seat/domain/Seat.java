@@ -25,6 +25,9 @@ public class Seat extends BaseTimeEntity {
     private long number;
     private long price;
 
+    @Version
+    private long version;
+
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
