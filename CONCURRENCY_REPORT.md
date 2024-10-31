@@ -330,3 +330,42 @@ void 분산_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성공�
 ![image](https://github.com/user-attachments/assets/39c35e14-d257-4c5e-a09c-df7079f582ce)
 
 
+<br> 
+
+### 3) 결제 요청 
+**(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>**
+```
+@Test
+@DisplayName("총 50번의 예약 요청 중 1번만 성공한다")
+public void 총_50번의_예약_요청_중_1번만_성공한다() throws InterruptedException {
+            int requestCount = 50;
+            ExecutorService executorService = Executors.newFixedThreadPool(5);
+            AtomicInteger successCount = new AtomicInteger(0);
+            CountDownLatch latch = new CountDownLatch(requestCount);
+
+            long startTime = System.currentTimeMillis();
+
+            for (int i = 0; i < requestCount; i++) {
+                executorService.submit(() -> {
+                    try {
+                        reservationFacade.createReservation(token, memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
+                        successCount.incrementAndGet();
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+
+            latch.await();
+            executorService.shutdown();
+
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+
+            log.info("Total time taken for 50 requests: " + duration + " ms");
+
+            assertEquals(1, successCount.get());
+        }
+```
+
+
