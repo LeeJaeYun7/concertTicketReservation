@@ -83,6 +83,34 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithPessimisticLock(@Param("conce
 **(2) 낙관적 락(Optimistic Lock)을 활용한 동시성 제어 <br>**
 
 ```
+
+@Getter
+@Entity
+@Table(name = "seat")
+@NoArgsConstructor
+public class Seat extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "concert_schedule_id")
+    private ConcertSchedule concertSchedule;
+    private long number;
+    private long price;
+
+    @Version
+    private long version;
+
+    @Enumerated(EnumType.STRING)
+    private SeatStatus status;
+
+    ...
+}
+```
+
+```
 public Seat getSeatByConcertScheduleIdAndNumberWithOptimisticLock(long concertScheduleId, long number) {
         return seatRepository.findByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, number)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
