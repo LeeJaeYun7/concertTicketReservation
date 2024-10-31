@@ -202,6 +202,39 @@ Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 ## 3. 동시성 테스트
 
 
+### 1) 잔액 충전
+**(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>** 
+```
+@Test
+@DisplayName("총 50번의 충전 요청 중 1번만 멤버 잔액에 반영된다")
+void 총_50번의_충전_요청_중_1번만_멤버_잔액에_반영된다() throws InterruptedException {
+            int requestCount = 50;
+            ExecutorService executorService = Executors.newFixedThreadPool(10);
+            AtomicInteger successCount = new AtomicInteger(0);
+            CountDownLatch latch = new CountDownLatch(requestCount);
+
+            for (int i = 0; i < requestCount; i++) {
+                executorService.submit(() -> {
+                    try {
+                        chargeFacade.chargeBalance(memberUuid, 10000);
+                        successCount.incrementAndGet();
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+
+            latch.await();
+            executorService.shutdown();
+
+            Member updatedMember = memberRepository.findByUuid(memberUuid).orElseThrow();
+
+            assertEquals(1, successCount.get());
+            assertEquals(10000, updatedMember.getBalance());
+        }
+```
+
+
 ### 2) 좌석 예약 요청 
 **(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>**
 
