@@ -99,10 +99,10 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concer
 
 ```
 @DistributedLock(key = "#concertScheduleId + '_' + #number", waitTime = 500, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
-    public Seat getSeatByConcertScheduleIdAndNumberWithDistributedLock(String lockName, long concertScheduleId, long number) {
+public Seat getSeatByConcertScheduleIdAndNumberWithDistributedLock(String lockName, long concertScheduleId, long number) {
         return seatRepository.findByConcertScheduleIdAndNumberWithDistributedLock(concertScheduleId, number)
-                    .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
-    }
+                             .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
+}
 ```
 
 ```
