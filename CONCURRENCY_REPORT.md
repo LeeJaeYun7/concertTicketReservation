@@ -70,14 +70,6 @@ Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 **(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
 
 ```
-public void changeUpdatedAt(long concertScheduleId, long number) throws Exception {
-        Seat seat = getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number);
-        LocalDateTime now = timeProvider.now();
-        seat.changeUpdatedAt(now);
-}
-
-```
-```
 public Seat getSeatByConcertScheduleIdAndNumberWithLock(long concertScheduleId, long number) throws Exception {
         return seatRepository.findByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)
                              .orElseThrow(Exception::new);
