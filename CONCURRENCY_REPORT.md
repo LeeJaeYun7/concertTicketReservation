@@ -230,3 +230,43 @@ void 비관적_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성�
 ```
 ![image](https://github.com/user-attachments/assets/d27c0a06-bc8a-44e2-895b-0c15e78b04be)
 
+
+**(2) 낙관적 락(Optimistic Lock) 동시성 테스트 <br>**
+
+```
+@Test
+@DisplayName("낙관적 락을 활용해 1000번의 좌석 예약 요청 중 1번만 성공한다")
+void 낙관적_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성공한다() throws InterruptedException {
+
+            int requestCount = 1000;
+            ExecutorService executorService = Executors.newFixedThreadPool(50);
+            AtomicInteger successCount = new AtomicInteger(0);
+            CountDownLatch latch = new CountDownLatch(requestCount);
+
+            long startTime = System.currentTimeMillis();
+
+            for (int i = 0; i < requestCount; i++) {
+                int finalI = i;
+
+                executorService.submit(() -> {
+                    try {
+                        seatFacade.createSeatReservationWithOptimisticLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
+                        successCount.incrementAndGet();
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+
+            latch.await();
+            executorService.shutdown();
+
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+
+            log.info("Total time taken for 1000 requests: " + duration + " ms");
+
+            assertEquals(1, successCount.get());
+}
+```
+![image](https://github.com/user-attachments/assets/7fb8b0f1-99bc-4167-9ce3-319a9fbc45ad)
