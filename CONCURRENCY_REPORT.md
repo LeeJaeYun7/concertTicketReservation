@@ -40,7 +40,6 @@
 
 **(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
 
-**코드**
 ```
 public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
         validateMember(uuid);
