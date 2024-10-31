@@ -285,7 +285,6 @@ void 낙관적_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성�
             assertEquals(1, successCount.get());
 }
 ```
-![image](https://github.com/user-attachments/assets/7fb8b0f1-99bc-4167-9ce3-319a9fbc45ad)
 ![image](https://github.com/user-attachments/assets/84d6042a-2787-4732-9214-d65e3fa4df0f)
 
 
