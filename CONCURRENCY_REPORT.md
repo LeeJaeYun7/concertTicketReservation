@@ -245,6 +245,8 @@ void 비관적_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성�
 ![image](https://github.com/user-attachments/assets/d27c0a06-bc8a-44e2-895b-0c15e78b04be)
 
 
+<br> 
+
 **(2) 낙관적 락(Optimistic Lock) 동시성 테스트 <br>**
 
 ```
@@ -285,7 +287,7 @@ void 낙관적_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성�
 ```
 ![image](https://github.com/user-attachments/assets/7fb8b0f1-99bc-4167-9ce3-319a9fbc45ad)
 
-
+<br> 
 
 **(3) 레디스 분산 락(Redis Distributed Lock) 동시성 테스트 <br>**
 
