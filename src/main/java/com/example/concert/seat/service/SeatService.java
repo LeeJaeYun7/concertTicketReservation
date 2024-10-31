@@ -9,7 +9,6 @@ import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
