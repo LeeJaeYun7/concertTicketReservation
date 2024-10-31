@@ -33,12 +33,12 @@
 - 한 명의 사용자가 여러 번 결제 요청을 보내더라도, 결제는 한 번만 되어야 한다.
 - 결제 금액의 차감은 사용자 계정에 정확하게 반영되어야 한다.
 
-## 2. 동시성 제어 과정
+## 2. 동시성 제어 코드
 
 
 ### 1) 잔액 충전
 
-**(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
+**(1) 비관적 락(Pessimistic Lock) <br>**
 
 ```
 public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
@@ -66,7 +66,7 @@ Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 ```
 
 ### 2) 좌석 예약 요청 
-**(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
+**(1) 비관적 락(Pessimistic Lock) <br>**
 
 ```
 public Seat getSeatByConcertScheduleIdAndNumberWithPessimisticLock(long concertScheduleId, long number) throws Exception {
@@ -80,7 +80,7 @@ public Seat getSeatByConcertScheduleIdAndNumberWithPessimisticLock(long concertS
 Optional<Seat> findByConcertScheduleIdAndNumberWithPessimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
 
-**(2) 낙관적 락(Optimistic Lock)을 활용한 동시성 제어 <br>**
+**(2) 낙관적 락(Optimistic Lock) <br>**
 
 ```
 
@@ -123,7 +123,7 @@ public Seat getSeatByConcertScheduleIdAndNumberWithOptimisticLock(long concertSc
 Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
 ```
 
-**(3) 레디스 분산 락(Redis Distributed Lock)을 활용한 동시성 제어 <br>**
+**(3) 레디스 분산 락(Redis Distributed Lock) <br>**
 
 ```
 @DistributedLock(key = "#concertScheduleId + '_' + #number", waitTime = 500, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
@@ -142,7 +142,7 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithDistributedLock(@Param("conce
 
 
 ### 3) 결제 요청 
-**(1) 비관적 락(Pessimistic Lock)을 활용한 동시성 제어 <br>**
+**(1) 비관적 락(Pessimistic Lock) <br>**
 
 ```
 @Transactional
@@ -187,4 +187,46 @@ Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
 
 ## 3. 동시성 테스트
 
+
+### 2) 좌석 예약 요청 
+**(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>**
+
+```
+@Test
+@DisplayName("비관적 락을 활용해 1000번의 좌석 예약 요청 중 1번만 성공한다")
+void 비관적_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성공한다() throws InterruptedException {
+
+            int requestCount = 1000;
+            ExecutorService executorService = Executors.newFixedThreadPool(50);
+            AtomicInteger successCount = new AtomicInteger(0);
+            CountDownLatch latch = new CountDownLatch(requestCount);
+
+            long startTime = System.currentTimeMillis();
+
+            for (int i = 0; i < requestCount; i++) {
+                int finalI = i;
+
+                executorService.submit(() -> {
+                    try {
+                        seatFacade.createSeatReservationWithPessimisticLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
+                        successCount.incrementAndGet();
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+
+            latch.await();
+            executorService.shutdown();
+
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+
+            log.info("Total time taken for 1000 requests: " + duration + " ms");
+
+            assertEquals(1, successCount.get());
+}
+
+```
+![image](https://github.com/user-attachments/assets/d27c0a06-bc8a-44e2-895b-0c15e78b04be)
 
