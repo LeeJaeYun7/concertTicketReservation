@@ -367,5 +367,6 @@ public void 총_50번의_예약_요청_중_1번만_성공한다() throws Interru
             assertEquals(1, successCount.get());
         }
 ```
+![image](https://github.com/user-attachments/assets/e6f0a9d8-1f12-484c-adb7-7e330ea6d937)
 
 
