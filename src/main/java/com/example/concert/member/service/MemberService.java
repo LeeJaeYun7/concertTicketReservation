@@ -9,8 +9,6 @@ import com.example.concert.member.vo.MemberVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Service
 public class MemberService {
 
@@ -21,7 +19,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberVO createMember(String name){
+    public MemberVO createMember(String name) {
         Member member = Member.of(name);
         Member savedMember = memberRepository.save(member);
 

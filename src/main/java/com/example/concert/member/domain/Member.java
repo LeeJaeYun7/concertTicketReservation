@@ -4,12 +4,11 @@ import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
 import com.example.concert.global.entity.BaseTimeEntity;
+import com.example.concert.utils.SnowFlakeGenerator;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Getter
 @Entity
@@ -35,8 +34,8 @@ public class Member extends BaseTimeEntity {
         this.balance = balance;
     }
 
-    public static Member of(String name){
-        String uuid = UUID.randomUUID().toString();
+    public static Member of(String name) {
+        String uuid = SnowFlakeGenerator.createSnowFlake();
 
         return Member.builder()
                      .uuid(uuid)
