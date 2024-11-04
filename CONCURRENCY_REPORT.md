@@ -54,7 +54,7 @@
 public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
         validateMember(uuid);
 
-        **Member member = memberService.getMemberByUuidWithLock(uuid);**
+        Member member = memberService.getMemberByUuidWithLock(uuid);
         long balance = member.getBalance();
         long updatedBalance = balance + amount;
         member.updateBalance(updatedBalance);
@@ -66,8 +66,8 @@ public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
 ```
 ```
 public Member getMemberByUuidWithLock(UUID uuid) throws Exception {
-        **return memberRepository.findByUuidWithLock(uuid)
-                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));**
+        return memberRepository.findByUuidWithLock(uuid)
+                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
 }
 ```
 ```
