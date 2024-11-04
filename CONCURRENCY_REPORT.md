@@ -99,7 +99,7 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithPessimisticLock(@Param("conce
 **(2) 낙관적 락(Optimistic Lock) <br>**
 - 좌석 선점 예약 시, 우선적으로 **DB에서 해당 좌석이 선점되었는지 조회가 필요한데 DB 조회시 낙관적 락**을 걸어주었습니다. <br> 
 -> **낙관적 락은 좌석 Entity에 Version 필드를 추가해서 관리**됩니다. <br> 
--> **여러 스레드가 경합하는 상황에서**, **한 스레드에 의해 버전 정보가 변동되었다면, 다른 스레드는 정보 업데이트가 불가능**합니다. <br> 
+-> **여러 스레드가 경합하는 상황에서**, 한 스레드에 의해 버전 정보가 변동되었다면, **다른 스레드는 정보 업데이트가 불가능**합니다. <br> 
 ```
 
 @Getter
