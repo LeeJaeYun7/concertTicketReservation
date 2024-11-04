@@ -4,21 +4,26 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class ConcertScheduleResponse {
 
-    private final List<LocalDateTime> availableDateTimes;
+    private final String concertName;
+    private final LocalDateTime dateTime;
+    private final long price;
 
     @Builder
-    public ConcertScheduleResponse(List<LocalDateTime> availableDateTimes){
-        this.availableDateTimes = availableDateTimes;
+    public ConcertScheduleResponse(String concertName, LocalDateTime dateTime, long price){
+        this.concertName = concertName;
+        this.dateTime = dateTime;
+        this.price = price;
     }
 
-    public static ConcertScheduleResponse of(List<LocalDateTime> availableDateTimes){
+    public static ConcertScheduleResponse of(String concertName, LocalDateTime dateTime, long price){
         return ConcertScheduleResponse.builder()
-                                      .availableDateTimes(availableDateTimes)
-                                      .build();
+                                      .concertName(concertName)
+                .dateTime(dateTime)
+                .price(price)
+                .build();
     }
 }

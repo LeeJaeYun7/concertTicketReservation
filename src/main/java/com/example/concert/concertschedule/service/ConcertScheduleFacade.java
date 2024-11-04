@@ -1,8 +1,11 @@
 package com.example.concert.concertschedule.service;
 
 import com.example.concert.concertschedule.domain.ConcertSchedule;
+import com.example.concert.concertschedule.dto.response.AvailableDateTimesResponse;
+import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.service.SeatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -10,14 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ConcertScheduleFacade {
     private final ConcertScheduleService concertScheduleService;
     private final SeatService seatService;
 
-    public ConcertScheduleFacade(ConcertScheduleService concertScheduleService, SeatService seatService){
-        this.concertScheduleService = concertScheduleService;
-        this.seatService = seatService;
+    public List<ConcertScheduleResponse> getAllAvailableConcertSchedules(){
+        return concertScheduleService.getAllAvailableConcertSchedules();
     }
+
 
     public List<LocalDateTime> getAvailableDateTimes(long concertId) {
 

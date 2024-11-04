@@ -1,5 +1,6 @@
 package com.example.concert.concertschedule.controller;
 
+import com.example.concert.concertschedule.dto.response.AvailableDateTimesResponse;
 import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.concertschedule.service.ConcertScheduleFacade;
 import com.example.concert.seat.dto.response.SeatNumbersResponse;
@@ -22,11 +23,17 @@ public class ConcertScheduleController {
     }
 
     @GetMapping("/concertSchedule")
-    public ResponseEntity<ConcertScheduleResponse> retrieveAvailableDateTimes(@RequestParam long concertId) {
+    public ResponseEntity<AvailableDateTimesResponse> retrieveAvailableDateTimes(@RequestParam long concertId) {
         List<LocalDateTime> availableDateTimes = concertScheduleFacade.getAvailableDateTimes(concertId);
-        ConcertScheduleResponse concertScheduleResponse = ConcertScheduleResponse.of(availableDateTimes);
+        AvailableDateTimesResponse availableDateTimesResponse = AvailableDateTimesResponse.of(availableDateTimes);
 
-        return ResponseEntity.status(HttpStatus.OK).body(concertScheduleResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(availableDateTimesResponse);
+    }
+
+    @GetMapping("/concertSchedule/list")
+    public ResponseEntity<List<ConcertScheduleResponse>> retrieveAvailableConcertSchedules() {
+        List<ConcertScheduleResponse> availableConcertSchedules = concertScheduleFacade.getAllAvailableConcertSchedules();
+        return ResponseEntity.status(HttpStatus.OK).body(availableConcertSchedules);
     }
 
     @GetMapping("/concertSchedule/seats")
