@@ -145,7 +145,7 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concer
 
 **(3) 레디스 분산 락(Redis Distributed Lock) <br>**
 - 좌석 선점 예약 시, **concertScheduleId와 좌석 번호를 결합한 정보를 Key로 Redis 분산 락을 생성**하였습니다. <br> 
--> 즉, **한 스레드가 Redis 분산 락을 획득 하면**, 다른 스레드는 그 락이 해제될 때까지 해당 자원에 접근하지 못하게 됩니다. <br>
+-> 즉, **한 스레드가 Redis 분산 락을 획득 하면**, 다른 스레드는 그 락이 해제될 때까지 **해당 자원에 접근하지 못하게 됩니다**. <br>
 -> Redis 분산 락 구현 시, **코드의 유지보수성을 고려해 AOP로 구현**하였습니다. <br>      
 ```
 @DistributedLock(key = "#concertScheduleId + '_' + #number", waitTime = 500, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
