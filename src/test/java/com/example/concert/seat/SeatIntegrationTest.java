@@ -80,7 +80,7 @@ public class SeatIntegrationTest {
             Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
             seatRepository.save(seat);
 
-            sut.changeUpdatedAt(savedConcertSchedule.getId(), 1);
+            sut.changeUpdatedAtWithPessimisticLock(savedConcertSchedule.getId(), 1);
 
             assertEquals(seat.getUpdatedAt(), LocalDateTime.now());
         }
