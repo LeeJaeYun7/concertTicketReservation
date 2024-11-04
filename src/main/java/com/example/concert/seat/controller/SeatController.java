@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RestController
 public class SeatController {
 
@@ -21,11 +19,11 @@ public class SeatController {
 
     @PostMapping("/seat/reservation")
     public ResponseEntity<Void> createSeatReservation(@RequestBody SeatReservationRequest seatReservationRequest) {
-        UUID uuid = seatReservationRequest.getUuid();
+        String uuid = seatReservationRequest.getUuid();
         long concertScheduleId = seatReservationRequest.getConcertScheduleId();
         long number = seatReservationRequest.getNumber();
 
-        seatFacade.createSeatReservation(uuid, concertScheduleId, number);
+        seatFacade.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

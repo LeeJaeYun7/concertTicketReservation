@@ -20,8 +20,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
@@ -31,13 +29,10 @@ public class SeatFacadeTest {
     private TimeProvider timeProvider;
     @Mock
     private MemberService memberService;
-
     @Mock
     private ConcertScheduleService concertScheduleService;
-
     @Mock
     private SeatService seatService;
-
     @InjectMocks
     private SeatFacade sut;
 
@@ -50,7 +45,7 @@ public class SeatFacadeTest {
         void 모든_유효성_검사를_통과하고_좌석_예약이_6분전에_일어났으면_좌석_예약이_가능하다() {
 
             Member member = Member.of("Tom Cruise");
-            UUID uuid = member.getUuid();
+            String uuid = member.getUuid().toString();
 
             long concertScheduleId = 1L;
             Concert concert = Concert.of("박효신 콘서트");
@@ -62,11 +57,11 @@ public class SeatFacadeTest {
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)).willReturn(seat);
+            given(seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(6));
 
-            sut.createSeatReservation(uuid, concertScheduleId, number);
+            sut.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number);
         }
 
         @Test
@@ -74,7 +69,7 @@ public class SeatFacadeTest {
         void 좌석_예약이_4분전에_일어났으면_좌석_예약이_불가능하다() {
 
             Member member = Member.of("Tom Cruise");
-            UUID uuid = member.getUuid();
+            String uuid = member.getUuid().toString();
 
             long concertScheduleId = 1L;
             Concert concert = Concert.of("박효신 콘서트");
@@ -86,11 +81,11 @@ public class SeatFacadeTest {
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number)).willReturn(seat);
+            given(seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(4));
 
-            assertThrows(CustomException.class, () -> sut.createSeatReservation(uuid, concertScheduleId, number));
+            assertThrows(CustomException.class, () -> sut.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number));
         }
     }
 }

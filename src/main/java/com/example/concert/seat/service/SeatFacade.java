@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 public class SeatFacade {
@@ -32,11 +31,11 @@ public class SeatFacade {
     }
 
     @Transactional
-    public void createSeatReservation(UUID uuid, long concertScheduleId, long number) {
+    public void createSeatReservationWithPessimisticLock(String uuid, long concertScheduleId, long number) {
         validateMember(uuid);
         validateConcertSchedule(concertScheduleId);
 
-        boolean isReservable = validateSeat(concertScheduleId, number);
+        boolean isReservable = validateSeatWithPessimisticLock(concertScheduleId, number);
 
         if(!isReservable){
             throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
@@ -45,7 +44,37 @@ public class SeatFacade {
         seatService.changeUpdatedAt(concertScheduleId, number);
     }
 
-    private void validateMember(UUID uuid) {
+
+    @Transactional
+    public void createSeatReservationWithOptimisticLock(String uuid, long concertScheduleId, long number) {
+        validateMember(uuid);
+        validateConcertSchedule(concertScheduleId);
+
+        boolean isReservable = validateSeatWithOptimisticLock(concertScheduleId, number);
+
+        if(!isReservable){
+            throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
+        }
+
+        seatService.changeUpdatedAt(concertScheduleId, number);
+    }
+
+
+    @Transactional
+    public void createSeatReservationWithDistributedLock(String uuid, long concertScheduleId, long number) {
+        validateMember(uuid);
+        validateConcertSchedule(concertScheduleId);
+
+        boolean isReservable = validateSeatWithDistributedLock(concertScheduleId, number);
+
+        if(!isReservable){
+            throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
+        }
+
+        seatService.changeUpdatedAt(concertScheduleId, number);
+    }
+
+    private void validateMember(String uuid) {
         memberService.getMemberByUuid(uuid);
     }
 
@@ -53,8 +82,21 @@ public class SeatFacade {
         concertScheduleService.getConcertScheduleById(concertScheduleId);
     }
 
-    private boolean validateSeat(long concertScheduleId, long number) {
-        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, number);
+    private boolean validateSeatWithPessimisticLock(long concertScheduleId, long number) {
+        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number);
+        return seat.getStatus().equals(SeatStatus.AVAILABLE) && isFiveMinutesPassed(seat.getUpdatedAt());
+    }
+
+
+    private boolean validateSeatWithOptimisticLock(long concertScheduleId, long number) {
+        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, number);
+        return seat.getStatus().equals(SeatStatus.AVAILABLE) && isFiveMinutesPassed(seat.getUpdatedAt());
+    }
+
+    private boolean validateSeatWithDistributedLock(long concertScheduleId, long number) {
+        String lockName = "SEAT_RESERVATION:" + concertScheduleId + ":" + number;
+
+        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithDistributedLock(lockName, concertScheduleId, number);
         return seat.getStatus().equals(SeatStatus.AVAILABLE) && isFiveMinutesPassed(seat.getUpdatedAt());
     }
 

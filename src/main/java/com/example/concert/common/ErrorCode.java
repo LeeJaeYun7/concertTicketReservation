@@ -20,7 +20,10 @@ public enum ErrorCode {
     SEAT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 좌석을 찾을 수 없습니다."),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다."),
 
-    WAITING_QUEUE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다.");
+    HOST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다."),
+    WAITING_QUEUE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다."),
+
+    LOCK_ACQUISITION_FAILED(HttpStatus.NOT_FOUND, "해당 분산락을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

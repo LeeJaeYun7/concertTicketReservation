@@ -25,6 +25,9 @@ public class Seat extends BaseTimeEntity {
     private long number;
     private long price;
 
+    @Version
+    private long version;
+
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
@@ -34,6 +37,8 @@ public class Seat extends BaseTimeEntity {
         this.number = number;
         this.price = price;
         this.status = status;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public static Seat of(ConcertSchedule concertSchedule, long number, long price, SeatStatus status){

@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 public class ReservationFacade {
@@ -49,12 +48,13 @@ public class ReservationFacade {
     }
 
     @Transactional
-    public ReservationVO createReservation(String token, UUID uuid, long concertScheduleId, long seatNumber) {
+    public ReservationVO createReservation(String token, String uuid, long concertScheduleId, long seatNumber) {
+
         validateSeatReservation(concertScheduleId, seatNumber);
         checkBalanceOverPrice(uuid, concertScheduleId);
 
         ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, seatNumber);
+        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
         reservationService.createReservation(concertSchedule, uuid, seat, price);
@@ -83,7 +83,7 @@ public class ReservationFacade {
          }
     }
 
-    private void checkBalanceOverPrice(UUID uuid, long concertScheduleId) {
+    private void checkBalanceOverPrice(String uuid, long concertScheduleId) {
         long balance = getMember(uuid).getBalance();
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
@@ -91,7 +91,7 @@ public class ReservationFacade {
             throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE, Loggable.NEVER);
         }
     }
-    private Member getMember(UUID uuid) {
+    private Member getMember(String uuid) {
         return memberService.getMemberByUuid(uuid);
     }
 
