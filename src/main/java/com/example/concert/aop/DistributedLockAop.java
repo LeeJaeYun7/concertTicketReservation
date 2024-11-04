@@ -39,25 +39,37 @@ public class DistributedLockAop {
 
         RLock rLock = redissonClient.getLock(key);
 
+        log.info("WaitTime: {}", distributedLock.waitTime());
+        log.info("LeaseTime: {}", distributedLock.leaseTime());
+
         try {
+            if (rLock.isLocked()) {
+                log.info("The lock with key: {} is currently held.", key);
+            } else {
+                log.info("The lock with key: {} is not held.", key);
+            }
+
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
 
             if (!available) {
+                log.warn("Unable to acquire lock for service: {}, key: {}", method.getName(), key);
                 return false;
             }
 
+            log.info("Successfully acquired lock for service: {}, key: {}", method.getName(), key);
             return aopForTransaction.proceed(joinPoint);  // (3)
         } catch (InterruptedException e) {
             throw new InterruptedException();
-        } finally {
-            try {
-                rLock.unlock();   // (4)
-            } catch (IllegalMonitorStateException e) {
-                log.info("Redisson Lock already unlocked for service: {}, key: {}",
-                        method.getName(),
-                        key
-                );
-            }
         }
+//        } finally {
+//            try {
+//                rLock.unlock();   // (4)
+//            } catch (IllegalMonitorStateException e) {
+//                log.info("Redisson Lock already unlocked for service: {}, key: {}",
+//                        method.getName(),
+//                        key
+//                );
+//            }
+//        }
     }
 }
