@@ -48,7 +48,7 @@
 
 **(1) 비관적 락(Pessimistic Lock) <br>**
 - 잔액 충전 시, 우선적으로 **DB에서 멤버의 잔액 조회가 필요한데 DB 조회시 비관적 락**을 걸어주었습니다. <br> 
--> 비관적 락은 멤버 정보가 업데이트 되고, JPA의 Dirty-Checking에 의해 DB에 커밋될 때 해제됩니다.   
+-> 비관적 락은 멤버 정보가 업데이트 되고, **JPA의 Dirty-Checking에 의해 DB에 커밋될 때 해제**됩니다.   
 
 ```
 public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
