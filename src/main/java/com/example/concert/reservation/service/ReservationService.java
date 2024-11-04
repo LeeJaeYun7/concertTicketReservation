@@ -20,4 +20,10 @@ public class ReservationService {
         Reservation reservation = Reservation.of(concertSchedule, uuid, seat, price);
         return reservationRepository.save(reservation);
     }
+
+    public Reservation createReservationWithOptimisticLock(ConcertSchedule concertSchedule, String uuid, Seat seat, long price) {
+        reservationRepository.findReservationByConcertScheduleIdAndSeatIdWithOptimisticLock(concertSchedule.getId(), seat.getId());
+        Reservation reservation = Reservation.of(concertSchedule, uuid, seat, price);
+        return reservationRepository.save(reservation);
+    }
 }
