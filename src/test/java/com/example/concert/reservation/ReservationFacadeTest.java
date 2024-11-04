@@ -95,7 +95,7 @@ public class ReservationFacadeTest {
             element.updateWaitingNumber();
 
             given(concertService.getConcertById(1L)).willReturn(concert);
-            ReservationVO reservationVO = sut.createReservation(token, uuid, concertScheduleId, seatNumber);
+            ReservationVO reservationVO = sut.createReservationWithPessimisticLock(token, uuid, concertScheduleId, seatNumber);
 
             assertEquals("Tom Cruise", reservationVO.getName());
             assertEquals("박효신 콘서트", reservationVO.getConcertName());

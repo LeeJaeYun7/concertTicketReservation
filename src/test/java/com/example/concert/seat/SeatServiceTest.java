@@ -78,7 +78,7 @@ public class SeatServiceTest {
                     .thenReturn(Optional.of(seat));
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
 
-            sut.changeUpdatedAt(1L, 1);
+            sut.changeUpdatedAtWithPessimisticLock(1L, 1);
 
             assertEquals(seat.getUpdatedAt(), LocalDateTime.of(2024, 10, 18, 0, 0));
         }

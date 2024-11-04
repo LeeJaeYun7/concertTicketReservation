@@ -32,11 +32,26 @@ public class SeatService {
         return seatRepository.findAllAvailableSeatsByConcertScheduleIdAndStatus(concertScheduleId, SeatStatus.AVAILABLE, threshold);
     }
 
-    public void changeUpdatedAt(long concertScheduleId, long number) {
+    public void changeUpdatedAtWithPessimisticLock(long concertScheduleId, long number) {
         Seat seat = getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number);
         LocalDateTime now = timeProvider.now();
         seat.changeUpdatedAt(now);
     }
+
+
+    public void changeUpdatedAtWithOptimisticLock(long concertScheduleId, long number) {
+        Seat seat = getSeatByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, number);
+        LocalDateTime now = timeProvider.now();
+        seat.changeUpdatedAt(now);
+    }
+    public void changeUpdatedAtWithDistributedLock(long concertScheduleId, long number) {
+        String lockName = "SEAT_RESERVATION:" + concertScheduleId + ":" + number;
+
+        Seat seat = getSeatByConcertScheduleIdAndNumberWithDistributedLock(lockName, concertScheduleId, number);
+        LocalDateTime now = timeProvider.now();
+        seat.changeUpdatedAt(now);
+    }
+
 
     public void updateSeatStatus(long concertScheduleId, long number, SeatStatus status) {
         Seat seat = getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number);

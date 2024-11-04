@@ -30,6 +30,9 @@ public class Reservation extends BaseTimeEntity {
 
     private long price;
 
+    @Version
+    private long version;
+
     @Builder
     public Reservation(ConcertSchedule concertSchedule, String uuid, Seat seat, long price){
         this.concertSchedule = concertSchedule;

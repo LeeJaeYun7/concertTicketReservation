@@ -41,7 +41,7 @@ public class SeatFacade {
             throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
         }
 
-        seatService.changeUpdatedAt(concertScheduleId, number);
+        seatService.changeUpdatedAtWithPessimisticLock(concertScheduleId, number);
     }
 
 
@@ -56,7 +56,7 @@ public class SeatFacade {
             throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
         }
 
-        seatService.changeUpdatedAt(concertScheduleId, number);
+        seatService.changeUpdatedAtWithOptimisticLock(concertScheduleId, number);
     }
 
 
@@ -71,7 +71,7 @@ public class SeatFacade {
             throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
         }
 
-        seatService.changeUpdatedAt(concertScheduleId, number);
+        seatService.changeUpdatedAtWithDistributedLock(concertScheduleId, number);
     }
 
     private void validateMember(String uuid) {
