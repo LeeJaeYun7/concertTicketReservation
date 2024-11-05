@@ -24,6 +24,11 @@ public class ConcertService {
                                 .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND, Loggable.ALWAYS));
     }
 
+    public Concert getConcertByName(String concertName) {
+        return concertRepository.findByName(concertName)
+                .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND, Loggable.ALWAYS));
+    }
+
     public List<Long> getAllConcertIds() {
         return concertRepository.findAll().stream().map(Concert::getId).collect(Collectors.toList());
     }

@@ -22,8 +22,8 @@ public class ConcertScheduleResponse {
     public static ConcertScheduleResponse of(String concertName, LocalDateTime dateTime, long price){
         return ConcertScheduleResponse.builder()
                                       .concertName(concertName)
-                .dateTime(dateTime)
-                .price(price)
-                .build();
+                                      .dateTime(dateTime)
+                                      .price(price)
+                                      .build();
     }
 }

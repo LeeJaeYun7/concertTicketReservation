@@ -1,5 +1,6 @@
-package com.example.concert.config;
+package com.example.concert.redis;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class RedissonConfig {
 
     @Value("${spring.redis.host}")
@@ -18,15 +20,15 @@ public class RedissonConfig {
     @Value("${spring.redis.port}")
     private int redisPort;
 
+    private RedissonClient redisson;
+
     private static final String REDISSON_HOST_PREFIX = "redis://";
 
     @Bean
     public RedissonClient redissonClient() {
-        RedissonClient redisson = null;
         Config config = new Config();
         config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
         redisson = Redisson.create(config);
-
 
         try {
             redisson.getBucket("testKey").get();

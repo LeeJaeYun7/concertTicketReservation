@@ -36,6 +36,8 @@ dependencies {
 	// MySQL JDBC 드라이버 추가
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.33'
 
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
 	// AOP 추가
 	implementation 'org.aspectj:aspectjweaver:1.9.7'
 
