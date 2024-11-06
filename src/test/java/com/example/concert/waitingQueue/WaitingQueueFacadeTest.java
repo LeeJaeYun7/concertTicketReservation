@@ -64,7 +64,7 @@ public class WaitingQueueFacadeTest {
             given(concertService.getConcertById(1L)).willReturn(concert1);
             given(waitingQueueService.getAllByConcertId(1L)).willReturn(List.of(element1, element2));
 
-            TokenVO tokenVO = sut.createToken(1L, uuid);
+            TokenVO tokenVO = sut.createConcertToken(1L, uuid);
 
             assertEquals(3, tokenVO.getWaitingNumber());
             verify(waitingQueueService, times(1)).save(any(WaitingQueue.class));
@@ -81,7 +81,7 @@ public class WaitingQueueFacadeTest {
             WaitingQueue element = WaitingQueue.of(concert, uuid, token, 1);
             given(waitingQueueService.getByUuid(uuid)).willReturn(Optional.of(element));
 
-            assertThrows(CustomException.class, ()-> sut.createToken(1L, uuid));
+            assertThrows(CustomException.class, ()-> sut.createConcertToken(1L, uuid));
         }
 
         @Test
@@ -107,7 +107,7 @@ public class WaitingQueueFacadeTest {
             given(concertService.getConcertById(1L)).willReturn(concert1);
             given(waitingQueueService.getAllByConcertId(1L)).willReturn(List.of(element1, element2));
 
-            TokenVO tokenVO = sut.createToken(1L, uuid);
+            TokenVO tokenVO = sut.createConcertToken(1L, uuid);
 
             assertEquals(3, tokenVO.getWaitingNumber());
             verify(waitingQueueService, times(1)).save(any(WaitingQueue.class));

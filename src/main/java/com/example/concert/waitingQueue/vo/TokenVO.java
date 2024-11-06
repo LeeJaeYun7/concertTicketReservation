@@ -6,18 +6,15 @@ import lombok.Getter;
 @Getter
 public class TokenVO {
 
-    private final String newToken;
     private final long waitingNumber;
 
     @Builder
-    public TokenVO(String newToken, long waitingNumber){
-        this.newToken = newToken;
+    public TokenVO(long waitingNumber){
         this.waitingNumber = waitingNumber;
     }
 
-    public static TokenVO of(String newToken, long waitingNumber){
+    public static TokenVO of(long waitingNumber){
         return TokenVO.builder()
-                      .newToken(newToken)
                       .waitingNumber(waitingNumber)
                       .build();
     }

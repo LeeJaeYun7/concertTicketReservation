@@ -8,7 +8,7 @@ import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.concertschedule.vo.ConcertScheduleVO;
-import com.example.concert.redis.RedissonDao;
+import com.example.concert.redis.ConcertScheduleDao;
 import com.example.concert.utils.TimeProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +17,7 @@ import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,15 +30,16 @@ public class ConcertScheduleService {
 
     private final TimeProvider timeProvider;
     private final ConcertScheduleRepository concertScheduleRepository;
-    private final RedissonDao redissonDao;
+    private final ConcertScheduleDao concertScheduleDao;
 
+    @Transactional
     public void createConcertSchedule(Concert concert, LocalDateTime dateTime, long price) throws JsonProcessingException {
         ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, price);
         ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
         // Redis에 캐싱된 값이 있을 때
-        if (redissonDao.getConcertSchedules() != null){
-            String concertSchedulesJson = redissonDao.getConcertSchedules();
+        if (concertScheduleDao.getConcertSchedules() != null){
+            String concertSchedulesJson = concertScheduleDao.getConcertSchedules();
 
             List<ConcertScheduleVO> concertScheduleVOs = changeConcertScheduleStringtoVO(concertSchedulesJson);
             ConcertScheduleVO concertScheduleVO = ConcertScheduleVO.of(savedConcertSchedule.getConcert().getName(), savedConcertSchedule.getDateTime(), savedConcertSchedule.getPrice());
@@ -55,8 +57,8 @@ public class ConcertScheduleService {
     public List<ConcertScheduleResponse> getAllAvailableConcertSchedules() throws JsonProcessingException {
 
         // Redis에 캐싱된 값이 있을 때
-        if(redissonDao.getConcertSchedules() != null){
-            String concertSchedulesJson = redissonDao.getConcertSchedules();
+        if(concertScheduleDao.getConcertSchedules() != null){
+            String concertSchedulesJson = concertScheduleDao.getConcertSchedules();
             List<ConcertScheduleVO> concertScheduleVOs = changeConcertScheduleStringtoVO(concertSchedulesJson);
             return changeConcertScheduleVOtoResponse(concertScheduleVOs);
         }
@@ -91,7 +93,7 @@ public class ConcertScheduleService {
 
         try {
             String concertSchedulesJson = objectMapper.writeValueAsString(concertScheduleVOs);
-            redissonDao.saveConcertSchedules(concertSchedulesJson);
+            concertScheduleDao.saveConcertSchedules(concertSchedulesJson);
         } catch (Exception e) {
             log.error("Concert Schedule failed to save into redis cache", e);
         }

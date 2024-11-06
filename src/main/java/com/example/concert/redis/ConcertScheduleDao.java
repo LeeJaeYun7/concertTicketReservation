@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RedissonDao {
+public class ConcertScheduleDao {
 
     private final RedissonClient redisson;
 

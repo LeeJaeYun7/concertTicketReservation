@@ -24,13 +24,13 @@ public class WaitingQueueController {
         this.waitingQueueService = waitingQueueService;
     }
 
-    @PostMapping("/waitingQueue/token")
-    public ResponseEntity<TokenResponse> createToken(@RequestBody TokenRequest tokenRequest) {
+    @PostMapping("/waitingQueue/concert/token")
+    public ResponseEntity<TokenResponse> createConcertToken(@RequestBody TokenRequest tokenRequest) {
         long concertId = tokenRequest.getConcertId();
         String uuid = tokenRequest.getUuid();
 
-        TokenVO tokenVO = waitingQueueFacade.createToken(concertId, uuid);
-        TokenResponse tokenResponse = TokenResponse.of(tokenVO.getNewToken(), tokenVO.getWaitingNumber());
+        TokenVO tokenVO = waitingQueueFacade.createConcertToken(concertId, uuid);
+        TokenResponse tokenResponse = TokenResponse.of(tokenVO.getWaitingNumber());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
     }
