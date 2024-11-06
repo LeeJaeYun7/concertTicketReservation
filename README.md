@@ -12,4 +12,5 @@
 ### 7. [동시성 제어 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CONCURRENCY_REPORT.md)
 ### 8. [캐시 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CACHE_REPORT.md)
 ### 9. [레디스 대기열 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_REPORT.md)
+### 9. [레디스 대기열 조회 Polling vs Websocket](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_QUERY_REPORT.md)
 
