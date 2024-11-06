@@ -9,5 +9,5 @@
 ### 4. [API 명세 문서] 
 ### 5. [Swagger](https://github.com/LeeJaeYun7/concertTicket/blob/master/swagger.md) 
 ### 6. [대기열 설계를 위한 조사] 
-### 7. [동시성 제어 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/CONCURRENCY_REPORT.md) 
+### 7. [Cache 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/CONCURRENCY_REPORT.md) 
 
