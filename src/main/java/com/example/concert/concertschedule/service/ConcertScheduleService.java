@@ -35,16 +35,12 @@ public class ConcertScheduleService {
         ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, price);
         ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-        // Redis에 캐싱된 값이 있을 때
-        if (redissonDao.getConcertSchedules() != null){
-            String concertSchedulesJson = redissonDao.getConcertSchedules();
+        String concertSchedulesJson = redissonDao.getConcertSchedules();
+        List<ConcertScheduleVO> concertScheduleVOs = changeConcertScheduleStringtoVO(concertSchedulesJson);
+        ConcertScheduleVO concertScheduleVO = ConcertScheduleVO.of(savedConcertSchedule.getConcert().getName(), savedConcertSchedule.getDateTime(), savedConcertSchedule.getPrice());
+        concertScheduleVOs.add(concertScheduleVO);
 
-            List<ConcertScheduleVO> concertScheduleVOs = changeConcertScheduleStringtoVO(concertSchedulesJson);
-            ConcertScheduleVO concertScheduleVO = ConcertScheduleVO.of(savedConcertSchedule.getConcert().getName(), savedConcertSchedule.getDateTime(), savedConcertSchedule.getPrice());
-            concertScheduleVOs.add(concertScheduleVO);
-
-            saveConcertSchedulesIntoRedis(concertScheduleVOs);
-        }
+        saveConcertSchedulesIntoRedis(concertScheduleVOs);
     }
 
     public List<ConcertSchedule> getAllConcertSchedulesAfterNowByConcertId(long concertId){
@@ -53,19 +49,8 @@ public class ConcertScheduleService {
     }
 
     public List<ConcertScheduleResponse> getAllAvailableConcertSchedules() throws JsonProcessingException {
-
-        // Redis에 캐싱된 값이 있을 때
-        if(redissonDao.getConcertSchedules() != null){
-            String concertSchedulesJson = redissonDao.getConcertSchedules();
-            List<ConcertScheduleVO> concertScheduleVOs = changeConcertScheduleStringtoVO(concertSchedulesJson);
-            return changeConcertScheduleVOtoResponse(concertScheduleVOs);
-        }
-
-        // Redis에 캐싱된 값이 없을 때
-        List<ConcertScheduleVO> concertScheduleVOs = getAllConcertSchedulesAfterNow();
-
-        // Redis에 값을 캐싱
-        saveConcertSchedulesIntoRedis(concertScheduleVOs);
+        String concertSchedulesJson = redissonDao.getConcertSchedules();
+        List<ConcertScheduleVO> concertScheduleVOs = changeConcertScheduleStringtoVO(concertSchedulesJson);
         return changeConcertScheduleVOtoResponse(concertScheduleVOs);
     }
 
