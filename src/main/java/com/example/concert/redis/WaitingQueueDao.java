@@ -18,7 +18,6 @@ public class WaitingQueueDao {
 
     public WaitingQueueDao(RedissonClient redisson){
         this.redisson = redisson;
-        log.info("global waiting queue initialized");
     }
 
     public void addToWaitingQueue(long concertId, String uuid){
@@ -27,8 +26,6 @@ public class WaitingQueueDao {
         String queueEntry = new StringBuilder(timestamp).append(":").append(uuid).toString();
         RSortedSet<String> waitingQueue = redisson.getSortedSet("waitingQueue:" + concertId);
         waitingQueue.add(queueEntry);
-
-        log.info("Added to waiting queue: {}", queueEntry);
     }
 
     public long getWaitingRank(long concertId, String uuid){
@@ -58,6 +55,11 @@ public class WaitingQueueDao {
         RMapCache<String, String> activeQueue = redisson.getMapCache("activeQueue:" + concertId);  // RMapCache 사용
 
         return activeQueue.get(uuid);
+    }
+
+    public void deleteActiveQueueToken(long concertId, String uuid){
+        RMapCache<String, String> activeQueue = redisson.getMapCache("activeQueue:" + concertId);  // RMapCache 사용
+        activeQueue.remove(uuid);
     }
 
     // 각 콘서트 대기열 마다

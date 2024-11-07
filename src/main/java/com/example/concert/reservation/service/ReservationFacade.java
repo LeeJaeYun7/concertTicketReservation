@@ -10,12 +10,14 @@ import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.payment.service.PaymentService;
+import com.example.concert.redis.WaitingQueueDao;
 import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.domain.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,29 +25,19 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class ReservationFacade {
 
     private final TimeProvider timeProvider;
     private final MemberService memberService;
     private final ReservationService reservationService;
     private final SeatService seatService;
-
     private final ConcertService concertService;
     private final ConcertScheduleService concertScheduleService;
     private final PaymentService paymentService;
-
     private final WaitingQueueService waitingQueueService;
 
-    public ReservationFacade(TimeProvider timeProvider, MemberService memberService, ReservationService reservationService, SeatService seatService, ConcertService concertService, ConcertScheduleService concertScheduleService, PaymentService paymentService, WaitingQueueService waitingQueueService){
-        this.timeProvider = timeProvider;
-        this.memberService = memberService;
-        this.reservationService = reservationService;
-        this.seatService = seatService;
-        this.concertService = concertService;
-        this.concertScheduleService = concertScheduleService;
-        this.paymentService = paymentService;
-        this.waitingQueueService = waitingQueueService;
-    }
+    private final WaitingQueueDao waitingQueueDao;
 
     @Transactional
     public ReservationVO createReservationWithPessimisticLock(String token, String uuid, long concertScheduleId, long seatNumber) {
@@ -62,6 +54,8 @@ public class ReservationFacade {
         memberService.decreaseBalance(uuid, price);
 
         updateStatus(token, concertScheduleId, seatNumber);
+
+        waitingQueueDao.deleteActiveQueueToken(concertSchedule.getConcert().getId(), uuid);
 
         String name = getMember(uuid).getName();
         String concertName = getConcert(concertScheduleId).getName();
