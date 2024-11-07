@@ -15,7 +15,6 @@ import com.example.concert.member.domain.Member;
 import com.example.concert.member.repository.MemberRepository;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 
 import java.time.LocalDate;

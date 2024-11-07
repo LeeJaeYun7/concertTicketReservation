@@ -10,7 +10,6 @@ import com.example.concert.reservation.repository.ReservationRepository;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.enums.SeatGrade;
-import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

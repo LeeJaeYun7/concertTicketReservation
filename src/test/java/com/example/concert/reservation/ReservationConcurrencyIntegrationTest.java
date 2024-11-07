@@ -12,7 +12,6 @@ import com.example.concert.reservation.repository.ReservationRepository;
 import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.enums.SeatGrade;
-import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
