@@ -19,10 +19,11 @@ public class ConcertFixtureFactory {
         return concert;
     }
 
-    public static Concert createConcertWithParameters(long concertId, String name){
+    public static Concert createConcertWithParameters(long concertId, String name, long performanceTime){
         Concert concert = createConcert();
         setField(concert, "id", concertId);
         setField(concert, "name", name);
+        setField(concert, "performanceTime", performanceTime);
         setField(concert, "createdAt", LocalDateTime.now());
         setField(concert, "updatedAt", LocalDateTime.now());
 

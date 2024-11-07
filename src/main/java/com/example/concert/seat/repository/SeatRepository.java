@@ -1,7 +1,7 @@
 package com.example.concert.seat.repository;
 
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatStatus;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

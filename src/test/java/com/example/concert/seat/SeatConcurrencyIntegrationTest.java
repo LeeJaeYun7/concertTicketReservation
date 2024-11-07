@@ -1,5 +1,7 @@
 package com.example.concert.seat;
 
+import com.example.concert.concert.enums.ConcertAgeRestriction;
+import com.example.concert.seat.enums.SeatGrade;
 import com.example.concert.seat.service.SeatFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -13,9 +15,10 @@ import com.example.concert.member.domain.Member;
 import com.example.concert.member.repository.MemberRepository;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,14 +71,18 @@ public class SeatConcurrencyIntegrationTest {
             memberUuids.add(savedMembers.get(i).getUuid());
         }
 
-        Concert concert = Concert.of("김연우 콘서트");
+        LocalDate startAt = LocalDate.of(2024, 10, 16);
+        LocalDate endAt = LocalDate.of(2024, 10, 18);
+
+        Concert concert = Concert.of("박효신 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
         savedConcert = concertRepository.save(concert);
 
         LocalDateTime dateTime = LocalDateTime.of(2024, 11, 25, 22, 30);
         ConcertSchedule concertSchedule = ConcertSchedule.of(savedConcert, dateTime, 50000);
         savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-        Seat seat = Seat.of(savedConcertSchedule, 1, 50000, SeatStatus.AVAILABLE);
+        Seat seat = Seat.of(savedConcertSchedule, 1, 50000, SeatGrade.ALL);
         seat.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
         savedSeat = seatRepository.save(seat);
     }

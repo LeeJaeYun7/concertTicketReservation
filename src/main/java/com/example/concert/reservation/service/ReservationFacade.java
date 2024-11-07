@@ -12,7 +12,7 @@ import com.example.concert.member.service.MemberService;
 import com.example.concert.payment.service.PaymentService;
 import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.service.WaitingQueueService;

@@ -54,19 +54,6 @@ public class MemberServiceTest {
     class 멤버를_조회할때 {
 
         @Test
-        @DisplayName("name이 전달될 때, uuid가 조회된다")
-        void name이_전달될때_uuid가_조회된다() {
-            String name = "Tom Cruise";
-            Member member = Member.of(name);
-
-            given(memberRepository.findByName(name)).willReturn(Optional.of(member));
-
-            MemberVO memberVO = sut.getMemberUuid(name);
-
-            assertEquals(memberVO.getUuid(), member.getUuid());
-        }
-
-        @Test
         @DisplayName("uuid가 전달될 때, 멤버가 조회된다")
         void uuid가_전달될때_멤버가_조회된다() {
             String name = "Tom Cruise";

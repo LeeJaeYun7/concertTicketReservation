@@ -29,14 +29,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
     }
 
-    @GetMapping("/member/uuid")
-    public ResponseEntity<MemberResponse> getMemberUuid(@RequestParam(value="name") String name) {
-        MemberVO memberVO = memberService.getMemberUuid(name);
-        MemberResponse memberResponse = MemberResponse.of(memberVO.getUuid(), memberVO.getName());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
-    }
-
     @GetMapping("/member/balance")
     public ResponseEntity<MemberBalanceResponse> getMemberBalance(@RequestParam(value="uuid") String uuid) {
         long balance = memberService.getMemberBalance(uuid);

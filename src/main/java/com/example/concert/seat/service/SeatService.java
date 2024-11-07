@@ -5,7 +5,7 @@ import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
 import com.example.concert.lock.DistributedLock;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;

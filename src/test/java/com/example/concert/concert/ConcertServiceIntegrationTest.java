@@ -25,7 +25,7 @@ public class ConcertServiceIntegrationTest {
     @Test
     @DisplayName("콘서트를 저장하고 가져온다")
     void 콘서트를_저장하고_가져온다() {
-        Concert concert = ConcertFixtureFactory.createConcertWithParameters(1L, "박효신 콘서트");
+        Concert concert = ConcertFixtureFactory.createConcertWithParameters(1L, "박효신 콘서트", 120);
         concertRepository.save(concert);
 
         Concert foundConcert = sut.getConcertById(1L);

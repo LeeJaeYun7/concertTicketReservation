@@ -12,7 +12,8 @@ import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatGrade;
+import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.utils.TimeProvider;
@@ -28,7 +29,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -83,7 +83,7 @@ public class ReservationFacadeTest {
             long concertScheduleId = 1L;
             WaitingQueue element = WaitingQueue.of(concert, uuid, token, 0);
 
-            Seat seat = Seat.of(concertSchedule, seatNumber, 50000, SeatStatus.AVAILABLE);
+            Seat seat = Seat.of(concertSchedule, seatNumber, 50000, SeatGrade.ALL);
             seat.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
 
             given(seatService.getSeatByConcertScheduleIdAndNumber(concertScheduleId, seatNumber)).willReturn(seat);

@@ -1,4 +1,4 @@
-package com.example.concert.seat.domain;
+package com.example.concert.seat.enums;
 
 public enum SeatStatus {
     RESERVED,

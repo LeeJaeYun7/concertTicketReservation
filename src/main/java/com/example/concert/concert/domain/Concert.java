@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -29,19 +30,19 @@ public class Concert extends BaseTimeEntity {
     private String location;
 
     @Column(name = "performance_time")
-    private String performanceTime;
+    private long performanceTime;
 
     @Enumerated(EnumType.STRING)
     private ConcertAgeRestriction ageRestriction;
 
     @Column(name = "start_at")
-    private LocalDateTime startAt;
+    private LocalDate startAt;
 
     @Column(name = "end_at")
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     @Builder
-    public Concert(String name, String genre, String location, String performanceTime, ConcertAgeRestriction ageRestriction, LocalDateTime startAt, LocalDateTime endAt){
+    public Concert(String name, String genre, String location, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt){
         this.name = name;
         this.genre = genre;
         this.location = location;
@@ -53,7 +54,7 @@ public class Concert extends BaseTimeEntity {
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static Concert of(String name, String genre, String location, String performanceTime, ConcertAgeRestriction ageRestriction, LocalDateTime startAt, LocalDateTime endAt){
+    public static Concert of(String name, String genre, String location, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt){
         return Concert.builder()
                       .genre(genre)
                       .name(name)

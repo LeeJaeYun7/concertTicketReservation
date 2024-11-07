@@ -19,5 +19,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT m from Member m WHERE m.uuid = :uuid")
     Optional<Member> findByUuidWithLock(@Param("uuid") String uuid);
-    Optional<Member> findByName(String name);
 }

@@ -1,6 +1,7 @@
 package com.example.concert.concertschedule;
 
 import com.example.concert.concert.domain.Concert;
+import com.example.concert.concert.enums.ConcertAgeRestriction;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,17 +41,16 @@ public class ConcertScheduleServiceTest {
         @Test
         @DisplayName("성공한다")
         void 성공한다() {
-            Concert concert1 = Concert.of("박효신 콘서트");
-            LocalDateTime dateTime1 = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert1, dateTime1, 50000);
+            LocalDate IUstartAt = LocalDate.of(2024, 10, 16);
+            LocalDate IUendAt = LocalDate.of(2024, 10, 18);
+            Concert IUConcert = Concert.of("아이유 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, IUstartAt, IUendAt);
 
-            Concert concert2 = Concert.of("아이유 콘서트");
-            LocalDateTime dateTime2 = LocalDateTime.of(2024, 10, 18, 22, 30);
-            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert2, dateTime2, 50000);
+            LocalDateTime IUdateTime = LocalDateTime.of(2024, 10, 18, 22, 30);
+            ConcertSchedule IUconcertSchedule = ConcertSchedule.of(IUConcert, IUdateTime, 50000);
 
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
 
-            given(concertScheduleRepository.findAllAfterNowByConcertId(1L, timeProvider.now())).willReturn(List.of(concertSchedule2));
+            given(concertScheduleRepository.findAllAfterNowByConcertId(1L, timeProvider.now())).willReturn(List.of(IUconcertSchedule));
 
             List<ConcertSchedule> result = sut.getAllConcertSchedulesAfterNowByConcertId(1L);
 

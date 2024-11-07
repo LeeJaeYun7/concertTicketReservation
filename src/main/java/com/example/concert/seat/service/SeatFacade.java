@@ -6,7 +6,7 @@ import com.example.concert.common.Loggable;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.utils.TimeProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

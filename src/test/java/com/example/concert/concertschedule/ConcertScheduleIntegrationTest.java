@@ -2,6 +2,7 @@ package com.example.concert.concertschedule;
 
 
 import com.example.concert.concert.domain.Concert;
+import com.example.concert.concert.enums.ConcertAgeRestriction;
 import com.example.concert.concert.repository.ConcertRepository;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,13 +37,16 @@ public class ConcertScheduleIntegrationTest {
         @Test
         @DisplayName("총 스케줄이_2개인 경우 2개를 가져온다.")
         void 총_스케줄이_2개인_경우_2개를_가져온다() {
-            Concert concert1 = Concert.of("김연우 콘서트");
-            LocalDateTime dateTime1 = LocalDateTime.of(2024, 11, 25, 22, 30);
-            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert1, dateTime1, 50000);
-            LocalDateTime dateTime2 = LocalDateTime.of(2024, 11, 28, 22, 30);
-            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert1, dateTime2, 50000);
+            LocalDate startAt = LocalDate.of(2024, 11, 25);
+            LocalDate endAt = LocalDate.of(2024, 11, 28);
+            Concert concert = Concert.of("김연우 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
-            Concert saveConcert = concertRepository.save(concert1);
+            LocalDateTime dateTime1 = LocalDateTime.of(2024, 11, 25, 22, 30);
+            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert, dateTime1, 50000);
+            LocalDateTime dateTime2 = LocalDateTime.of(2024, 11, 28, 22, 30);
+            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert, dateTime2, 50000);
+
+            Concert saveConcert = concertRepository.save(concert);
             concertScheduleRepository.save(concertSchedule1);
             concertScheduleRepository.save(concertSchedule2);
 
@@ -53,13 +58,16 @@ public class ConcertScheduleIntegrationTest {
         @Test
         @DisplayName("총 스케줄이_2개인 경우 해당하는 1개를 가져온다.")
         void 총_스케줄이_2개인_경우_해당하는_1개를_가져온다() {
-            Concert concert1 = Concert.of("김연우 콘서트");
-            LocalDateTime dateTime1 = LocalDateTime.of(2024, 9, 25, 22, 30);
-            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert1, dateTime1, 50000);
-            LocalDateTime dateTime2 = LocalDateTime.of(2024, 11, 28, 22, 30);
-            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert1, dateTime2, 50000);
+            LocalDate startAt = LocalDate.of(2024, 11, 25);
+            LocalDate endAt = LocalDate.of(2024, 11, 28);
+            Concert concert = Concert.of("김연우 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
-            Concert saveConcert = concertRepository.save(concert1);
+            LocalDateTime dateTime1 = LocalDateTime.of(2024, 9, 25, 22, 30);
+            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert, dateTime1, 50000);
+            LocalDateTime dateTime2 = LocalDateTime.of(2024, 11, 28, 22, 30);
+            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert, dateTime2, 50000);
+
+            Concert saveConcert = concertRepository.save(concert);
             concertScheduleRepository.save(concertSchedule1);
             concertScheduleRepository.save(concertSchedule2);
 
