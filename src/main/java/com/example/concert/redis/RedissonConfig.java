@@ -25,8 +25,6 @@ public class RedissonConfig {
 
     private static final String REDISSON_HOST_PREFIX = "redis://";
 
-    private CircuitBreaker circuitBreaker;
-
     @Bean
     public RedissonClient redissonClient() {
         Config config = new Config();
