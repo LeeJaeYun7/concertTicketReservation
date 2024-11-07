@@ -22,6 +22,56 @@
 ```
 
 ### (2) 캐시 도입 과정
+![image](https://github.com/user-attachments/assets/8817d41d-c830-4ed7-b334-009da0b534ca)
+
+
+- 콘서트 티켓 서비스에는 콘서트와 콘서트 스케줄이라는 도메인이 존재합니다.
+  
+   
+  기존에 프로젝트에서 Redisson 라이브러리를 활용하고 있었습니다.
+  따라서 Redisson 라이브러리를 활용해, 
+
+
+```
+// RedissonDao.java
+
+package com.example.concert.redis;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class RedissonDao {
+
+    private final RedissonClient redisson;
+
+    private static final String CONCERT_SCHEDULES = "concertSchedules";
+
+    public void saveConcertSchedules(String concertSchedules) {
+        redisson.getBucket(CONCERT_SCHEDULES).set(concertSchedules);
+        log.info("Concert schedules saved into redis");
+    }
+
+    public String getConcertSchedules() {
+        RBucket<String> bucket = redisson.getBucket(CONCERT_SCHEDULES);
+        String value = bucket.get();
+
+        if (value != null) {
+            log.info("Retrieved concert schedules: {}", value);
+        } else {
+            log.warn("No concert schedules found.");
+        }
+
+        return value;
+    }
+}
+
+```
 
 
 
