@@ -1,23 +1,9 @@
 package com.example.concert.waitingQueue.service;
 
-import com.example.concert.common.CustomException;
-import com.example.concert.common.ErrorCode;
-import com.example.concert.common.Loggable;
-import com.example.concert.concert.domain.Concert;
-import com.example.concert.concert.service.ConcertService;
 import com.example.concert.redis.WaitingQueueDao;
-import com.example.concert.utils.RandomStringGenerator;
-import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.vo.TokenVO;
+import com.example.concert.waitingQueue.dto.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static java.lang.Math.max;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +11,18 @@ public class WaitingQueueFacade {
 
     private final WaitingQueueDao waitingQueueDao;
 
-    public TokenVO createConcertToken(long concertId, String uuid) {
-        waitingQueueDao.addToWaitingQueue(concertId, uuid);
+    // uuid가 대기열 -> 대기 번호 리턴
+    // uuid가 활성화열 -> 토큰 리턴
+    public TokenResponse retrieveWaitingRankOrToken(long concertId, String uuid) {
         long rank = waitingQueueDao.getWaitingRank(concertId, uuid);
-        return TokenVO.of(rank);
-    }
+        String token = waitingQueueDao.getActiveQueueToken(concertId, uuid);
 
+        // 대기열, 활성화열 둘 다에 없는 경우
+        if(rank == -1 && token == null){
+            waitingQueueDao.addToWaitingQueue(concertId, uuid);
+            rank = waitingQueueDao.getWaitingRank(concertId, uuid);
+        }
+
+        return TokenResponse.of(rank, token);
+    }
 }
