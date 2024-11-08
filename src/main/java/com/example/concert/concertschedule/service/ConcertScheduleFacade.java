@@ -22,15 +22,10 @@ public class ConcertScheduleFacade {
     private final ConcertScheduleService concertScheduleService;
     private final SeatService seatService;
 
-    public void createConcertSchedule(String concertName, LocalDateTime dateTime, long price) throws JsonProcessingException {
+    public void createConcertSchedule(String concertName, LocalDateTime dateTime, long price) {
         Concert concert = concertService.getConcertByName(concertName);
         concertScheduleService.createConcertSchedule(concert, dateTime, price);
     }
-
-    public List<ConcertScheduleResponse> getAllAvailableConcertSchedules() throws JsonProcessingException {
-        return concertScheduleService.getAllAvailableConcertSchedules();
-    }
-
     public List<LocalDateTime> getAvailableDateTimes(long concertId) {
 
         List<ConcertSchedule> allConcertSchedules = concertScheduleService.getAllConcertSchedulesAfterNowByConcertId(concertId);
