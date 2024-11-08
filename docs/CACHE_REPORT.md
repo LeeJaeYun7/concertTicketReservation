@@ -86,7 +86,6 @@ public class ConcertDao {
     private static final String CONCERTS = "concerts";
 
    // 콘서트 정보를 Redis에 저장하는 기능
-   // CircuitBreaker 설정 추가 
     @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
     public void saveConcerts(String concerts) {
         redisson.getBucket(CONCERTS).set(concerts);
@@ -94,7 +93,6 @@ public class ConcertDao {
     }
 
     // 콘서트 정보를 Redis에서 불러오는 기능
-    // CircuitBreaker 설정 추가  
     @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
     public String getConcerts() {
         RBucket<String> bucket = redisson.getBucket(CONCERTS);
