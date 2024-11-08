@@ -160,7 +160,7 @@ resilience4j.circuitbreaker:
 
 - 콘서트 정보 3000개를 불러오는 것을 기준으로 2가지 테스트를 진행했습니다 <br>
 (1) 3000개를 RDB에서 검색 <br>
-(3) 3000개를 Redis에서 검색 <br> 
+(2) 3000개를 Redis에서 검색 <br> 
 
 
 **(1) 3000개를 RDB에서 검색**
@@ -168,5 +168,9 @@ resilience4j.circuitbreaker:
 - 평균적으로 200.4ms가 소요되었습니다. 
 ![image](https://github.com/user-attachments/assets/0e598607-6b7a-43c1-9d56-a43d9822082b)
 
-**(1) 3000개를 Redis에서 검색**
+**(2) 3000개를 Redis에서 검색**
+- Redis에 콘서트 데이터 캐싱
+- ![image](https://github.com/user-attachments/assets/d3dc6e76-497d-4f4b-acbd-323fef6efe9f)
+
+
 - Postman으로 5차례 테스트 시 567ms가 소요되었습니다
