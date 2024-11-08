@@ -121,6 +121,8 @@ public class ConcertDao {
 // application.yml
 // Circuit Breaker 설정 추가
 
+...
+...
 
 management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
