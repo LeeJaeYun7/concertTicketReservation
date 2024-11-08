@@ -16,13 +16,13 @@ public class ConcertDao {
 
     private static final String CONCERTS = "concerts";
 
-    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
+    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcerts")
     public void saveConcerts(String concerts) {
         redisson.getBucket(CONCERTS).set(concerts);
         log.info("Concerts saved into redis");
     }
 
-    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
+    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcerts")
     public String getConcerts() {
         RBucket<String> bucket = redisson.getBucket(CONCERTS);
         String value = bucket.get();
