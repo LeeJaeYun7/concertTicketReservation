@@ -151,7 +151,7 @@ resilience4j.circuitbreaker:
         - io.github.robwin.exception.BusinessException
 ```
 
-### Spring Actuator 헬스체크를 통한 CircuitBreaker 동작 확인
+#### Spring Actuator 헬스체크를 통한 CircuitBreaker 동작 확인
 ![image](https://github.com/user-attachments/assets/2a1b7404-e6ea-4371-ba5f-d02007cfb1a9)
 
 
