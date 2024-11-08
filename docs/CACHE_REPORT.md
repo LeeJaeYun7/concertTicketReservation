@@ -115,6 +115,7 @@ public class ConcertDao {
         return null;
     }
 }
+```
 
 ```
 // application.yml
@@ -144,10 +145,6 @@ resilience4j.circuitbreaker:
         - java.io.IOException
       ignoreExceptions:
         - io.github.robwin.exception.BusinessException
-```
-
-
-
 ```
 
 
