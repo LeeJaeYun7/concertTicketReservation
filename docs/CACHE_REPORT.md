@@ -150,7 +150,8 @@ resilience4j.circuitbreaker:
       ignoreExceptions:
         - io.github.robwin.exception.BusinessException
 ```
-![image](https://github.com/user-attachments/assets/22afa6d7-e6d8-47cc-9cc3-ff7f79855499)
+![image](https://github.com/user-attachments/assets/2a1b7404-e6ea-4371-ba5f-d02007cfb1a9)
+
 
 
 ### 3) 캐시 도입을 통해 개선된 점
