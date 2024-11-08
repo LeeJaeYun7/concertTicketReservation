@@ -150,9 +150,12 @@ resilience4j.circuitbreaker:
       ignoreExceptions:
         - io.github.robwin.exception.BusinessException
 ```
+![image](https://github.com/user-attachments/assets/22afa6d7-e6d8-47cc-9cc3-ff7f79855499)
+
 
 ### 3) 캐시 도입을 통해 개선된 점
 
-
+- 콘서트 정보 3000개를 불러오는 것을 기준으로 3가지 테스트를 진행했습니다
+(1) 3000개를 RDB에서 불러오는 것 
 
 
