@@ -85,12 +85,16 @@ public class ConcertDao {
 
     private static final String CONCERTS = "concerts";
 
+   // 콘서트 정보를 Redis에 저장하는 기능
+   // CircuitBreaker 설정 추가 
     @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
     public void saveConcerts(String concerts) {
         redisson.getBucket(CONCERTS).set(concerts);
         log.info("Concerts saved into redis");
     }
 
+    // 콘서트 정보를 Redis에서 불러오는 기능
+    // CircuitBreaker 설정 추가  
     @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
     public String getConcerts() {
         RBucket<String> bucket = redisson.getBucket(CONCERTS);
@@ -149,6 +153,7 @@ resilience4j.circuitbreaker:
         - io.github.robwin.exception.BusinessException
 ```
 
+### 3) 캐시 도입을 통해 개선된 점
 
 
 
