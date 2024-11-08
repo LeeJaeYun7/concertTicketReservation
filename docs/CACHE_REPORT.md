@@ -173,4 +173,7 @@ resilience4j.circuitbreaker:
 - ![image](https://github.com/user-attachments/assets/d3dc6e76-497d-4f4b-acbd-323fef6efe9f)
 
 
-- Postman으로 5차례 테스트 시 567ms가 소요되었습니다
+- Postman으로 5차례 테스트 시 636ms, 128ms, 84ms, 100ms, 64ms 가 소요되었습니다
+- 평균적으로 202.4ms가 소요되었습니다.
+![image](https://github.com/user-attachments/assets/c4a4ebc2-196d-4e2c-abda-b2f7392101d5)
+
