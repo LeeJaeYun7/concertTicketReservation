@@ -21,7 +21,7 @@ public class ConcertFacade {
         List<ConcertVO> concertVOs = concertService.getAllConcertsFromRedis();
 
         return concertVOs.stream()
-                         .map(ConcertResponse::of)  // Concert 객체를 ConcertResponse로 변환
+                         .map(ConcertResponse::of)  // ConcertVO를 ConcertResponse로 변환
                          .collect(Collectors.toList());  // 리스트로 수집
     }
     public List<ConcertResponse> getAllConcertsFromDB() throws JsonProcessingException {
