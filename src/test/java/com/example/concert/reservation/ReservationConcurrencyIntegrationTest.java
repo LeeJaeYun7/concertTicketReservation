@@ -3,6 +3,8 @@ package com.example.concert.reservation;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.enums.ConcertAgeRestriction;
 import com.example.concert.concert.repository.ConcertRepository;
+import com.example.concert.concerthall.domain.ConcertHall;
+import com.example.concert.concerthall.repository.ConcertHallRepository;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.member.domain.Member;
@@ -45,6 +47,8 @@ public class ReservationConcurrencyIntegrationTest {
     ConcertRepository concertRepository;
 
     @Autowired
+    ConcertHallRepository concertHallRepository;
+    @Autowired
     ConcertScheduleRepository concertScheduleRepository;
 
     @Autowired
@@ -63,6 +67,8 @@ public class ReservationConcurrencyIntegrationTest {
     private Member savedMember;
 
     private Concert savedConcert;
+
+    private ConcertHall savedConcertHall;
     private ConcertSchedule savedConcertSchedule;
 
     private Seat savedSeat;
@@ -78,7 +84,11 @@ public class ReservationConcurrencyIntegrationTest {
 
         LocalDate startAt = LocalDate.of(2024, 11, 25);
         LocalDate endAt = LocalDate.of(2024, 11, 28);
-        Concert concert = Concert.of("김연우 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
+        ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+        savedConcertHall = concertHallRepository.save(concertHall);
+
+        Concert concert = Concert.of("김연우 콘서트", savedConcertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
         savedConcert = concertRepository.save(concert);
 
@@ -111,39 +121,7 @@ public class ReservationConcurrencyIntegrationTest {
             for (int i = 0; i < requestCount; i++) {
                 executorService.submit(() -> {
                     try {
-                        reservationFacade.createReservationWithPessimisticLock(token, memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
-                        successCount.incrementAndGet();
-                    } finally {
-                        latch.countDown();
-                    }
-                });
-            }
-
-            latch.await();
-            executorService.shutdown();
-
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-
-            log.info("Total time taken for 50 requests: " + duration + " ms");
-
-            assertEquals(1, successCount.get());
-        }
-
-        @Test
-        @DisplayName("낙관적 락을 활용하면 총 50번의 예약 요청 중 1번만 성공한다")
-        public void 낙관적_락을_활용하면_총_50번의_예약_요청_중_1번만_성공한다() throws InterruptedException {
-            int requestCount = 50;
-            ExecutorService executorService = Executors.newFixedThreadPool(5);
-            AtomicInteger successCount = new AtomicInteger(0);
-            CountDownLatch latch = new CountDownLatch(requestCount);
-
-            long startTime = System.currentTimeMillis();
-
-            for (int i = 0; i < requestCount; i++) {
-                executorService.submit(() -> {
-                    try {
-                        reservationFacade.createReservationWithOptimisticLock(token, memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
+                        reservationFacade.createReservation(token, memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
                         successCount.incrementAndGet();
                     } finally {
                         latch.countDown();

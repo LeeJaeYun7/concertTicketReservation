@@ -1,5 +1,6 @@
 package com.example.concert.reservation.domain;
 
+import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.global.entity.BaseTimeEntity;
 import com.example.concert.seat.domain.Seat;
@@ -19,6 +20,10 @@ public class Reservation extends BaseTimeEntity {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "concert_id")
+    private Concert concert;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_schedule_id")
     private ConcertSchedule concertSchedule;
 
@@ -29,12 +34,9 @@ public class Reservation extends BaseTimeEntity {
     private Seat seat;
 
     private long price;
-
-    @Version
-    private long version;
-
     @Builder
-    public Reservation(ConcertSchedule concertSchedule, String uuid, Seat seat, long price){
+    public Reservation(Concert concert, ConcertSchedule concertSchedule, String uuid, Seat seat, long price){
+        this.concert = concert;
         this.concertSchedule = concertSchedule;
         this.uuid = uuid;
         this.seat = seat;
@@ -43,8 +45,9 @@ public class Reservation extends BaseTimeEntity {
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static Reservation of(ConcertSchedule concertSchedule, String uuid, Seat seat, long price){
+    public static Reservation of(Concert concert, ConcertSchedule concertSchedule, String uuid, Seat seat, long price){
         return Reservation.builder()
+                          .concert(concert)
                           .concertSchedule(concertSchedule)
                           .uuid(uuid)
                           .seat(seat)

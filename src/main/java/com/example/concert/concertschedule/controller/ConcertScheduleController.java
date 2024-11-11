@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConcertScheduleController {
 
-    private final ConcertScheduleService concertScheduleService;
     private final ConcertScheduleFacade concertScheduleFacade;
 
     @PostMapping("/concertSchedule")
@@ -38,12 +37,6 @@ public class ConcertScheduleController {
         AvailableDateTimesResponse availableDateTimesResponse = AvailableDateTimesResponse.of(availableDateTimes);
 
         return ResponseEntity.status(HttpStatus.OK).body(availableDateTimesResponse);
-    }
-
-    @GetMapping("/concertSchedule/list")
-    public ResponseEntity<List<ConcertScheduleResponse>> retrieveAvailableConcertSchedules() throws JsonProcessingException {
-        List<ConcertScheduleResponse> availableConcertSchedules = concertScheduleFacade.getAllAvailableConcertSchedules();
-        return ResponseEntity.status(HttpStatus.OK).body(availableConcertSchedules);
     }
 
     @GetMapping("/concertSchedule/seats")

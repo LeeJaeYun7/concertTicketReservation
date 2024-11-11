@@ -2,6 +2,7 @@ package com.example.concert.seat;
 
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.enums.ConcertAgeRestriction;
+import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.enums.SeatGrade;
@@ -47,7 +48,9 @@ public class SeatServiceTest {
         void concertScheduleId가_전달될때_예약_가능한_좌석이_조회된다() {
             LocalDate startAt = LocalDate.of(2024, 10, 16);
             LocalDate endAt = LocalDate.of(2024, 10, 18);
-            Concert concert = Concert.of("박효신 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
@@ -77,7 +80,9 @@ public class SeatServiceTest {
         void 업데이트_시각을_최신화할때_성공한다() {
             LocalDate startAt = LocalDate.of(2024, 10, 16);
             LocalDate endAt = LocalDate.of(2024, 10, 18);
-            Concert concert = Concert.of("박효신 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
@@ -101,7 +106,9 @@ public class SeatServiceTest {
         void 좌석_상태를_업데이트할_때_성공한다() {
             LocalDate startAt = LocalDate.of(2024, 10, 16);
             LocalDate endAt = LocalDate.of(2024, 10, 18);
-            Concert concert = Concert.of("박효신 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad",  120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);

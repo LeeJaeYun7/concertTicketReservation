@@ -16,8 +16,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Reservation r WHERE r.concertSchedule.id = :concertScheduleId AND r.seat.id = :seatId")
     Optional<Reservation> findReservationByConcertScheduleIdAndSeatId(@Param(value="concertScheduleId") long concertScheduleId, @Param(value="seatId") long seatId);
-
-    @Lock(LockModeType.OPTIMISTIC)
-    @Query("SELECT r FROM Reservation r WHERE r.concertSchedule.id = :concertScheduleId AND r.seat.id = :seatId")
-    Optional<Reservation> findReservationByConcertScheduleIdAndSeatIdWithOptimisticLock(@Param(value="concertScheduleId") long concertScheduleId, @Param(value="seatId") long seatId);
 }

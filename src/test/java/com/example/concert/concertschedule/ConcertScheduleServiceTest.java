@@ -2,6 +2,7 @@ package com.example.concert.concertschedule;
 
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.enums.ConcertAgeRestriction;
+import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
@@ -43,7 +44,9 @@ public class ConcertScheduleServiceTest {
         void 성공한다() {
             LocalDate IUstartAt = LocalDate.of(2024, 10, 16);
             LocalDate IUendAt = LocalDate.of(2024, 10, 18);
-            Concert IUConcert = Concert.of("아이유 콘서트", "ballad", "장충체육관", 120, ConcertAgeRestriction.OVER_15, IUstartAt, IUendAt);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert IUConcert = Concert.of("아이유 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, IUstartAt, IUendAt);
 
             LocalDateTime IUdateTime = LocalDateTime.of(2024, 10, 18, 22, 30);
             ConcertSchedule IUconcertSchedule = ConcertSchedule.of(IUConcert, IUdateTime, 50000);

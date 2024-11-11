@@ -29,7 +29,7 @@ public class ReservationController {
         long concertScheduleId = reservationRequest.getConcertScheduleId();
         long seatNumber = reservationRequest.getSeatNumber();
 
-        ReservationVO reservationVO = reservationFacade.createReservationWithPessimisticLock(token, uuid, concertScheduleId, seatNumber);
+        ReservationVO reservationVO = reservationFacade.createReservation(token, uuid, concertScheduleId, seatNumber);
         ReservationResponse reservationResponse = ReservationResponse.of(reservationVO.getName(), reservationVO.getConcertName(), reservationVO.getDateTime(), reservationVO.getPrice());
 
         return ResponseEntity.status(HttpStatus.OK).body(reservationResponse);

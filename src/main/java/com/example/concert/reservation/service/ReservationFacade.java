@@ -48,8 +48,7 @@ public class ReservationFacade {
     }
 
     @Transactional
-    public ReservationVO createReservationWithPessimisticLock(String token, String uuid, long concertScheduleId, long seatNumber) {
-
+    public ReservationVO createReservation(String token, String uuid, long concertScheduleId, long seatNumber) {
         validateSeatReservation(concertScheduleId, seatNumber);
         checkBalanceOverPrice(uuid, concertScheduleId);
 
@@ -57,31 +56,8 @@ public class ReservationFacade {
         Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
-        reservationService.createReservation(concertSchedule, uuid, seat, price);
-        paymentService.createPayment(concertSchedule, uuid, price);
-        memberService.decreaseBalance(uuid, price);
-
-        updateStatus(token, concertScheduleId, seatNumber);
-
-        String name = getMember(uuid).getName();
-        String concertName = getConcert(concertScheduleId).getName();
-        LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
-
-        return ReservationVO.of(name, concertName, dateTime, price);
-    }
-
-    @Transactional
-    public ReservationVO createReservationWithOptimisticLock(String token, String uuid, long concertScheduleId, long seatNumber) {
-
-        validateSeatReservation(concertScheduleId, seatNumber);
-        checkBalanceOverPrice(uuid, concertScheduleId);
-
-        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, seatNumber);
-        long price = getConcertSchedule(concertScheduleId).getPrice();
-
-        reservationService.createReservationWithOptimisticLock(concertSchedule, uuid, seat, price);
-        paymentService.createPayment(concertSchedule, uuid, price);
+        reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
+        paymentService.createPayment(concertSchedule.getConcert(), concertSchedule, uuid, price);
         memberService.decreaseBalance(uuid, price);
 
         updateStatus(token, concertScheduleId, seatNumber);

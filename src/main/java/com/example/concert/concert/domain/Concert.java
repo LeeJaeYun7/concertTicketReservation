@@ -1,6 +1,7 @@
 package com.example.concert.concert.domain;
 
 import com.example.concert.concert.enums.ConcertAgeRestriction;
+import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -24,11 +25,12 @@ public class Concert extends BaseTimeEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "concert_hall_id")
+    private ConcertHall concertHall;
+
     @Column(name = "genre")
     private String genre;
-
-    @Column(name = "location")
-    private String location;
 
     @Column(name = "performance_time")
     private long performanceTime;
@@ -43,10 +45,10 @@ public class Concert extends BaseTimeEntity implements Serializable {
     private LocalDate endAt;
 
     @Builder
-    public Concert(String name, String genre, String location, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt){
+    public Concert(String name, ConcertHall concertHall, String genre, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt){
         this.name = name;
+        this.concertHall = concertHall;
         this.genre = genre;
-        this.location = location;
         this.performanceTime = performanceTime;
         this.ageRestriction = ageRestriction;
         this.startAt = startAt;
@@ -55,11 +57,11 @@ public class Concert extends BaseTimeEntity implements Serializable {
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static Concert of(String name, String genre, String location, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt){
+    public static Concert of(String name, ConcertHall concertHall, String genre, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt){
         return Concert.builder()
-                      .genre(genre)
                       .name(name)
-                      .location(location)
+                      .concertHall(concertHall)
+                      .genre(genre)
                       .performanceTime(performanceTime)
                       .ageRestriction(ageRestriction)
                       .startAt(startAt)
