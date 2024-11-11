@@ -14,7 +14,8 @@
 
 
 ### 1) 락 도입 이유 
-![image](https://github.com/user-attachments/assets/398ba19d-6372-4e55-b467-5b4e81bcabbf)
+![image](https://github.com/user-attachments/assets/8f655e39-06a1-44d4-be19-4a20a468f608)
+
 
 ### 2) 좌석 예약 요청
 
