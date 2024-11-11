@@ -2,9 +2,7 @@ package com.example.concert.concertschedule.controller;
 
 import com.example.concert.concertschedule.dto.request.ConcertScheduleCreateRequest;
 import com.example.concert.concertschedule.dto.response.AvailableDateTimesResponse;
-import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.concertschedule.service.ConcertScheduleFacade;
-import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.seat.dto.response.SeatNumbersResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;

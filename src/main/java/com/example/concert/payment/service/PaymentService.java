@@ -6,8 +6,6 @@ import com.example.concert.payment.domain.Payment;
 import com.example.concert.payment.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class PaymentService {
 
