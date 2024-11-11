@@ -242,10 +242,31 @@ resilience4j.circuitbreaker:
   
 
 **(4-2) 캐시 스케줄러 구현**
-- **'최근 3일간 판매량 Top30 콘서트'** 정보를 제공함에 있어서, 판매량은 계속해서 업데이트되므로, 실시간성을 반영할 필요가 있다고 생각했습니다.<br>
+```
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class ConcertScheduler {
+
+    private final ReservationRepository reservationRepository;
+    private final TimeProvider timeProvider;
+    private final ConcertCache concertCache;
+
+    @Scheduled(fixedRate = 300000)
+    public void updateTop30Concerts() throws JsonProcessingException {
+        LocalDateTime now = timeProvider.now();
+        LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));
+
+        List<Concert> top30Concerts = reservationRepository.findTop30Concerts(threeDaysAgo);
+        concertCache.saveTop30Concerts(top30Concerts);
+    }
+}
+
+```
+- **'최근 3일간 판매량 Top30 콘서트'** 정보를 제공함에 있어서, <br> 
+  판매량은 계속해서 업데이트되므로, 실시간성을 반영할 필요가 있다고 생각했습니다.<br>
   따라서 캐시 스케줄러를 구현해서 **'5분마다'** 캐시 정보가 최신화되도록 하였습니다. <br> 
   
-
 
 **(4-3) 캐시 TTL(Time To Live) 설정**
 - Redis 캐시는 일반적으로 메모리 관리를 고려해, TTL을 설정합니다. <br> 
