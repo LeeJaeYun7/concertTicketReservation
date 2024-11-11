@@ -27,9 +27,8 @@
 - 콘서트 티켓 서비스에는 콘서트라는 도메인이 존재합니다. <br>
   그리고 사용자가 콘서트 메인 페이지에 접근했을 때, **'가장 인기 있는'** 콘서트들의 정보가 제공되어야 합니다. <br>
 
-- 콘서트 티켓 서비스에서 콘서트 메인 페이지는 사용자가 가장 많이 접근하는 페이지 중 하나입니다. <br>
-  그리고 그 때마다 콘서트들의 정보가 제공되어야 합니다. <br> 
-  따라서 이 부분에 캐시를 적용하는 것이, 사용자 경험 향상에 도움이 될 것이라고 판단했습니다. <br> 
+- 콘서트 티켓 서비스에서 콘서트 메인 페이지는 **사용자가 가장 많이 접근**하는 페이지 중 하나입니다. <br>
+  따라서 **'가장 인기 있는'** 콘서트 정보를 제공하는 부분에 캐시를 적용하는 것이, 사용자 경험 향상에 도움이 될 것이라고 판단했습니다. <br> 
    
 
 **(2) 캐시 선택시 고려한 점**
@@ -49,7 +48,7 @@
   (2) 캐시 서버의 장애로 인한 네트워크 장애가 발생할 수 있다는 점입니다. <br>  
 
 **(3) 캐시 선택 결론**
-- 저는 이번 캐시 도입을 글로벌 캐시인 Redis로 결정했습니다. <br>
+- 저는 이번 캐시 도입을 **글로벌 캐시인 Redis**로 결정했습니다. <br>
   
   그 이유는 <br> 
   (1) 일반적으로 분산 환경에서는 동기화 이슈로 인해 글로벌 캐시가 우선적으로 고려되고, 로컬 캐시는 보조적으로 활용된다는 점 <br> 
@@ -65,46 +64,67 @@
 **(3) 캐시 구현**
 
 ```
-// ConcertDao.java
+// ConcertCache.java
+public interface ConcertCache {
+    void saveTop30Concerts(List<Concert> concerts) throws JsonProcessingException;
+    List<Concert> findTop30Concerts() throws JsonProcessingException;
+}
 
+```
+
+```
+// RedisConcertCache.java
 package com.example.concert.redis;
 
+import com.example.concert.concert.cache.ConcertCache;
+import com.example.concert.concert.domain.Concert;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RBucket;
+import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.util.List;
+
 @Slf4j
+@Primary
 @Component
 @RequiredArgsConstructor
-public class ConcertDao {
+public class RedisConcertCache implements ConcertCache {
 
     private final RedissonClient redisson;
+    private static final String TOP30_CONCERTS = "top30concerts";
+    private final ObjectMapper objectMapper;
 
-    private static final String CONCERTS = "concerts";
+    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcerts")
+    public void saveTop30Concerts(List<Concert> concerts) throws JsonProcessingException {
+        RMap<String, String> top30concertMap = redisson.getMap(TOP30_CONCERTS);
+        String top30concertListJson = objectMapper.writeValueAsString(concerts);
 
-   // 콘서트 정보를 Redis에 저장하는 기능
-    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
-    public void saveConcerts(String concerts) {
-        redisson.getBucket(CONCERTS).set(concerts);
-        log.info("Concerts saved into redis");
+        top30concertMap.put("top30concerts", top30concertListJson);
+        top30concertMap.expire(Duration.ofMinutes(5).plusSeconds(10));
+
+        log.info("Top 30 concerts saved to Redis as JSON.");
     }
 
-    // 콘서트 정보를 Redis에서 불러오는 기능
-    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcertSchedules")
-    public String getConcerts() {
-        RBucket<String> bucket = redisson.getBucket(CONCERTS);
-        String value = bucket.get();
+    @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcerts")
+    public List<Concert> findTop30Concerts() throws JsonProcessingException {
+        RMap<String, String> top30concertMap = redisson.getMap(TOP30_CONCERTS);
 
-        if (value != null) {
-            log.info("Retrieved concerts: {}", value);
+        String top30concertListJson = top30concertMap.get("top30concerts");
+
+        if (top30concertListJson != null && !top30concertListJson.isEmpty()) {
+            log.info("Retrieved top 30 concerts from Redis.");
+            return objectMapper.readValue(top30concertListJson, objectMapper.getTypeFactory().constructCollectionType(List.class, Concert.class));
         } else {
-            log.warn("No concerts found.");
+            log.warn("No top 30 concerts found in Redis.");
+            return null;
         }
-
-        return value;
     }
 
     // Fallback 메소드 정의 (서킷 브레이커가 열렸을 때 호출됨)
@@ -117,6 +137,8 @@ public class ConcertDao {
         return null;
     }
 }
+
+
 ```
 
 ```
