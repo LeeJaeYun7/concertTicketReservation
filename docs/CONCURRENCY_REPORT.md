@@ -4,28 +4,16 @@
 
 ## 개요
 
-이 보고서는 크게 4가지 파트로 구성됩니다.
+이 보고서는 크게 5가지 파트로 구성됩니다.
   
 **1) 락 도입 이유** <br>
 **2) 락 도입 과정** <br>
 **3) 락 구현** <br>
-**4) 락 도입을 통해 개선된 점** <br> 
+**4) 락 테스트 코드 구현** <br>
+**5) 락 도입을 통해 개선된 점** <br> 
 
 
-## 1. 콘서트 대기열 시스템에서 동시성 문제가 발생할 수 있는 로직 
-
-### 1) 잔액 충전
-
-**(1) 발생 원인**<br>
--  한 명의 사용자가 잔액을 충전할 때, 같은 요청을 여러 번 호출 할 수 있음<br> 
--> 이러한 경우, 1번의 요청만 승인되도록 해야 합니다. <br>
--> 이를 **멱등성(idempotent) 처리**라고 합니다. 
-
-**(2) 목표**<br>
-- 한 명의 사용자가 여러 번 충전 요청을 보내더라도, 잔액은 한 번만 증가해야 한다
-- 충전 금액은 사용자 계정에 정확하게 반영되어야 한다.
-
-<br> 
+### 1) 락 도입 이유 
 
 ### 2) 좌석 예약 요청
 
@@ -38,55 +26,10 @@
 
 <br> 
 
-### 3) 결제 요청(=예약 요청) 
-
-**(1) 발생 원인**<br>
--  한 명의 사용자가 결제를 할 때, 같은 요청을 여러 번 호출할 수 있음<br>
--> 이러한 경우, 1번의 요청만 승인되도록 해야 합니다. <br>
--> 이를 **멱등성(idempotent) 처리**라고 합니다. 
-
-**(2) 목표**<br>
-- 한 명의 사용자가 여러 번 결제 요청을 보내더라도, 결제는 한 번만 되어야 한다.
-- 결제 금액의 차감은 사용자 계정에 정확하게 반영되어야 한다.
-
-<br> 
-
-## 2. 동시성 제어 코드
 
 
-### 1) 잔액 충전
+### 2) 락 도입 과정 
 
-**(1) 비관적 락(Pessimistic Lock) <br>**
-- 잔액 충전 시, 우선적으로 **DB에서 멤버의 잔액 조회가 필요한데 DB 조회시 비관적 락**을 걸어주었습니다. <br> 
--> 비관적 락은 멤버 정보가 업데이트 되고, **JPA의 Dirty-Checking에 의해 DB에 커밋될 때 해제**됩니다.   
-
-```
-public ChargeResponse chargeBalance(UUID uuid, long amount) throws Exception {
-        validateMember(uuid);
-
-        Member member = memberService.getMemberByUuidWithLock(uuid);
-        long balance = member.getBalance();
-        long updatedBalance = balance + amount;
-        member.updateBalance(updatedBalance);
-
-        chargeService.createCharge(uuid, amount);
-
-        return ChargeResponse.of(updatedBalance);
-}
-```
-```
-public Member getMemberByUuidWithLock(UUID uuid) throws Exception {
-        return memberRepository.findByUuidWithLock(uuid)
-                               .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
-}
-```
-```
-@Lock(LockModeType.PESSIMISTIC_WRITE)
-@Query("SELECT m from Member m WHERE m.uuid = :uuid")
-Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
-```
-
-<br> 
 
 ### 2) 좌석 예약 요청 
 **(1) 비관적 락(Pessimistic Lock) <br>**
@@ -172,50 +115,6 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithDistributedLock(@Param("conce
 
 <br> 
 
-
-### 3) 결제 요청 
-**(1) 비관적 락(Pessimistic Lock) <br>**
-
-```
-@Transactional
-public ReservationResponse createReservation(String token, UUID uuid, long concertScheduleId, long seatNumber) throws Exception {
-        validateToken(token);
-        validateSeatReservation(concertScheduleId, seatNumber);
-        checkBalanceOverPrice(uuid, concertScheduleId);
-
-        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithLock(concertScheduleId, seatNumber);
-        long price = getConcertSchedule(concertScheduleId).getPrice();
-
-        reservationService.createReservation(concertSchedule, uuid, seat, price);
-        paymentService.createPayment(concertSchedule, uuid, price);
-        memberService.decreaseBalance(uuid, price);
-
-        updateStatus(token, concertScheduleId, seatNumber);
-
-        String name = getMember(uuid).getName();
-        String concertName = getConcert(concertScheduleId).getName();
-        LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
-
-        return ReservationResponse.of(name, concertName, dateTime, price);
-}
-```
-```
-public void decreaseBalance(UUID uuid, long price) throws Exception {
-        Member member = getMemberByUuidWithLock(uuid);
-        member.updateBalance(member.getBalance()-price);
-}
-```
-```
- public Member getMemberByUuidWithLock(UUID uuid) throws Exception {
-        return memberRepository.findByUuidWithLock(uuid).orElseThrow(Exception::new);
-}
-```
-```
-@Lock(LockModeType.PESSIMISTIC_READ)
-@Query("SELECT m from Member m WHERE m.uuid = :uuid")
-Optional<Member> findByUuidWithLock(@Param("uuid") UUID uuid);
-```
 
 <br>
 
