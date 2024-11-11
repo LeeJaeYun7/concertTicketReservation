@@ -301,18 +301,18 @@ public class ConcertScheduler {
 (1) 해당 정보를 RDB에서 검색 <br>
 (2) 해당 정보를 Redis에서 검색 <br> 
 
+- k6 테스트 조건은 다음과 같았습니다
+(1) 60초 동안 1000건의 요청이 발생
+(2) P90, P95, P99 지연시간 측정 
+(3) P99에 대한 threshold는 1초로 설정
 
 **(1) 해당 정보를 RDB에서 검색**
-- Postman으로 5차례 테스트 시 567ms, 160ms, 91ms, 109ms, 75ms가 소요되었습니다
-- 평균적으로 200.4ms가 소요되었습니다. 
-![image](https://github.com/user-attachments/assets/0e598607-6b7a-43c1-9d56-a43d9822082b)
+- 로컬에서 K6으로 테스트 시 다음과 같은 결과를 얻었습니다.
+![image](https://github.com/user-attachments/assets/0cf0c014-d2bc-45ce-962e-c1c5d00a649d)
+
 
 **(2) 해당 정보를 Redis에서 검색**
-- Redis에 콘서트 데이터 캐싱
-- ![image](https://github.com/user-attachments/assets/d3dc6e76-497d-4f4b-acbd-323fef6efe9f)
+- 로컬에서 k6으로 테스트 시 다음과 같은 결과를 얻었습니다. 
+![image](https://github.com/user-attachments/assets/ef758733-07d3-4ec6-ad5c-b1a7d0a0cad6)
 
-
-- Postman으로 5차례 테스트 시 636ms, 128ms, 84ms, 100ms, 64ms 가 소요되었습니다
-- 평균적으로 202.4ms가 소요되었습니다.
-![image](https://github.com/user-attachments/assets/c4a4ebc2-196d-4e2c-abda-b2f7392101d5)
 
