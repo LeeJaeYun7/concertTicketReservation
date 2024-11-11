@@ -63,6 +63,8 @@
 
 **(3) 캐시 구현**
 
+**(3-1) ConcertCache 인터페이스**
+
 ```
 // ConcertCache.java
 public interface ConcertCache {
@@ -72,6 +74,7 @@ public interface ConcertCache {
 
 ```
 
+**(3-2) RedisConcertCache 클래스**
 ```
 // RedisConcertCache.java
 package com.example.concert.redis;
@@ -141,6 +144,7 @@ public class RedisConcertCache implements ConcertCache {
 
 ```
 
+**(3-3) ConcertScheduler 클래스**
 ```
 // ConcertScheduler.java
 
@@ -181,6 +185,7 @@ public class ConcertScheduler {
 
 ```
 
+**(3-3) Circuit Breaker 설정**
 ```
 // application.yml
 // Circuit Breaker 설정 추가
