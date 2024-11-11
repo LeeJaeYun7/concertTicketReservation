@@ -297,17 +297,17 @@ public class ConcertScheduler {
 
 ### 3) 캐시 도입을 통해 개선된 점
 
-- '최근 3일간 Top30 콘서트' 정보를 불러오는 것에 대해 2가지 테스트를 진행했습니다 <br>
+- '최근 3일간 Top30 콘서트' 정보를 불러오는 것에 대해 k6로 2가지 테스트를 진행했습니다 <br>
 (1) 해당 정보를 RDB에서 검색 <br>
 (2) 해당 정보를 Redis에서 검색 <br> 
 
 
-**(1) 3000개를 RDB에서 검색**
+**(1) 해당 정보를 RDB에서 검색**
 - Postman으로 5차례 테스트 시 567ms, 160ms, 91ms, 109ms, 75ms가 소요되었습니다
 - 평균적으로 200.4ms가 소요되었습니다. 
 ![image](https://github.com/user-attachments/assets/0e598607-6b7a-43c1-9d56-a43d9822082b)
 
-**(2) 3000개를 Redis에서 검색**
+**(2) 해당 정보를 Redis에서 검색**
 - Redis에 콘서트 데이터 캐싱
 - ![image](https://github.com/user-attachments/assets/d3dc6e76-497d-4f4b-acbd-323fef6efe9f)
 
