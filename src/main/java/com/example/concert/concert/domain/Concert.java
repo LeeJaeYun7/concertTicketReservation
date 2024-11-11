@@ -25,7 +25,7 @@ public class Concert extends BaseTimeEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "concert_hall_id")
     private ConcertHall concertHall;
 

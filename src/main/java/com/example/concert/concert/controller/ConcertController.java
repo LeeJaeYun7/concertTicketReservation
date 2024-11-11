@@ -17,23 +17,22 @@ import java.util.List;
 public class ConcertController {
 
     private final ConcertFacade concertFacade;
-    private final ConcertService concertService;
 
-    @GetMapping("/concert/redis")
-    public ResponseEntity<List<ConcertResponse>> retrieveAllConcertsFromRedis() throws JsonProcessingException {
-        List<ConcertResponse> concertResponses = concertFacade.getAllConcertsFromRedis();
+    @GetMapping("/concert/top30/3days/db")
+    public ResponseEntity<List<ConcertResponse>> retrieveAllConcertsFromDB() throws JsonProcessingException {
+        List<ConcertResponse> concertResponses = concertFacade.getTop30ConcertsFromDB();
         return ResponseEntity.status(HttpStatus.OK).body(concertResponses);
     }
 
-    @GetMapping("/concert/redis/init")
-    public ResponseEntity<Void> saveAllConcertsToRedis() throws JsonProcessingException {
-        concertService.saveAllConcertsToRedis();
+    @GetMapping("/concert/save/top30/3days")
+    public ResponseEntity<Void> saveTop30ConcertsIntoRedis() throws JsonProcessingException {
+        concertFacade.saveTop30ConcertsIntoRedis();
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/concert/db")
-    public ResponseEntity<List<ConcertResponse>> retrieveAllConcertsFromDB() throws JsonProcessingException {
-        List<ConcertResponse> concertResponses = concertFacade.getAllConcertsFromDB();
-        return ResponseEntity.status(HttpStatus.OK).body(concertResponses);
+    @GetMapping("/concert/top30/3days")
+    public ResponseEntity<List<ConcertResponse>> retrieveTop30Concerts() throws JsonProcessingException {
+        List<ConcertResponse> concertResponseList = concertFacade.getTop30Concerts();
+        return ResponseEntity.status(HttpStatus.OK).body(concertResponseList);
     }
 }

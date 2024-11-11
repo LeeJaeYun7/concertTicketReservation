@@ -3,18 +3,16 @@ package com.example.concert.concertschedule.service;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.service.ConcertService;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
-import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.service.SeatService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ConcertScheduleFacade {
 

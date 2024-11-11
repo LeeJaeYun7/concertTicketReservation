@@ -3,14 +3,17 @@ package com.example.concert.concert.service;
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
+import com.example.concert.concert.cache.ConcertCache;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.repository.ConcertRepository;
-import com.example.concert.concert.vo.ConcertVO;
-import com.example.concert.redis.ConcertDao;
+import com.example.concert.reservation.repository.ReservationRepository;
+import com.example.concert.utils.TimeProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,18 +21,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ConcertService {
 
+    private final TimeProvider timeProvider;
     private final ConcertRepository concertRepository;
-    private final ConcertDao concertDao;
-
-    public List<ConcertVO> getAllConcertsFromRedis() throws JsonProcessingException {
-        List<Concert> concerts = concertDao.getConcerts();
-        return changeConcertEntityToVO(concerts);
-    }
-
-    public List<ConcertVO> getAllConcertsFromDB() {
-        List<Concert> concerts = concertRepository.findAll();
-        return concerts.stream().map(ConcertVO::of).toList();
-    }
+    private final ReservationRepository reservationRepository;
+    private final ConcertCache concertCache;
 
     public Concert getConcertById(long concertId) {
         return concertRepository.findById(concertId)
@@ -45,14 +40,30 @@ public class ConcertService {
         return concertRepository.findAll().stream().map(Concert::getId).collect(Collectors.toList());
     }
 
-    public List<ConcertVO> changeConcertEntityToVO(List<Concert> concerts) {
-        return concerts.stream()
-                .map(ConcertVO::of)  // Concert 객체를 ConcertVO 객체로 변환
-                .collect(Collectors.toList());  // 변환된 객체들을 리스트로 수집
+    public void saveTop30ConcertsIntoRedis() throws JsonProcessingException {
+        LocalDateTime now = timeProvider.now();
+        LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));
+
+        List<Concert> top30concerts = reservationRepository.findTop30Concerts(threeDaysAgo);
+        concertCache.saveTop30Concerts(top30concerts);
     }
 
-    public void saveAllConcertsToRedis() throws JsonProcessingException {
-        List<Concert> concerts = concertRepository.findAll();
-        concertDao.saveConcerts(concerts);
+    public List<Concert> getTop30ConcertsFromDB() {
+        LocalDateTime now = timeProvider.now();
+        LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));
+
+        return reservationRepository.findTop30Concerts(threeDaysAgo);
+    }
+
+    public List<Concert> getTop30Concerts() throws JsonProcessingException {
+
+        if(concertCache.findTop30Concerts() != null){
+            return concertCache.findTop30Concerts();
+        }
+
+        LocalDateTime now = timeProvider.now();
+        LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));
+
+        return reservationRepository.findTop30Concerts(threeDaysAgo);
     }
 }

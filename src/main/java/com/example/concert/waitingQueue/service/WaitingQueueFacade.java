@@ -8,16 +8,15 @@ import com.example.concert.concert.service.ConcertService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.vo.TokenVO;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.lang.Math.max;
 
-@Service
+@Component
 public class WaitingQueueFacade {
 
     private final ConcertService concertService;

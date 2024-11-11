@@ -17,12 +17,8 @@ public class ReservationService {
     }
 
     public Reservation createReservation(Concert concert, ConcertSchedule concertSchedule, String uuid, Seat seat, long price) {
-        System.out.println("여기 도착1");
-
         reservationRepository.findReservationByConcertScheduleIdAndSeatId(concertSchedule.getId(), seat.getId());
-        System.out.println("여기 도착2");
         Reservation reservation = Reservation.of(concert, concertSchedule, uuid, seat, price);
-        System.out.println("여기 도착3");
         return reservationRepository.save(reservation);
     }
 }

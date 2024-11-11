@@ -4,7 +4,9 @@ import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
 import com.example.concert.concert.domain.Concert;
+import com.example.concert.concert.dto.response.ConcertResponse;
 import com.example.concert.concert.service.ConcertService;
+import com.example.concert.concert.vo.ConcertVO;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
@@ -16,36 +18,27 @@ import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Service
+@Component
+@RequiredArgsConstructor
 public class ReservationFacade {
 
     private final TimeProvider timeProvider;
     private final MemberService memberService;
     private final ReservationService reservationService;
     private final SeatService seatService;
-
     private final ConcertService concertService;
     private final ConcertScheduleService concertScheduleService;
     private final PaymentService paymentService;
-
     private final WaitingQueueService waitingQueueService;
-
-    public ReservationFacade(TimeProvider timeProvider, MemberService memberService, ReservationService reservationService, SeatService seatService, ConcertService concertService, ConcertScheduleService concertScheduleService, PaymentService paymentService, WaitingQueueService waitingQueueService){
-        this.timeProvider = timeProvider;
-        this.memberService = memberService;
-        this.reservationService = reservationService;
-        this.seatService = seatService;
-        this.concertService = concertService;
-        this.concertScheduleService = concertScheduleService;
-        this.paymentService = paymentService;
-        this.waitingQueueService = waitingQueueService;
-    }
 
     @Transactional
     public ReservationVO createReservation(String token, String uuid, long concertScheduleId, long seatNumber) {
