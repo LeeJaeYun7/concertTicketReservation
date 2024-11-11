@@ -317,7 +317,7 @@ public class ConcertScheduler {
 - 로컬에서 k6으로 테스트 시 다음과 같은 결과를 얻었습니다. 
 ![image](https://github.com/user-attachments/assets/ef758733-07d3-4ec6-ad5c-b1a7d0a0cad6)
 
-- **평균 응답 시간은 256.16ms**이었으며, 90%의 요청이 496.25ms, 95%의 요청이 582.64ms, 99%의 요청이 798.72s 이내에 응답하였습니다.
+- **평균 응답 시간은 256.16ms**이었으며, 90%의 요청이 496.25ms, 95%의 요청이 582.64ms, 99%의 요청이 798.72ms 이내에 응답하였습니다.
 - Redis 사용 시 **평균 응답 시간 기준 RDB 대비 71.03% 개선**되었습니다.
   ![image](https://github.com/user-attachments/assets/035a9443-6da6-47b3-b844-1dbe441dcc28)
 
