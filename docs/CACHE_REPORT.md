@@ -185,7 +185,7 @@ public class ConcertScheduler {
 
 ```
 
-**(3-3) Circuit Breaker 설정**
+**(3-4) Circuit Breaker 설정**
 ```
 // application.yml
 // Circuit Breaker 설정 추가
