@@ -302,17 +302,22 @@ public class ConcertScheduler {
 (2) 해당 정보를 Redis에서 검색 <br> 
 
 - k6 테스트 조건은 다음과 같았습니다
-(1) 60초 동안 1000건의 요청이 발생
-(2) P90, P95, P99 지연시간 측정 
-(3) P99에 대한 threshold는 1초로 설정
+(1) **60초 동안 1000건의 요청(=RPM 1000)**이 발생
+(2) **P90, P95, P99 지연시간** 측정 
+(3) **P99에 대한 threshold는 1초**로 설정
 
 **(1) 해당 정보를 RDB에서 검색**
 - 로컬에서 K6으로 테스트 시 다음과 같은 결과를 얻었습니다.
 ![image](https://github.com/user-attachments/assets/0cf0c014-d2bc-45ce-962e-c1c5d00a649d)
 
+- 평균 응답 시간은 882.64ms이었으며, 90%의 요청이 1.6s, 95%의 요청이 1.85s, 99%의 요청이 2.45s 이내에 응답하였습니다.
+- P99 threshold를 초과해서 에러가 발생하였습니다. 
 
 **(2) 해당 정보를 Redis에서 검색**
 - 로컬에서 k6으로 테스트 시 다음과 같은 결과를 얻었습니다. 
 ![image](https://github.com/user-attachments/assets/ef758733-07d3-4ec6-ad5c-b1a7d0a0cad6)
 
+- 평균 응답 시간은 256.16ms이었으며, 90%의 요청이 496.25ms, 95%의 요청이 582.64ms, 99%의 요청이 798.72s 이내에 응답하였습니다.
+- Redis 사용 시 평균 응답 시간 기준 RDB 대비 71.03% 개선되었습니다.
+- ![image](https://github.com/user-attachments/assets/035a9443-6da6-47b3-b844-1dbe441dcc28)
 
