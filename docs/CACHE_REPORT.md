@@ -311,7 +311,7 @@ public class ConcertScheduler {
 ![image](https://github.com/user-attachments/assets/0cf0c014-d2bc-45ce-962e-c1c5d00a649d)
 
 - **평균 응답 시간은 882.64ms**이었으며, 90%의 요청이 1.6s, 95%의 요청이 1.85s, 99%의 요청이 2.45s 이내에 응답하였습니다.
-- P99 threshold를 초과해서 에러가 발생하였습니다. 
+- **P99 threshold를 초과**해서 에러가 발생하였습니다. 
 
 **(2) 해당 정보를 Redis에서 검색**
 - 로컬에서 k6으로 테스트 시 다음과 같은 결과를 얻었습니다. 
