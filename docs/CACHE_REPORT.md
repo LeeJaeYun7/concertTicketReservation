@@ -236,7 +236,7 @@ resilience4j.circuitbreaker:
   **캐시 스탬피드(Cache stampede)** 현상이 발생할 수 있습니다.
 
 - 캐시 스탬피드 현상이란 캐시가 없거나 만료된 시점에 여러 개의 애플리케이션이 <br>
-  동시에 캐시를 쓰는 **'중복 쓰기'**와 같은 작업으로 인해 부하가 발생하는 것을 의미합니다.
+  동시에 캐시를 쓰는 **중복 쓰기**와 같은 작업으로 인해 부하가 발생하는 것을 의미합니다.
 
 
   
@@ -269,6 +269,19 @@ public class ConcertScheduler {
   
 
 **(4-3) 캐시 TTL(Time To Live) 설정**
+```
+ @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcerts")
+ public void saveTop30Concerts(List<Concert> concerts) throws JsonProcessingException {
+        RMap<String, String> top30concertMap = redisson.getMap(TOP30_CONCERTS);
+        String top30concertListJson = objectMapper.writeValueAsString(concerts);
+
+        top30concertMap.put("top30concerts", top30concertListJson);
+        top30concertMap.expire(Duration.ofMinutes(5).plusSeconds(10));
+
+        log.info("Top 30 concerts saved to Redis as JSON.");
+}
+
+```
 - Redis 캐시는 일반적으로 메모리 관리를 고려해, TTL을 설정합니다. <br> 
   그리고 저는 이번 캐시 도입에서 캐시 TTL을 **'5분 10초'**로 설정했습니다. <br> 
   그 이유는 다음과 같습니다.
@@ -281,14 +294,11 @@ public class ConcertScheduler {
 
 
 
-
-
-
 ### 3) 캐시 도입을 통해 개선된 점
 
-- 콘서트 정보 3000개를 불러오는 것을 기준으로 2가지 테스트를 진행했습니다 <br>
-(1) 3000개를 RDB에서 검색 <br>
-(2) 3000개를 Redis에서 검색 <br> 
+- '최근 3일간 Top30 콘서트' 정보를 불러오는 것에 대해 2가지 테스트를 진행했습니다 <br>
+(1) 해당 정보를 RDB에서 검색 <br>
+(2) 해당 정보를 Redis에서 검색 <br> 
 
 
 **(1) 3000개를 RDB에서 검색**
