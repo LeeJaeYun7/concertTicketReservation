@@ -225,7 +225,7 @@ resilience4j.circuitbreaker:
 **(4-1) 캐시 워밍(Cache warming)**
 ```
   @GetMapping("/concert/save/top30/3days")
-    public ResponseEntity<Void> saveTop30ConcertsIntoRedis() throws JsonProcessingException {
+    public ResponseEntity<Void> **saveTop30ConcertsIntoRedis()** throws JsonProcessingException {
         concertFacade.saveTop30ConcertsIntoRedis();
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -252,7 +252,7 @@ public class ConcertScheduler {
     private final TimeProvider timeProvider;
     private final ConcertCache concertCache;
 
-    @Scheduled(fixedRate = 300000)
+    **@Scheduled(fixedRate = 300000)**
     public void updateTop30Concerts() throws JsonProcessingException {
         LocalDateTime now = timeProvider.now();
         LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));
@@ -276,7 +276,7 @@ public class ConcertScheduler {
         String top30concertListJson = objectMapper.writeValueAsString(concerts);
 
         top30concertMap.put("top30concerts", top30concertListJson);
-        top30concertMap.expire(Duration.ofMinutes(5).plusSeconds(10));
+        **top30concertMap.expire(Duration.ofMinutes(5).plusSeconds(10));**
 
         log.info("Top 30 concerts saved to Redis as JSON.");
 }
