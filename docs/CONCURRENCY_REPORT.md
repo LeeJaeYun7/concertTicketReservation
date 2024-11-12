@@ -308,7 +308,7 @@ void 분산_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성공�
   
 **2. Redis 분산락의 waitTime, leaseTime 설정** <br> 
 - 실무에서 Redis 분산락을 적용할 때, waitTime과 leaseTime을 어떻게 설정해야 할지에 대한 고민이 필요합니다. <br>
-- 
+  
 **3. Redis Key 관리 정책** <br> 
 - Redis 분산락은 특정 key 형태로 생성됩니다. <br> 
   Redis에는 분산락 외에도 다양한 캐시 key가 존재하므로, 이들에 대한 관리 정책에 대한 고민이 필요합니다. <br>
