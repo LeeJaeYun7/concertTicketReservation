@@ -313,7 +313,8 @@ public class ConcertScheduler {
 
 
 **(1) RDB에서 정보를 검색**
-- 로컬에서 K6으로 테스트 시 다음과 같은 결과를 얻었습니다.<br> 
+- 로컬 환경에서 **K6**으로 테스트 시 다음과 같은 결과를 얻었습니다.<br>
+  
 ![image](https://github.com/user-attachments/assets/0cf0c014-d2bc-45ce-962e-c1c5d00a649d)
 
 - **평균 응답 시간은 882.64ms**이었으며, <br>
@@ -321,10 +322,13 @@ public class ConcertScheduler {
 - **P99 threshold를 초과**해서 에러가 발생하였습니다. <br> 
 
 **(2) Redis에서 정보를 검색** 
-- 로컬에서 k6으로 테스트 시 다음과 같은 결과를 얻었습니다. <br> 
+- 로컬 환경에서 **k6**으로 테스트 시 다음과 같은 결과를 얻었습니다. <br>
+  
 ![image](https://github.com/user-attachments/assets/ef758733-07d3-4ec6-ad5c-b1a7d0a0cad6)
 
-- **평균 응답 시간은 256.16ms**이었으며, 90%의 요청이 496.25ms, 95%의 요청이 582.64ms, 99%의 요청이 798.72ms 이내에 응답하였습니다.
-- Redis 사용 시 **평균 응답 시간 기준 RDB 대비 71.03% 개선**되었습니다.
+- **평균 응답 시간은 256.16ms**이었으며, <br>
+  90%의 요청이 496.25ms 이내, 95%의 요청이 582.64ms 이내, 99%의 요청이 798.72ms 이내에 응답하였습니다. <br>
+  
+- Redis 사용 시 **평균 응답 시간이 RDB보다 71.03% 향상**되었습니다. <br>
   ![image](https://github.com/user-attachments/assets/035a9443-6da6-47b3-b844-1dbe441dcc28)
 
