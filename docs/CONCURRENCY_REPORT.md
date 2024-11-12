@@ -149,11 +149,9 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithDistributedLock(@Param("conce
 
 ### 4) 3가지 락 테스트 코드 구현
 
-- 테스트 시나리오는 **1000명의 사용자가 동시에 좌석 선점 예약을 하는 경우에, <br>
-  1명만 성공**하도록 시나리오를 구성하였습니다. <br>
+- 테스트 시나리오는 **1000명의 사용자가 동시에 좌석 선점 예약을 시도할 때, 오직 1명만 성공**하는 방식으로 구성하였습니다.
 
 <br> 
-
 
 **(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>**
 
