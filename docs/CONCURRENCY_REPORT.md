@@ -133,45 +133,11 @@ Optional<Seat> findByConcertScheduleIdAndNumberWithDistributedLock(@Param("conce
 
 <br>
 
-## 3. 동시성 테스트
+### 4) 3가지 락 테스트 코드 구현
+
+- 테스트 시나리오는 **1000명의 사용자가 동시에 좌석 선점 예약을 하는 경우에, 1명만 성공**하도록 시나리오를 구성하였습니다. <br>
 
 
-### 1) 잔액 충전
-**(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>** 
-```
-@Test
-@DisplayName("총 50번의 충전 요청 중 1번만 멤버 잔액에 반영된다")
-void 총_50번의_충전_요청_중_1번만_멤버_잔액에_반영된다() throws InterruptedException {
-            int requestCount = 50;
-            ExecutorService executorService = Executors.newFixedThreadPool(10);
-            AtomicInteger successCount = new AtomicInteger(0);
-            CountDownLatch latch = new CountDownLatch(requestCount);
-
-            for (int i = 0; i < requestCount; i++) {
-                executorService.submit(() -> {
-                    try {
-                        chargeFacade.chargeBalance(memberUuid, 10000);
-                        successCount.incrementAndGet();
-                    } finally {
-                        latch.countDown();
-                    }
-                });
-            }
-
-            latch.await();
-            executorService.shutdown();
-
-            Member updatedMember = memberRepository.findByUuid(memberUuid).orElseThrow();
-
-            assertEquals(1, successCount.get());
-            assertEquals(10000, updatedMember.getBalance());
-        }
-```
-![image](https://github.com/user-attachments/assets/f266cc2c-485d-4d8e-9eda-84799249bc49)
-
-<br>
-
-### 2) 좌석 예약 요청 
 **(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>**
 
 ```
@@ -215,6 +181,7 @@ void 비관적_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성�
 
 
 <br> 
+
 
 **(2) 낙관적 락(Optimistic Lock) 동시성 테스트 <br>**
 
@@ -298,47 +265,6 @@ void 분산_락을_활용해_1000번의_좌석_예약_요청_중_1번만_성공�
         }
 ```
 ![image](https://github.com/user-attachments/assets/39c35e14-d257-4c5e-a09c-df7079f582ce)
-
-
-<br> 
-
-### 3) 결제 요청 
-**(1) 비관적 락(Pessimistic Lock) 동시성 테스트 <br>**
-```
-@Test
-@DisplayName("총 50번의 예약 요청 중 1번만 성공한다")
-public void 총_50번의_예약_요청_중_1번만_성공한다() throws InterruptedException {
-            int requestCount = 50;
-            ExecutorService executorService = Executors.newFixedThreadPool(5);
-            AtomicInteger successCount = new AtomicInteger(0);
-            CountDownLatch latch = new CountDownLatch(requestCount);
-
-            long startTime = System.currentTimeMillis();
-
-            for (int i = 0; i < requestCount; i++) {
-                executorService.submit(() -> {
-                    try {
-                        reservationFacade.createReservation(token, memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
-                        successCount.incrementAndGet();
-                    } finally {
-                        latch.countDown();
-                    }
-                });
-            }
-
-            latch.await();
-            executorService.shutdown();
-
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-
-            log.info("Total time taken for 50 requests: " + duration + " ms");
-
-            assertEquals(1, successCount.get());
-        }
-```
-![image](https://github.com/user-attachments/assets/e6f0a9d8-1f12-484c-adb7-7e330ea6d937)
-
 
 ## 3. 결론
 
