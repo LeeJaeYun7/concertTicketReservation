@@ -20,6 +20,7 @@
 - 이를 해결하기 위해, 빈번하게 조회되는 API에 대해 **캐시를 도입**하여, **조회 지연(latency)을 최소화**하고, <br> 
   서비스 성능을 개선함으로써 사용자 경험을 향상시키고자 합니다.
 
+<br> 
 
 ### 2) 캐시 도입 과정
 ![image](https://github.com/user-attachments/assets/33991bc0-e4e4-4bc3-a52f-38661aa6bc61)
