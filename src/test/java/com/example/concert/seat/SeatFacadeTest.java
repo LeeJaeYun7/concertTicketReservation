@@ -2,12 +2,14 @@ package com.example.concert.seat;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.concert.domain.Concert;
+import com.example.concert.concert.enums.ConcertAgeRestriction;
+import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatGrade;
 import com.example.concert.seat.service.SeatFacade;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
@@ -19,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -48,12 +51,17 @@ public class SeatFacadeTest {
             String uuid = member.getUuid().toString();
 
             long concertScheduleId = 1L;
-            Concert concert = Concert.of("박효신 콘서트");
+            LocalDate startAt = LocalDate.of(2024, 10, 16);
+            LocalDate endAt = LocalDate.of(2024, 10, 18);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad",120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             long number = 1L;
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
+            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
@@ -72,12 +80,17 @@ public class SeatFacadeTest {
             String uuid = member.getUuid().toString();
 
             long concertScheduleId = 1L;
-            Concert concert = Concert.of("박효신 콘서트");
+            LocalDate startAt = LocalDate.of(2024, 10, 16);
+            LocalDate endAt = LocalDate.of(2024, 10, 18);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             long number = 1L;
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
+            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);

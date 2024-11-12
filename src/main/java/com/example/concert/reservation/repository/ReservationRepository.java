@@ -1,13 +1,17 @@
 package com.example.concert.reservation.repository;
 
+import com.example.concert.concert.domain.Concert;
 import com.example.concert.reservation.domain.Reservation;
 import jakarta.persistence.LockModeType;
+import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,7 +21,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM Reservation r WHERE r.concertSchedule.id = :concertScheduleId AND r.seat.id = :seatId")
     Optional<Reservation> findReservationByConcertScheduleIdAndSeatId(@Param(value="concertScheduleId") long concertScheduleId, @Param(value="seatId") long seatId);
 
-    @Lock(LockModeType.OPTIMISTIC)
-    @Query("SELECT r FROM Reservation r WHERE r.concertSchedule.id = :concertScheduleId AND r.seat.id = :seatId")
-    Optional<Reservation> findReservationByConcertScheduleIdAndSeatIdWithOptimisticLock(@Param(value="concertScheduleId") long concertScheduleId, @Param(value="seatId") long seatId);
+    // 최근 3일 간 콘서트 티켓 예약량 기준으로 Top30을 반환
+    @Query("SELECT r.concert, COUNT(r) AS salesCount " +
+            "FROM Reservation r " +
+            "WHERE r.createdAt >= :threeDaysAgo " +
+            "GROUP BY r.concert.id " +
+            "ORDER BY salesCount DESC")
+    List<Concert> findTop30Concerts(@Param("threeDaysAgo") LocalDateTime threeDaysAgo);
+
 }

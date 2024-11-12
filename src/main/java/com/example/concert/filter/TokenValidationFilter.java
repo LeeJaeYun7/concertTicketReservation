@@ -26,6 +26,7 @@ public class TokenValidationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         String requestURI = httpRequest.getRequestURI();
+
         if (isTokenValidationRequired(requestURI)) {
             String token = httpRequest.getHeader("Authorization");
 
@@ -49,7 +50,12 @@ public class TokenValidationFilter implements Filter {
 
 
     private boolean validateToken(String token) {
+        System.out.println("여기로 진입");
+
         Optional<WaitingQueue> waitingQueueOpt = waitingQueueRepository.findByToken(token);
+
+        System.out.println("결과는?");
+        System.out.println(waitingQueueOpt.isPresent());
 
         return waitingQueueOpt.isPresent();
     }

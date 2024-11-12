@@ -1,6 +1,8 @@
 package com.example.concert.concertschedule.repository;
 
 import com.example.concert.concertschedule.domain.ConcertSchedule;
+import com.example.concert.concertschedule.vo.ConcertScheduleVO;
+import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +15,7 @@ import java.util.List;
 public interface ConcertScheduleRepository extends JpaRepository<ConcertSchedule, Long> {
     @Query("SELECT c FROM ConcertSchedule c WHERE c.concert.id = :concertId AND c.dateTime >= :now")
     List<ConcertSchedule> findAllAfterNowByConcertId(@Param("concertId") long concertId, @Param("now") LocalDateTime now);
+
+    @Query("SELECT c.name, cs.dateTime, cs.price FROM ConcertSchedule cs INNER JOIN Concert c ON cs.concert.id = c.id WHERE cs.dateTime >= :now")
+    List<Tuple> findAllAfterNow(@Param("now") LocalDateTime now);
 }
