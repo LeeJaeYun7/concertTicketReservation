@@ -43,7 +43,7 @@
 | **레디스 분산 락 (Redis Distributed Lock)** | - 분산 환경에서 락을 관리할 수 있음. <br> - 빠르고 가벼운 락 제공. <br> - 여러 서버 간 동기화 용이. | - 락이 만료되면 다른 클라이언트가 락을 획득할 수 있음. <br> - 네트워크 지연 및 장애 발생 시 문제. <br> - 분산 시스템에서의 일관성 문제. |
 
 
-- 저는 3가지 락을 비교하기 위해, **3가지 락을 모두 구현 후, 성능 테스트**를 해보는 것으로 결정하였습니다.
+- 저는 3가지 락을 비교하기 위해, 3가지 락을 모두 구현한 후 **동시성 테스트와 성능 테스트를 진행**하기로 결정했습니다.
 
 
 <br> 
@@ -52,8 +52,13 @@
 ### 3) 3가지 락 구현
 
 **(1) 비관적 락(Pessimistic Lock) <br>**
-- 좌석 선점 예약 시, 우선적으로 **DB에서 해당 좌석이 선점되었는지 조회가 필요한데 DB 조회시 비관적 락**을 걸어주었습니다. <br> 
--> 비관적 락은 좌석 선점 예약이 업데이트 될 때, **JPA의 Dirty-Checking에 의해 DB에 커밋되면서 해제**됩니다.   
+
+- 좌석 선점 예약 시, 우선적으로 **DB에서 해당 좌석이 이미 선점되었는지 조회**해야 합니다. <br>
+  이 때 **비관적 락**을 사용하여 DB 조회 시 다른 사용자의 접근을 차단합니다. <br>
+  
+- 비관적 락은 좌석 선점 예약이 **JPA의 Dirty-Checking**에 의해 업데이트되고, <br>
+  그 결과가 DB에 커밋되면서 락이 해제됩니다.
+
 ```
 public Seat getSeatByConcertScheduleIdAndNumberWithPessimisticLock(long concertScheduleId, long number) throws Exception {
         return seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)
