@@ -93,6 +93,17 @@ seat_id	bigint	YES	MUL
 concert_schedule_id	bigint	YES	MUL		
 concert_id	bigint	YES	MUL		
 ```
+| **컬럼명**              | **데이터 타입**      | **NULL 허용** | **키**   | **기타**        |
+|-------------------------|----------------------|---------------|----------|-----------------|
+| `id`                    | `bigint`             | `NO`          | `PRI`    | `auto_increment`|
+| `created_at`             | `datetime(6)`        | `YES`         |          |                 |
+| `updated_at`             | `datetime(6)`        | `YES`         |          |                 |
+| `price`                  | `bigint`             | `NO`          |          |                 |
+| `uuid`                   | `varchar(255)`       | `YES`         |          |                 |
+| `seat_id`                | `bigint`             | `YES`         | `MUL`    |                 |
+| `concert_schedule_id`    | `bigint`             | `YES`         | `MUL`    |                 |
+| `concert_id`             | `bigint`             | `YES`         | `MUL`    |                 |
+
 
 #### 조회 쿼리
 ```
