@@ -97,14 +97,6 @@
 
 #### 조회 쿼리
 ```
-SELECT r.concert, COUNT(r) AS salesCount " +
-            "FROM Reservation r " +
-            "WHERE r.createdAt >= :threeDaysAgo " +
-            "GROUP BY r.concert.id " +
-            "ORDER BY salesCount DESC")
-List<Concert> findTop30Concerts(@Param("threeDaysAgo") LocalDateTime threeDaysAgo);
-```
-```
 SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
                                          WHERE r.createdAt >= :threeDaysAgo
                                          GROUP BY r.concert.id
