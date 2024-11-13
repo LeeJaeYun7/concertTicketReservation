@@ -5,18 +5,19 @@ import lombok.Getter;
 @Getter
 public class TokenResponse {
 
+    private final long waitingRank;
     private final String token;
-    private final long waitingNumber;
+
     @Builder
-    public TokenResponse(String token, long waitingNumber){
+    public TokenResponse(long waitingRank, String token){
+        this.waitingRank = waitingRank;
         this.token = token;
-        this.waitingNumber = waitingNumber;
     }
 
-    public static TokenResponse of(String token, long waitingNumber){
+    public static TokenResponse of(long waitingRank, String token){
         return TokenResponse.builder()
+                            .waitingRank(waitingRank)
                             .token(token)
-                            .waitingNumber(waitingNumber)
                             .build();
     }
 }
