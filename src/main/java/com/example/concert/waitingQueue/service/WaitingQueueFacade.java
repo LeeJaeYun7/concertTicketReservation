@@ -1,71 +1,28 @@
 package com.example.concert.waitingQueue.service;
 
-import com.example.concert.common.CustomException;
-import com.example.concert.common.ErrorCode;
-import com.example.concert.common.Loggable;
-import com.example.concert.concert.domain.Concert;
-import com.example.concert.concert.service.ConcertService;
-import com.example.concert.utils.RandomStringGenerator;
-import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.vo.TokenVO;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import com.example.concert.redis.WaitingQueueDao;
+import com.example.concert.waitingQueue.dto.response.TokenResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
-import static java.lang.Math.max;
-
-@Component
+@Service
+@RequiredArgsConstructor
 public class WaitingQueueFacade {
 
-    private final ConcertService concertService;
-    private final WaitingQueueService waitingQueueService;
+    private final WaitingQueueDao waitingQueueDao;
 
-    public WaitingQueueFacade(ConcertService concertService, WaitingQueueService waitingQueueService){
-        this.concertService = concertService;
-        this.waitingQueueService = waitingQueueService;
-    }
+    // uuid가 대기열 -> 대기 번호 리턴
+    // uuid가 활성화열 -> 토큰 리턴
+    public TokenResponse retrieveWaitingRankOrToken(long concertId, String uuid) {
+        long rank = waitingQueueDao.getWaitingRank(concertId, uuid);
+        String token = waitingQueueDao.getActiveQueueToken(concertId, uuid);
 
-    @Transactional
-    public TokenVO createToken(long concertId, String uuid) {
-
-        checkQueueExists(concertId, uuid);
-
-        Concert concert = concertService.getConcertById(concertId);
-
-        String newToken = RandomStringGenerator.generateRandomString(16);
-
-        List<WaitingQueue> tokenList = waitingQueueService.getAllByConcertId(concertId);
-
-        long end = 0;
-
-        for(WaitingQueue token: tokenList){
-            end = max(end, token.getWaitingNumber());
+        // 대기열, 활성화열 둘 다에 없는 경우
+        if(rank == -1 && token == null){
+            waitingQueueDao.addToWaitingQueue(concertId, uuid);
+            rank = waitingQueueDao.getWaitingRank(concertId, uuid);
         }
 
-        WaitingQueue newWaitingQueue = WaitingQueue.of(concert, uuid, newToken, end+1);
-        waitingQueueService.save(newWaitingQueue);
-
-        return TokenVO.of(newToken, end+1);
-    }
-
-    private void checkQueueExists(long concertId, String uuid) {
-        Optional<WaitingQueue> tokenOpt = waitingQueueService.getByUuid(uuid);
-
-        // 대기열에 uuid로 만든 토큰이 없는 경우
-        if(tokenOpt.isEmpty()){
-            return;
-        }
-
-        WaitingQueue token = tokenOpt.get();
-
-        // 같은 대기열에 uuid로 만든 토큰이 존재하는 경우
-        if(token.getConcert().getId() == concertId){
-            throw new CustomException(ErrorCode.TOKEN_ALREADY_EXISTS, Loggable.NEVER);
-        }
-
-        // 다른 대기열에 uuid로 만든 토큰이 존재하는 경우, 삭제해준다
-        waitingQueueService.delete(token.getConcert().getId(), uuid);
+        return TokenResponse.of(rank, token);
     }
 }
