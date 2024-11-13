@@ -105,6 +105,7 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
                                          ORDER BY salesCount DESC
 ```
 
+#### 결론
 
 - 예약 테이블의 DDL과 조회 쿼리를 고려할 때, **created_at과 concert_id 필드에 복합 인덱스를 적용**하기로 결정했습니다.
 
