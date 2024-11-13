@@ -26,6 +26,8 @@
 <br> 
 
 ### 2) 인덱스 도입 과정
+![image](https://github.com/user-attachments/assets/6d559890-32af-4873-b844-c74d5177a286)
+
 
 
 
