@@ -120,7 +120,7 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
 
 ### 3) 인덱스 구현
 
-- 콘서트 티켓 서비스에서는 JPA를 활용하므로, JPA 엔티티에 어노테이션을 활용해서 인덱스를 구현했습니다. <br> 
+- 콘서트 티켓 서비스에서는 JPA를 활용하므로, JPA 엔티티의 @Index 어노테이션을 활용해서 인덱스를 구현했습니다. <br> 
   
 ![image](https://github.com/user-attachments/assets/a396a5cf-e8d1-481d-b4e4-17f715730556)
 
