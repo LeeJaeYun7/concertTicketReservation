@@ -106,9 +106,9 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
 ```
 
 
-- 저는 예약 테이블의 DDL과 조회 쿼리를 고려할 때, **created_at, concert_id 필드에 복합 인덱스를 도입**하는 것으로 결정하였습니다 
-(1) created_at 필드는 조회 쿼리의 WHERE 절에 직접 쓰이면서, 카디널리티가 높은 필드입니다.
-(2) concert_id 필드를 추가해서 복합 인덱스로 구성하면, 조회 성능을 더 최적화할 수 있다고 판단했습니다.  
+- 저는 예약 테이블의 DDL과 조회 쿼리를 고려할 때, **created_at, concert_id 필드에 복합 인덱스를 도입**하는 것으로 결정하였습니다.<br> 
+(1) created_at 필드는 조회 쿼리의 WHERE 절에 직접 쓰이면서, 카디널리티가 높은 필드입니다. <br>
+(2) concert_id 필드를 추가해서 복합 인덱스로 구성하면, 조회 성능을 더 최적화할 수 있다고 판단했습니다. <br>   
 
 
 
