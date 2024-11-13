@@ -124,5 +124,12 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
   
 ![image](https://github.com/user-attachments/assets/a396a5cf-e8d1-481d-b4e4-17f715730556)
 
+<br> 
+
+
+### 4) 인덱스 도입을 통해 개선된 점
+
+
+
 
 
