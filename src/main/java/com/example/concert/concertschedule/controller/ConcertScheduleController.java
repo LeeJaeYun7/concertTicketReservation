@@ -2,9 +2,7 @@ package com.example.concert.concertschedule.controller;
 
 import com.example.concert.concertschedule.dto.request.ConcertScheduleCreateRequest;
 import com.example.concert.concertschedule.dto.response.AvailableDateTimesResponse;
-import com.example.concert.concertschedule.dto.response.ConcertScheduleResponse;
 import com.example.concert.concertschedule.service.ConcertScheduleFacade;
-import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.seat.dto.response.SeatNumbersResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConcertScheduleController {
 
-    private final ConcertScheduleService concertScheduleService;
     private final ConcertScheduleFacade concertScheduleFacade;
 
     @PostMapping("/concertSchedule")
@@ -38,12 +35,6 @@ public class ConcertScheduleController {
         AvailableDateTimesResponse availableDateTimesResponse = AvailableDateTimesResponse.of(availableDateTimes);
 
         return ResponseEntity.status(HttpStatus.OK).body(availableDateTimesResponse);
-    }
-
-    @GetMapping("/concertSchedule/list")
-    public ResponseEntity<List<ConcertScheduleResponse>> retrieveAvailableConcertSchedules() throws JsonProcessingException {
-        List<ConcertScheduleResponse> availableConcertSchedules = concertScheduleFacade.getAllAvailableConcertSchedules();
-        return ResponseEntity.status(HttpStatus.OK).body(availableConcertSchedules);
     }
 
     @GetMapping("/concertSchedule/seats")

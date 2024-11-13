@@ -15,7 +15,7 @@ public class TokenVO {
 
     public static TokenVO of(long waitingNumber){
         return TokenVO.builder()
-                      .waitingNumber(waitingNumber)
-                      .build();
+                .waitingNumber(waitingNumber)
+                .build();
     }
 }

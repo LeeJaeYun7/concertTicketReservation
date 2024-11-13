@@ -1,5 +1,6 @@
 package com.example.concert.reservation.service;
 
+import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.reservation.domain.Reservation;
 import com.example.concert.reservation.repository.ReservationRepository;
@@ -15,15 +16,9 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public Reservation createReservation(ConcertSchedule concertSchedule, String uuid, Seat seat, long price) {
+    public Reservation createReservation(Concert concert, ConcertSchedule concertSchedule, String uuid, Seat seat, long price) {
         reservationRepository.findReservationByConcertScheduleIdAndSeatId(concertSchedule.getId(), seat.getId());
-        Reservation reservation = Reservation.of(concertSchedule, uuid, seat, price);
-        return reservationRepository.save(reservation);
-    }
-
-    public Reservation createReservationWithOptimisticLock(ConcertSchedule concertSchedule, String uuid, Seat seat, long price) {
-        reservationRepository.findReservationByConcertScheduleIdAndSeatIdWithOptimisticLock(concertSchedule.getId(), seat.getId());
-        Reservation reservation = Reservation.of(concertSchedule, uuid, seat, price);
+        Reservation reservation = Reservation.of(concert, concertSchedule, uuid, seat, price);
         return reservationRepository.save(reservation);
     }
 }

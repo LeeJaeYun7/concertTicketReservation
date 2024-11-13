@@ -53,6 +53,8 @@ public class TokenValidationFilterTest {
         void 유효한_토큰으로_요청을_하는_경우_토큰_검증을_통과한다 () throws Exception {
             MockHttpServletRequest request = new MockHttpServletRequest();
             request.addHeader(HttpHeaders.AUTHORIZATION, "valid-token");
+            request.setRequestURI("/concertSchedule");
+
             MockHttpServletResponse response = new MockHttpServletResponse();
             FilterChain chain = mock(FilterChain.class);
 
@@ -64,9 +66,10 @@ public class TokenValidationFilterTest {
         @Test
         @DisplayName("유효하지 않은 토큰으로 요청을 하는 경우, 토큰 검증이 실패한다.")
         void 유효하지_않은_토큰으로_요청을_하는_경우_토큰_검증이_실패한다 () {
-
             MockHttpServletRequest request = new MockHttpServletRequest();
             request.addHeader(HttpHeaders.AUTHORIZATION, "invalid-token");
+            request.setRequestURI("/concertSchedule");
+
             MockHttpServletResponse response = new MockHttpServletResponse();
             FilterChain chain = mock(FilterChain.class);
 

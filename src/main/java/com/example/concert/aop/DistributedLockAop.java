@@ -43,12 +43,6 @@ public class DistributedLockAop {
         log.info("LeaseTime: {}", distributedLock.leaseTime());
 
         try {
-            if (rLock.isLocked()) {
-                log.info("The lock with key: {} is currently held.", key);
-            } else {
-                log.info("The lock with key: {} is not held.", key);
-            }
-
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
 
             if (!available) {

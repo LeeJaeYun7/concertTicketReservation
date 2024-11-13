@@ -4,27 +4,30 @@ import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
 import com.example.concert.concert.domain.Concert;
+import com.example.concert.concert.dto.response.ConcertResponse;
 import com.example.concert.concert.service.ConcertService;
+import com.example.concert.concert.vo.ConcertVO;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.payment.service.PaymentService;
-import com.example.concert.redis.WaitingQueueDao;
 import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ReservationFacade {
 
@@ -37,11 +40,8 @@ public class ReservationFacade {
     private final PaymentService paymentService;
     private final WaitingQueueService waitingQueueService;
 
-    private final WaitingQueueDao waitingQueueDao;
-
     @Transactional
-    public ReservationVO createReservationWithPessimisticLock(String token, String uuid, long concertScheduleId, long seatNumber) {
-
+    public ReservationVO createReservation(String token, String uuid, long concertScheduleId, long seatNumber) {
         validateSeatReservation(concertScheduleId, seatNumber);
         checkBalanceOverPrice(uuid, concertScheduleId);
 
@@ -49,33 +49,8 @@ public class ReservationFacade {
         Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
-        reservationService.createReservation(concertSchedule, uuid, seat, price);
-        paymentService.createPayment(concertSchedule, uuid, price);
-        memberService.decreaseBalance(uuid, price);
-
-        updateStatus(token, concertScheduleId, seatNumber);
-
-        waitingQueueDao.deleteActiveQueueToken(concertSchedule.getConcert().getId(), uuid);
-
-        String name = getMember(uuid).getName();
-        String concertName = getConcert(concertScheduleId).getName();
-        LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
-
-        return ReservationVO.of(name, concertName, dateTime, price);
-    }
-
-    @Transactional
-    public ReservationVO createReservationWithOptimisticLock(String token, String uuid, long concertScheduleId, long seatNumber) {
-
-        validateSeatReservation(concertScheduleId, seatNumber);
-        checkBalanceOverPrice(uuid, concertScheduleId);
-
-        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, seatNumber);
-        long price = getConcertSchedule(concertScheduleId).getPrice();
-
-        reservationService.createReservationWithOptimisticLock(concertSchedule, uuid, seat, price);
-        paymentService.createPayment(concertSchedule, uuid, price);
+        reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
+        paymentService.createPayment(concertSchedule.getConcert(), concertSchedule, uuid, price);
         memberService.decreaseBalance(uuid, price);
 
         updateStatus(token, concertScheduleId, seatNumber);

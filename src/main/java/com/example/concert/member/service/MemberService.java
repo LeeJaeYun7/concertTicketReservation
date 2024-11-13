@@ -26,12 +26,6 @@ public class MemberService {
         return MemberVO.of(savedMember.getUuid(), savedMember.getName());
     }
 
-    public MemberVO getMemberUuid(String name) {
-        Member member = memberRepository.findByName(name)
-                                        .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
-        return MemberVO.of(member.getUuid(), member.getName());
-    }
-
     public Member getMemberByUuid(String uuid) {
         return memberRepository.findByUuid(uuid)
                                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));

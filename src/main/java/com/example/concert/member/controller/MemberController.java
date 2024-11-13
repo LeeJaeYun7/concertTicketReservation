@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 public class MemberController {
 
@@ -24,14 +22,6 @@ public class MemberController {
     public ResponseEntity<MemberResponse> createMember(@RequestBody MemberRequest memberRequest){
         String name = memberRequest.getName();
         MemberVO memberVO = memberService.createMember(name);
-        MemberResponse memberResponse = MemberResponse.of(memberVO.getUuid(), memberVO.getName());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
-    }
-
-    @GetMapping("/member/uuid")
-    public ResponseEntity<MemberResponse> getMemberUuid(@RequestParam(value="name") String name) {
-        MemberVO memberVO = memberService.getMemberUuid(name);
         MemberResponse memberResponse = MemberResponse.of(memberVO.getUuid(), memberVO.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);

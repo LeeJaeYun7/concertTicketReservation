@@ -1,9 +1,12 @@
 package com.example.concert.seat;
 
 import com.example.concert.concert.domain.Concert;
+import com.example.concert.concert.enums.ConcertAgeRestriction;
+import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.domain.SeatStatus;
+import com.example.concert.seat.enums.SeatGrade;
+import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
@@ -15,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -42,15 +46,20 @@ public class SeatServiceTest {
         @Test
         @DisplayName("concertScheduleId가 전달될 때, 예약 가능한 좌석이 조회된다")
         void concertScheduleId가_전달될때_예약_가능한_좌석이_조회된다() {
-            Concert concert = Concert.of("박효신 콘서트");
+            LocalDate startAt = LocalDate.of(2024, 10, 16);
+            LocalDate endAt = LocalDate.of(2024, 10, 18);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             LocalDateTime threshold = timeProvider.now().minusMinutes(5);
 
-            Seat seat1 = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
-            Seat seat2 = Seat.of(concertSchedule, 2, 50000, SeatStatus.AVAILABLE);
+            Seat seat1 = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
+            Seat seat2 = Seat.of(concertSchedule, 2, 50000, SeatGrade.ALL);
             List<Seat> availableSeats = List.of(seat1, seat2);
 
             given(seatRepository.findAllAvailableSeatsByConcertScheduleIdAndStatus(1L, SeatStatus.AVAILABLE, threshold))
@@ -69,11 +78,16 @@ public class SeatServiceTest {
         @Test
         @DisplayName("업데이트 시각을 최신화할 때 성공한다")
         void 업데이트_시각을_최신화할때_성공한다() {
-            Concert concert = Concert.of("박효신 콘서트");
+            LocalDate startAt = LocalDate.of(2024, 10, 16);
+            LocalDate endAt = LocalDate.of(2024, 10, 18);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
+            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
             when(seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(1L, 1))
                     .thenReturn(Optional.of(seat));
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
@@ -90,11 +104,16 @@ public class SeatServiceTest {
         @Test
         @DisplayName("좌석 상태를 업데이트할 때 성공한다")
         void 좌석_상태를_업데이트할_때_성공한다() {
-            Concert concert = Concert.of("박효신 콘서트");
+            LocalDate startAt = LocalDate.of(2024, 10, 16);
+            LocalDate endAt = LocalDate.of(2024, 10, 18);
+
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+            Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad",  120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatStatus.AVAILABLE);
+            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
             when(seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(1L, 1))
                     .thenReturn(Optional.of(seat));
 
