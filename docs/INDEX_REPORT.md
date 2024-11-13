@@ -75,6 +75,36 @@
   카디널리티가 높은 필드는 **검색 범위가 좁아지기** 때문에 인덱스의 효과가 더 크게 나타납니다. <br>
 
 
+<br>
+
+
+#### (2-3) 인덱스 도입 결론
+
+- 현재 인덱스 도입을 결정한 **예약 테이블의 DDL**과 **조회 쿼리**는 다음과 같습니다.
+
+#### 예약 테이블의 DDL
+```
+id	bigint	NO	PRI		auto_increment
+created_at	datetime(6)	YES			
+updated_at	datetime(6)	YES			
+price	bigint	NO			
+uuid	varchar(255)	YES			
+seat_id	bigint	YES	MUL		
+concert_schedule_id	bigint	YES	MUL		
+concert_id	bigint	YES	MUL		
+```
+
+#### 조회 쿼리
+```
+@Query("SELECT r.concert, COUNT(r) AS salesCount " +
+            "FROM Reservation r " +
+            "WHERE r.createdAt >= :threeDaysAgo " +
+            "GROUP BY r.concert.id " +
+            "ORDER BY salesCount DESC")
+List<Concert> findTop30Concerts(@Param("threeDaysAgo") LocalDateTime threeDaysAgo);
+```
+
+- 
 
 
 
