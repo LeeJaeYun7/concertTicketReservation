@@ -3,6 +3,7 @@ package com.example.concert.reservation;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.fixtures.ConcertFixtureFactory;
 import com.example.concert.concert.service.ConcertService;
+import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
@@ -77,16 +78,18 @@ public class ReservationFacadeTest {
             member.updateBalance(100000);
 
             long seatNumber = 10;
+            ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+
             Concert concert = ConcertFixtureFactory.createConcertWithIdAndName(1L, "박효신 콘서트");
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
             long concertScheduleId = 1L;
             WaitingQueue element = WaitingQueue.of(concert, uuid, token, 0);
 
-            Seat seat = Seat.of(concertSchedule, seatNumber, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, seatNumber, 50000, SeatGrade.ALL);
             seat.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
 
-            given(seatService.getSeatByConcertScheduleIdAndNumber(concertScheduleId, seatNumber)).willReturn(seat);
+            given(seatService.getSeatByConcertHallIdAndNumber(concertScheduleId, seatNumber)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 3));
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(1L)).willReturn(concertSchedule);

@@ -66,7 +66,7 @@ public class ReservationIntegrationTest {
             concertScheduleRepository.save(concertSchedule);
 
             String uuid = UUID.randomUUID().toString();
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(savedConcertHall, 1, 50000, SeatGrade.ALL);
             seatRepository.save(seat);
 
             Reservation reservation = Reservation.of(concertSchedule.getConcert(), concertSchedule, uuid, seat, 50000);

@@ -20,10 +20,10 @@ public class SeatController {
     @PostMapping("/seat/reservation")
     public ResponseEntity<Void> createSeatReservation(@RequestBody SeatReservationRequest seatReservationRequest) {
         String uuid = seatReservationRequest.getUuid();
-        long concertScheduleId = seatReservationRequest.getConcertScheduleId();
+        long concertHallId = seatReservationRequest.getConcertHallId();
         long number = seatReservationRequest.getNumber();
 
-        seatFacade.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number);
+        seatFacade.createSeatReservationWithPessimisticLock(uuid, concertHallId, number);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

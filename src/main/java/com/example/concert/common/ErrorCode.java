@@ -17,6 +17,8 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
     CONCERT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 콘서트를 찾을 수 없습니다."),
     CONCERT_SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 콘서트 스케줄을 찾을 수 없습니다."),
+
+    CONCERT_HALL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 콘서트 홀을 찾을 수 없습니다."),
     SEAT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 좌석을 찾을 수 없습니다."),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다."),
 

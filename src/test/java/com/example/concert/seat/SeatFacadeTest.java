@@ -61,11 +61,11 @@ public class SeatFacadeTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             long number = 1L;
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
+            given(seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(6));
 
@@ -90,11 +90,11 @@ public class SeatFacadeTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             long number = 1L;
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
+            given(seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(4));
 

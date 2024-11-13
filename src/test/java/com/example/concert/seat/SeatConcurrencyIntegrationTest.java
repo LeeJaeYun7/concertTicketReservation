@@ -90,7 +90,7 @@ public class SeatConcurrencyIntegrationTest {
         ConcertSchedule concertSchedule = ConcertSchedule.of(savedConcert, dateTime, 50000);
         savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-        Seat seat = Seat.of(savedConcertSchedule, 1, 50000, SeatGrade.ALL);
+        Seat seat = Seat.of(savedConcertHall, 1, 50000, SeatGrade.ALL);
         seat.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
         savedSeat = seatRepository.save(seat);
     }

@@ -58,11 +58,11 @@ public class SeatServiceTest {
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             LocalDateTime threshold = timeProvider.now().minusMinutes(5);
 
-            Seat seat1 = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
-            Seat seat2 = Seat.of(concertSchedule, 2, 50000, SeatGrade.ALL);
+            Seat seat1 = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            Seat seat2 = Seat.of(concertHall, 2, 50000, SeatGrade.ALL);
             List<Seat> availableSeats = List.of(seat1, seat2);
 
-            given(seatRepository.findAllAvailableSeatsByConcertScheduleIdAndStatus(1L, SeatStatus.AVAILABLE, threshold))
+            given(seatRepository.findAllAvailableSeatsByConcertHallIdAndStatus(1L, SeatStatus.AVAILABLE, threshold))
                     .willReturn(availableSeats);
 
             List<Seat> result = sut.getAllAvailableSeats(1L);
@@ -87,8 +87,8 @@ public class SeatServiceTest {
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
-            when(seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(1L, 1))
+            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            when(seatRepository.findByConcertHallIdAndNumberWithPessimisticLock(1L, 1))
                     .thenReturn(Optional.of(seat));
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
 
@@ -113,8 +113,8 @@ public class SeatServiceTest {
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
-            when(seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(1L, 1))
+            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            when(seatRepository.findByConcertHallIdAndNumberWithPessimisticLock(1L, 1))
                     .thenReturn(Optional.of(seat));
 
             sut.updateSeatStatus(1L, 1, SeatStatus.RESERVED);

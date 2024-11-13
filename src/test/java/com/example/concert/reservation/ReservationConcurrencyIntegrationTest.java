@@ -96,7 +96,7 @@ public class ReservationConcurrencyIntegrationTest {
         ConcertSchedule concertSchedule = ConcertSchedule.of(savedConcert, dateTime, 50000);
         savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-        Seat seat = Seat.of(savedConcertSchedule, 1, 50000, SeatGrade.ALL);
+        Seat seat = Seat.of(savedConcertHall, 1, 50000, SeatGrade.ALL);
         seat.setUpdatedAt(LocalDateTime.now());
         savedSeat = seatRepository.save(seat);
 

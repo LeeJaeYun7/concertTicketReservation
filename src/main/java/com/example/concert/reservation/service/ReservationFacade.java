@@ -46,7 +46,7 @@ public class ReservationFacade {
         checkBalanceOverPrice(uuid, concertScheduleId);
 
         ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        Seat seat = seatService.getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
+        Seat seat = seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
         long price = getConcertSchedule(concertScheduleId).getPrice();
 
         reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
@@ -68,7 +68,7 @@ public class ReservationFacade {
     }
 
     private void validateSeatReservation(long concertScheduleId, long seatNumber) {
-         Seat seat = seatService.getSeatByConcertScheduleIdAndNumber(concertScheduleId, seatNumber);
+         Seat seat = seatService.getSeatByConcertHallIdAndNumber(concertScheduleId, seatNumber);
 
          if(isFiveMinutesPassed(seat.getUpdatedAt())){
              throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED, Loggable.ALWAYS);

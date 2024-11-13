@@ -11,13 +11,13 @@ import java.util.UUID;
 public class SeatReservationRequest {
 
     private String uuid;
-    private long concertScheduleId;
+    private long concertHallId;
     private long number;
 
     @Builder
-    public SeatReservationRequest(String uuid, long concertScheduleId, long number){
+    public SeatReservationRequest(String uuid, long concertHallId, long number){
         this.uuid = uuid;
-        this.concertScheduleId = concertScheduleId;
+        this.concertHallId = concertHallId;
         this.number = number;
     }
 }
