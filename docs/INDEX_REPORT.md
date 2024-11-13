@@ -115,3 +115,7 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
 (2) **concert_id 필드**를 추가하여 복합 인덱스를 구성함으로써, 특정 콘서트에 대한 예약을 효율적으로 조회할 수 있도록 최적화했습니다. <br> 
     이로 인해 created_at과 concert_id가 함께 사용되는 조회 쿼리의 성능이 더욱 개선될 것입니다. <br> 
 
+
+<br> 
+
+### 3) 인덱스 구현
