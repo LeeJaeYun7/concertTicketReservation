@@ -80,7 +80,7 @@
 <br>
 
 
-#### (2-3) 인덱스 도입 결론
+#### (2-3) 테이블 DDL & 조회 쿼리 
 
 - 현재 인덱스 도입을 결정한 **예약 테이블의 DDL**과 **조회 쿼리**는 다음과 같습니다.
 
@@ -105,7 +105,7 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
                                          ORDER BY salesCount DESC
 ```
 
-#### 결론
+#### (2-4) 결론
 
 - 예약 테이블의 DDL과 조회 쿼리를 고려할 때, **created_at과 concert_id 필드에 복합 인덱스를 적용**하기로 결정했습니다.
 
