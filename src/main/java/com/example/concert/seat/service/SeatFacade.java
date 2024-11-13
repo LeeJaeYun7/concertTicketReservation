@@ -4,7 +4,6 @@ import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
 import com.example.concert.concerthall.service.ConcertHallService;
-import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.enums.SeatStatus;

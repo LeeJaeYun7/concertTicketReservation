@@ -4,9 +4,7 @@ import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
 import com.example.concert.concert.domain.Concert;
-import com.example.concert.concert.dto.response.ConcertResponse;
 import com.example.concert.concert.service.ConcertService;
-import com.example.concert.concert.vo.ConcertVO;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
@@ -20,12 +18,10 @@ import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.service.WaitingQueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

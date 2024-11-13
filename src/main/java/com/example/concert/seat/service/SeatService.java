@@ -9,7 +9,6 @@ import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
