@@ -129,6 +129,12 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
 
 ### 4) 인덱스 도입을 통해 개선된 점
 
+- 현재 예약 테이블에는 **26만 row**의 데이터가 적재되어 있습니다
+- ![image](https://github.com/user-attachments/assets/d73a3a03-f0e4-4980-b8f0-0546bb86d14f)
+
+- 예약 테이블과 콘서트 테이블을 JOIN해서 **'최근 3일간 판매량 Top30 콘서트'를 조회**하면 <br>
+  다음과 같은 결과를 얻을 수 있습니다.
+![image](https://github.com/user-attachments/assets/a67c61c5-0bc3-47a7-ab2b-42c639882f71)
 
 
 
