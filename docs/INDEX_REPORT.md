@@ -139,21 +139,26 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
 ![image](https://github.com/user-attachments/assets/a67c61c5-0bc3-47a7-ab2b-42c639882f71)
 
 
-**'최근 3일간 Top30 콘서트'** 정보를 불러오는 작업에 대해 k6를 사용하여 2가지 테스트를 진행했습니다:
-(1) 인덱스 없이 검색
-(2) 인덱스 포함 검색
+**'최근 3일간 Top30 콘서트'** 정보를 불러오는 작업에 대해 k6를 사용하여 2가지 테스트를 진행했습니다: <br> 
+(1) 인덱스 없이 조회 쿼리 <br>
+(2) 인덱스 포함 조회 쿼리 <br> 
 
-k6 테스트 조건은 다음과 같습니다
-(1) 60초 동안 1,000건의 요청 발생
-(2) P90, P95, P99 지연시간 측정
-(3) P99 지연시간의 threshold는 1초로 설정
+k6 테스트 조건은 다음과 같습니다 <br> 
+(1) 60초 동안 1,000건의 요청 발생 <br> 
+(2) P90, P95, P99 지연시간 측정 <br> 
+(3) P99 지연시간의 threshold는 1초로 설정 <br> 
 
-**(1) 인덱스 없이 검색**
+**(1) 인덱스 없이 조회 쿼리**
+
+- 로컬 환경에서 **K6**으로 테스트 시 다음과 같은 결과를 얻었습니다. <br>
+
+![image](https://github.com/user-attachments/assets/b7d446a5-4cb8-440e-a7b0-0f3439197f5f)
 
 
+**(2) 인덱스 포함 조회 쿼리** 
 
+- 로컬 환경에서 **K6**으로 테스트 시 다음과 같은 결과를 얻었습니다. <br>
 
-
-**(2) 인덱스 포함 검색** 
+![image](https://github.com/user-attachments/assets/f62fea8a-2cae-43e2-8175-9cba93bdef86)
 
 
