@@ -135,7 +135,7 @@ SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
 <br> 
 
 - 예약 테이블과 콘서트 테이블을 JOIN해서 **'최근 3일간 판매량 Top30 콘서트'를 조회**해서 <br>
-  판매량 순으로 내림차순 정렬하면 다음과 같은 결과를 얻을 수 있습니다.
+  **판매량 기준 내림차순 정렬**하면 다음과 같은 결과를 얻을 수 있습니다.
 ![image](https://github.com/user-attachments/assets/a67c61c5-0bc3-47a7-ab2b-42c639882f71)
 
 
