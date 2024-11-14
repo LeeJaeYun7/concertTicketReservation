@@ -1,6 +1,6 @@
 package com.example.concert.seat.domain;
 
-import com.example.concert.concertschedule.domain.ConcertSchedule;
+import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.global.entity.BaseTimeEntity;
 import com.example.concert.seat.enums.SeatGrade;
 import com.example.concert.seat.enums.SeatStatus;
@@ -22,8 +22,8 @@ public class Seat extends BaseTimeEntity {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "concert_schedule_id")
-    private ConcertSchedule concertSchedule;
+    @JoinColumn(name = "concert_hall_id")
+    private ConcertHall concertHall;
 
     private long number;
 
@@ -39,8 +39,8 @@ public class Seat extends BaseTimeEntity {
     private SeatGrade grade;
 
     @Builder
-    public Seat(ConcertSchedule concertSchedule, long number, long price, SeatGrade grade, SeatStatus status){
-        this.concertSchedule = concertSchedule;
+    public Seat(ConcertHall concertHall, long number, long price, SeatGrade grade, SeatStatus status){
+        this.concertHall = concertHall;
         this.number = number;
         this.price = price;
         this.grade = grade;
@@ -49,9 +49,9 @@ public class Seat extends BaseTimeEntity {
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static Seat of(ConcertSchedule concertSchedule, long number, long price, SeatGrade grade){
+    public static Seat of(ConcertHall concertHall, long number, long price, SeatGrade grade){
         return Seat.builder()
-                   .concertSchedule(concertSchedule)
+                   .concertHall(concertHall)
                    .number(number)
                    .price(price)
                    .grade(grade)

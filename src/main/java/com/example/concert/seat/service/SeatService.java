@@ -9,7 +9,6 @@ import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,59 +21,58 @@ public class SeatService {
 
     private final TimeProvider timeProvider;
     private final SeatRepository seatRepository;
-    private final RedissonClient redissonClient;
 
 
-    public List<Seat> getAllAvailableSeats(long concertScheduleId){
+    public List<Seat> getAllAvailableSeats(long concertHallId){
         LocalDateTime now = timeProvider.now();
         LocalDateTime threshold = now.minusMinutes(5);
 
-        return seatRepository.findAllAvailableSeatsByConcertScheduleIdAndStatus(concertScheduleId, SeatStatus.AVAILABLE, threshold);
+        return seatRepository.findAllAvailableSeatsByConcertHallIdAndStatus(concertHallId, SeatStatus.AVAILABLE, threshold);
     }
 
-    public void changeUpdatedAtWithPessimisticLock(long concertScheduleId, long number) {
-        Seat seat = getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number);
+    public void changeUpdatedAtWithPessimisticLock(long concertHallId, long number) {
+        Seat seat = getSeatByConcertHallIdAndNumberWithPessimisticLock(concertHallId, number);
         LocalDateTime now = timeProvider.now();
         seat.changeUpdatedAt(now);
     }
 
 
-    public void changeUpdatedAtWithOptimisticLock(long concertScheduleId, long number) {
-        Seat seat = getSeatByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, number);
+    public void changeUpdatedAtWithOptimisticLock(long concertHallId, long number) {
+        Seat seat = getSeatByConcertHallIdAndNumberWithOptimisticLock(concertHallId, number);
         LocalDateTime now = timeProvider.now();
         seat.changeUpdatedAt(now);
     }
-    public void changeUpdatedAtWithDistributedLock(long concertScheduleId, long number) {
-        String lockName = "SEAT_RESERVATION:" + concertScheduleId + ":" + number;
+    public void changeUpdatedAtWithDistributedLock(long concertHallId, long number) {
+        String lockName = "SEAT_RESERVATION:" + concertHallId + ":" + number;
 
-        Seat seat = getSeatByConcertScheduleIdAndNumberWithDistributedLock(lockName, concertScheduleId, number);
+        Seat seat = getSeatByConcertHallIdAndNumberWithDistributedLock(lockName, concertHallId, number);
         LocalDateTime now = timeProvider.now();
         seat.changeUpdatedAt(now);
     }
 
 
-    public void updateSeatStatus(long concertScheduleId, long number, SeatStatus status) {
-        Seat seat = getSeatByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number);
+    public void updateSeatStatus(long concertHallId, long number, SeatStatus status) {
+        Seat seat = getSeatByConcertHallIdAndNumberWithPessimisticLock(concertHallId, number);
         seat.updateStatus(status);
     }
 
-    public Seat getSeatByConcertScheduleIdAndNumber(long concertScheduleId, long number) {
-        return seatRepository.findByConcertScheduleIdAndNumber(concertScheduleId, number)
+    public Seat getSeatByConcertHallIdAndNumber(long concertHallId, long number) {
+        return seatRepository.findByConcertHallIdAndNumber(concertHallId, number)
                              .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }
 
-    public Seat getSeatByConcertScheduleIdAndNumberWithPessimisticLock(long concertScheduleId, long number) {
-        return seatRepository.findByConcertScheduleIdAndNumberWithPessimisticLock(concertScheduleId, number)
+    public Seat getSeatByConcertHallIdAndNumberWithPessimisticLock(long concertHallId, long number) {
+        return seatRepository.findByConcertHallIdAndNumberWithPessimisticLock(concertHallId, number)
                              .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }
 
-    public Seat getSeatByConcertScheduleIdAndNumberWithOptimisticLock(long concertScheduleId, long number) {
-        return seatRepository.findByConcertScheduleIdAndNumberWithOptimisticLock(concertScheduleId, number)
+    public Seat getSeatByConcertHallIdAndNumberWithOptimisticLock(long concertHallId, long number) {
+        return seatRepository.findByConcertHallIdAndNumberWithOptimisticLock(concertHallId, number)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }
-    @DistributedLock(key = "#concertScheduleId + '_' + #number", waitTime = 60, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
-    public Seat getSeatByConcertScheduleIdAndNumberWithDistributedLock(String lockName, long concertScheduleId, long number) {
-        return seatRepository.findByConcertScheduleIdAndNumberWithDistributedLock(concertScheduleId, number)
+    @DistributedLock(key = "#concertHallId + '_' + #number", waitTime = 60, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
+    public Seat getSeatByConcertHallIdAndNumberWithDistributedLock(String lockName, long concertHallId, long number) {
+        return seatRepository.findByConcertHallIdAndNumberWithDistributedLock(concertHallId, number)
                     .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }
 }

@@ -15,19 +15,19 @@ import java.util.Optional;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
-    @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.status = :status AND s.updatedAt <= :threshold")
-    List<Seat> findAllAvailableSeatsByConcertScheduleIdAndStatus(@Param("concertScheduleId") long concertScheduleId, @Param("status") SeatStatus status, @Param("threshold") LocalDateTime threshold);
+    @Query("SELECT s FROM Seat s WHERE s.concertHall.id = :concertHallId AND s.status = :status AND s.updatedAt <= :threshold")
+    List<Seat> findAllAvailableSeatsByConcertHallIdAndStatus(@Param("concertHallId") long concertHallId, @Param("status") SeatStatus status, @Param("threshold") LocalDateTime threshold);
 
-    Optional<Seat> findByConcertScheduleIdAndNumber(long concertScheduleId, long number);
+    Optional<Seat> findByConcertHallIdAndNumber(long concertHallId, long number);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
-    Optional<Seat> findByConcertScheduleIdAndNumberWithPessimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
+    @Query("SELECT s FROM Seat s WHERE s.concertHall.id = :concertHallId AND s.number = :number")
+    Optional<Seat> findByConcertHallIdAndNumberWithPessimisticLock(@Param("concertHallId") long concertHallId, @Param("number") long number);
 
     @Lock(LockModeType.OPTIMISTIC)
-    @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
-    Optional<Seat> findByConcertScheduleIdAndNumberWithOptimisticLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
+    @Query("SELECT s FROM Seat s WHERE s.concertHall.id = :concertHallId AND s.number = :number")
+    Optional<Seat> findByConcertHallIdAndNumberWithOptimisticLock(@Param("concertHallId") long concertHallId, @Param("number") long number);
 
-    @Query("SELECT s FROM Seat s WHERE s.concertSchedule.id = :concertScheduleId AND s.number = :number")
-    Optional<Seat> findByConcertScheduleIdAndNumberWithDistributedLock(@Param("concertScheduleId") long concertScheduleId, @Param("number") long number);
+    @Query("SELECT s FROM Seat s WHERE s.concertHall.id = :concertHallId AND s.number = :number")
+    Optional<Seat> findByConcertHallIdAndNumberWithDistributedLock(@Param("concertHallId") long concertHallId, @Param("number") long number);
 }

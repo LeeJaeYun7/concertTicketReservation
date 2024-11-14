@@ -52,7 +52,7 @@ public class ReservationServiceTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
 
             String uuid = UUID.randomUUID().toString();
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
 
             Reservation reservation = Reservation.of(concertSchedule.getConcert(), concertSchedule, uuid, seat, 50000);
 

@@ -4,20 +4,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor
 public class SeatReservationRequest {
 
     private String uuid;
-    private long concertScheduleId;
+    private long concertHallId;
     private long number;
 
     @Builder
-    public SeatReservationRequest(String uuid, long concertScheduleId, long number){
+    public SeatReservationRequest(String uuid, long concertHallId, long number){
         this.uuid = uuid;
-        this.concertScheduleId = concertScheduleId;
+        this.concertHallId = concertHallId;
         this.number = number;
     }
 }

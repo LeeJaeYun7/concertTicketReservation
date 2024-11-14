@@ -64,9 +64,9 @@ public class SeatIntegrationTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
             ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-            Seat seat1 = Seat.of(concertSchedule, 11, 50000, SeatGrade.ALL);
+            Seat seat1 = Seat.of(savedConcertHall, 11, 50000, SeatGrade.ALL);
             seat1.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
-            Seat seat2 = Seat.of(concertSchedule, 22, 50000, SeatGrade.ALL);
+            Seat seat2 = Seat.of(savedConcertHall, 22, 50000, SeatGrade.ALL);
             seat2.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
 
             seatRepository.save(seat1);
@@ -99,7 +99,7 @@ public class SeatIntegrationTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
             ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-            Seat seat = Seat.of(concertSchedule, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(savedConcertHall, 1, 50000, SeatGrade.ALL);
             seatRepository.save(seat);
 
             sut.changeUpdatedAtWithPessimisticLock(savedConcertSchedule.getId(), 1);
@@ -127,7 +127,7 @@ public class SeatIntegrationTest {
             ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
             ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-            Seat seat = Seat.of(concertSchedule, 11, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(savedConcertHall, 11, 50000, SeatGrade.ALL);
             seatRepository.save(seat);
 
             sut.updateSeatStatus(savedConcertSchedule.getId(), 11, SeatStatus.RESERVED);

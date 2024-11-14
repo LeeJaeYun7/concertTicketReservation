@@ -53,13 +53,13 @@ public class ConcertScheduleFacadeTest {
 
             LocalDateTime dateTime1 = LocalDateTime.of(2024, 10, 16, 22, 30);
             ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert, dateTime1, 50000);
-            Seat seat1 = Seat.of(concertSchedule1, 1, 50000, SeatGrade.ALL);
-            Seat seat2 = Seat.of(concertSchedule1, 2, 50000, SeatGrade.ALL);
+            Seat seat1 = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            Seat seat2 = Seat.of(concertHall, 2, 50000, SeatGrade.ALL);
 
             LocalDateTime dateTime2 = LocalDateTime.of(2024, 10, 18, 22, 30);
             ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert, dateTime2, 50000);
-            Seat seat3 = Seat.of(concertSchedule2, 1, 50000, SeatGrade.ALL);
-            Seat seat4 = Seat.of(concertSchedule2, 2, 50000, SeatGrade.ALL);
+            Seat seat3 = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            Seat seat4 = Seat.of(concertHall, 2, 50000, SeatGrade.ALL);
 
             given(concertScheduleService.getAllConcertSchedulesAfterNowByConcertId(concertId)).willReturn(List.of(concertSchedule1, concertSchedule2));
             given(seatService.getAllAvailableSeats(concertSchedule1.getId())).willReturn(List.of(seat1, seat2));

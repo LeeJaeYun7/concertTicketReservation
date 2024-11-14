@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Table(name = "reservation")
+@Table(name = "reservation", indexes = {@Index(name = "idx_created_at_concert_id", columnList = "created_at, concert_id")})
 public class Reservation extends BaseTimeEntity {
 
     @Id
