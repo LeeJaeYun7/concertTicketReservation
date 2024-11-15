@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/aa9da2e3-d040-4eb1-ac67-c905fc81e62d)
 # MSA 기반 서비스 분리에 따른 트랜잭션 처리 한계 및 해결 방안 보고서 
 
 ## 개요
