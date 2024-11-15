@@ -75,9 +75,13 @@
 <br> 
 
 
-(1) **Two-Phace Commit**(2PC) <br> 
+(1) **Two-Phase Commit**(2PC) <br> 
 <br> 
-![image](https://github.com/user-attachments/assets/934ce4e4-aa13-431c-a6d6-80c7f4c9fcc4)
+![image](https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3)
+
+
+- **Two-Phase Commit**은 Cordinator가 존재하며, 이름 그대로 2단계로 나눠서 커밋을 진행하는 접근법입니다. <br>
+  
 
 
 
