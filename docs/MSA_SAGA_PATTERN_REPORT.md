@@ -30,7 +30,37 @@
 
 ### 2) 기존 예약 기능 
 
-- 기존 예약 기능은 
+- 기존 예약 기능은 다음과 같은 코드로 개발되어 있었습니다. <br>
+
+```
+
+    @Transactional
+    public ReservationVO createReservation(String token, String uuid, long concertScheduleId, long seatNumber) {
+        validateSeatReservation(concertScheduleId, seatNumber);
+        checkBalanceOverPrice(uuid, concertScheduleId);
+
+        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+        Seat seat = seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
+        long price = getConcertSchedule(concertScheduleId).getPrice();
+
+        reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
+        paymentService.createPayment(concertSchedule.getConcert(), concertSchedule, uuid, price);
+        memberService.decreaseBalance(uuid, price);
+
+        updateStatus(token, concertScheduleId, seatNumber);
+
+        String name = getMember(uuid).getName();
+        String concertName = getConcert(concertScheduleId).getName();
+        LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
+
+        return ReservationVO.of(name, concertName, dateTime, price);
+    }
+
+
+
+
+
+```
 
 <br> 
 
