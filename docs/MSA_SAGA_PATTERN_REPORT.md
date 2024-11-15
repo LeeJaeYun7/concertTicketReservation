@@ -72,8 +72,6 @@
 
 
 (1) **Two-Phace Commit**(2PC) <br> 
-
-
 ![image](https://github.com/user-attachments/assets/934ce4e4-aa13-431c-a6d6-80c7f4c9fcc4)
 
 
@@ -81,6 +79,11 @@
 
 (2) **Saga 패턴**
 ![image](https://github.com/user-attachments/assets/91b26c4c-13ca-4343-9f1a-413d505f8722)
+
+
+
+
+(3) **두 가지 접근 법 비교 및 선택**
 ![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf)
 
 - 
