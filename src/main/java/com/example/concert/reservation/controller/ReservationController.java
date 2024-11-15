@@ -1,6 +1,5 @@
 package com.example.concert.reservation.controller;
 
-import com.example.concert.concert.dto.response.ConcertResponse;
 import com.example.concert.reservation.dto.request.ReservationRequest;
 import com.example.concert.reservation.dto.response.ReservationResponse;
 import com.example.concert.reservation.service.ReservationFacade;

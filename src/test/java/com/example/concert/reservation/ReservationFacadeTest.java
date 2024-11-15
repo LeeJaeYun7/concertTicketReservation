@@ -84,7 +84,7 @@ public class ReservationFacadeTest {
             long concertScheduleId = 1L;
             WaitingQueue element = WaitingQueue.of(concert, uuid, token, 0);
 
-            Seat seat = Seat.of(concertHall, seatNumber, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, seatNumber);
             seat.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
 
             given(seatService.getSeatByConcertHallIdAndNumber(concertScheduleId, seatNumber)).willReturn(seat);
