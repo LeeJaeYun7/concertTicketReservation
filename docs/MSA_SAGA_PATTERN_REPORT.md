@@ -132,6 +132,10 @@
 
 
 (1) **새로운 예약 기능**
+- 새로운 예약 기능은 좌석 예약과 사용자 잔액 조회를 한 후에, <br>
+  결제 서버로 결제 요청 이벤트를 발송합니다. <br>
+  이 때, 결제 요청 이벤트를 전달하는데는 메시지 큐인 Kafka를 활용하였습니다. <br> 
+
 
 ```
 @Transactional
@@ -154,7 +158,11 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 
 (2) **MSA로 분리된 결제 기능** 
+- 결제 기능은 Kafka를 통해서 이벤트를 리스닝한 후에 결제 작업을 진행합니다. <br>
+  이 때, 결제 작업이 성공하면 다시 예약 서버에 Kafka를 통해 성공 이벤트를 전달합니다. <br>
+  만약 실패하면, 실패 이벤트를 전달합니다. <br>
 
+- 여기서 외부 결제 시스템이 존재하는 것으로 가정하였습니다. <br> 
 ```
 @Transactional
 @KafkaListener(topics = "payment-request-topic", groupId = "payment-service")
