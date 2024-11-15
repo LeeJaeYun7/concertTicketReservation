@@ -193,3 +193,38 @@ private boolean externalPaymentSystemCall(String uuid, long price) {
         return false;
 }
 ```
+
+
+(3) **결제 완료 시 추가적으로 실행되는 예약 기능**
+
+```
+@Transactional
+@KafkaListener(topics = "payment-confirmed-topic")
+public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
+        long concertScheduleId = event.getConcertScheduleId();
+        String uuid = event.getUuid();
+        long seatNumber = event.getSeatNumber();
+        long price = event.getPrice();
+
+        try {
+            ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+            Seat seat = seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
+
+            memberService.decreaseBalance(uuid, price);
+            updateStatus(concertScheduleId, seatNumber);
+
+            reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
+
+            String name = getMember(uuid).getName();
+            String concertName = getConcert(concertScheduleId).getName();
+            LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
+
+            ReservationVO reservationVO = ReservationVO.of(name, concertName, dateTime, price);
+            reservationFuture.complete(reservationVO);
+
+        } catch (Exception ex) {
+            handleCompensation(event);
+            throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);
+        }
+}
+```
