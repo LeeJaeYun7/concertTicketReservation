@@ -72,6 +72,9 @@
   여러 서비스 간의 **트랜잭션 원자성**(Atomicity)을 보장하기 위한 **추가적인 접근**이 필요합니다. <br> 
 
 
+<br> 
+
+
 (1) **Two-Phace Commit**(2PC) <br> 
 <br> 
 ![image](https://github.com/user-attachments/assets/934ce4e4-aa13-431c-a6d6-80c7f4c9fcc4)
