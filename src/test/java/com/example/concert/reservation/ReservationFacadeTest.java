@@ -8,7 +8,6 @@ import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
-import com.example.concert.payment.service.PaymentService;
 import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.reservation.vo.ReservationVO;
@@ -30,6 +29,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -55,9 +56,6 @@ public class ReservationFacadeTest {
     private ConcertScheduleService concertScheduleService;
 
     @Mock
-    private PaymentService paymentService;
-
-    @Mock
     private WaitingQueueService waitingQueueService;
 
 
@@ -69,7 +67,7 @@ public class ReservationFacadeTest {
     class 예약을_생성할때 {
         @Test
         @DisplayName("유효성 검사를 통과하고, 좌석과 대기열의 status를 업데이트한다.")
-        void 유효성_검사를_통과하고_좌석과_대기열의_status를_업데이트한다() {
+        void 유효성_검사를_통과하고_좌석과_대기열의_status를_업데이트한다() throws ExecutionException, InterruptedException {
 
             String token = RandomStringGenerator.generateRandomString(16);
 
@@ -98,12 +96,12 @@ public class ReservationFacadeTest {
             element.updateWaitingNumber();
 
             given(concertService.getConcertById(1L)).willReturn(concert);
-            ReservationVO reservationVO = sut.createReservation(token, uuid, concertScheduleId, seatNumber);
+            CompletableFuture<ReservationVO> reservationVO = sut.createReservation(uuid, concertScheduleId, seatNumber);
 
-            assertEquals("Tom Cruise", reservationVO.getName());
-            assertEquals("박효신 콘서트", reservationVO.getConcertName());
-            assertEquals(concertSchedule.getDateTime(), reservationVO.getDateTime());
-            assertEquals(concertSchedule.getPrice(), reservationVO.getPrice());
+            assertEquals("Tom Cruise", reservationVO.get().getName());
+            assertEquals("박효신 콘서트", reservationVO.get().getConcertName());
+            assertEquals(concertSchedule.getDateTime(), reservationVO.get().getDateTime());
+            assertEquals(concertSchedule.getPrice(), reservationVO.get().getPrice());
         }
     }
 }

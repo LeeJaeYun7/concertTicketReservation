@@ -121,7 +121,7 @@ public class ReservationConcurrencyIntegrationTest {
             for (int i = 0; i < requestCount; i++) {
                 executorService.submit(() -> {
                     try {
-                        reservationFacade.createReservation(token, memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
+                        reservationFacade.createReservation(memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
                         successCount.incrementAndGet();
                     } finally {
                         latch.countDown();

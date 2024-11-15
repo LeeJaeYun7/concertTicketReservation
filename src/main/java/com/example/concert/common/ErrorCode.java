@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
 
+    PAYMENT_FAILED(HttpStatus.BAD_REQUEST,"결제가 실패했습니다."),
+
     //== 400 ==//
     NOT_VALID_TOKEN(HttpStatus.BAD_REQUEST,"유효한 토큰이 아닙니다."),
     NOT_VALID_SEAT(HttpStatus.BAD_REQUEST,"예약 가능한 좌석이 아닙니다."),
