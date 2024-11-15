@@ -68,10 +68,17 @@
 
 - **MSA** 환경에서는 **각 서비스가 독립적인 데이터베이스**를 사용합니다. <br>
   따라서 **모놀리식 환경**에서처럼 단일 트랜잭션의 **커밋과 롤백**을 처리하는 방식과는 달리, <br>
-  여러 서비스 간의 트랜잭션 원자성(Atomicity)을 보장하기 위한 **추가적인 접근**이 필요합니다.
+  여러 서비스 간의 **트랜잭션 원자성**(Atomicity)을 보장하기 위한 **추가적인 접근**이 필요합니다.
 
 
-![image](https://github.com/user-attachments/assets/934ce4e4-aa13-431c-a6d6-80c7f4c9fcc4)![image](https://github.com/user-attachments/assets/91b26c4c-13ca-4343-9f1a-413d505f8722)
+(1) **Two-Phace Commit**(2PC)
+![image](https://github.com/user-attachments/assets/934ce4e4-aa13-431c-a6d6-80c7f4c9fcc4)
+
+
+
+
+(2) **Saga 패턴**
+![image](https://github.com/user-attachments/assets/91b26c4c-13ca-4343-9f1a-413d505f8722)
 ![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf)
 
 - 
