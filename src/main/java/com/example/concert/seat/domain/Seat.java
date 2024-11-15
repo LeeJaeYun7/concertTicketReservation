@@ -2,7 +2,6 @@ package com.example.concert.seat.domain;
 
 import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.global.entity.BaseTimeEntity;
-import com.example.concert.seat.enums.SeatGrade;
 import com.example.concert.seat.enums.SeatStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -27,34 +26,25 @@ public class Seat extends BaseTimeEntity {
 
     private long number;
 
-    private long price;
-
     @Version
     private long version;
 
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
-    @Enumerated(EnumType.STRING)
-    private SeatGrade grade;
-
     @Builder
-    public Seat(ConcertHall concertHall, long number, long price, SeatGrade grade, SeatStatus status){
+    public Seat(ConcertHall concertHall, long number, SeatStatus status){
         this.concertHall = concertHall;
         this.number = number;
-        this.price = price;
-        this.grade = grade;
         this.status = status;
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static Seat of(ConcertHall concertHall, long number, long price, SeatGrade grade){
+    public static Seat of(ConcertHall concertHall, long number){
         return Seat.builder()
                    .concertHall(concertHall)
                    .number(number)
-                   .price(price)
-                   .grade(grade)
                    .status(SeatStatus.AVAILABLE)
                    .build();
     }
