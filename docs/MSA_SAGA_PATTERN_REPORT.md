@@ -129,3 +129,70 @@
 <br> 
 
 ### 4) MSA로 분리된 예약&결제 기능  
+
+
+(1) **새로운 예약 기능**
+
+```
+@Transactional
+public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) {
+      validateSeatReservation(concertScheduleId, seatNumber);
+      checkBalanceOverPrice(uuid, concertScheduleId);
+
+      ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+      long price = getConcertSchedule(concertScheduleId).getPrice();
+
+      kafkaTemplate.send("payment-request-topic", new PaymentRequestEvent(concertSchedule.getConcert().getId(), concertScheduleId, uuid, seatNumber, price));
+
+      return reservationFuture;
+}
+```
+
+
+
+
+(2) **MSA로 분리된 결제 기능** 
+
+```
+@Transactional
+@KafkaListener(topics = "payment-request-topic", groupId = "payment-service")
+public void createPayment(PaymentRequestEvent paymentRequestEvent){
+        long concertId = paymentRequestEvent.getConcertId();
+        long concertScheduleId = paymentRequestEvent.getConcertScheduleId();
+        String uuid = paymentRequestEvent.getUuid();
+        long seatNumber = paymentRequestEvent.getSeatNumber();
+        long price = paymentRequestEvent.getPrice();
+
+        try {
+            boolean paymentSuccess = externalPaymentSystemCall(uuid, price);
+
+            if (!paymentSuccess) {
+                kafkaTemplate.send("payment-failed-topic", new PaymentFailedEvent(
+                        concertId, concertScheduleId, uuid, seatNumber, price, "Payment system error"
+                ));
+                return;
+            }
+
+            Payment payment = Payment.of(concertId, concertScheduleId, uuid, price);
+            paymentRepository.save(payment);
+
+            kafkaTemplate.send("payment-confirmed-topic", new PaymentConfirmedEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price));
+
+        } catch (Exception e) {
+            kafkaTemplate.send("payment-failed-topic", new PaymentFailedEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price, "System error"
+            ));
+        }
+}
+
+@Retryable(value = {CustomException.class},
+           maxAttempts = 5,
+           backoff = @Backoff(delay = 1000, multiplier = 3))
+private boolean externalPaymentSystemCall(String uuid, long price) {
+        return false;
+}
+
+
+
+```
