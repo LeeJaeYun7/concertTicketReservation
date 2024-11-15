@@ -72,6 +72,7 @@
 
 
 (1) **Two-Phace Commit**(2PC) <br> 
+<br> 
 ![image](https://github.com/user-attachments/assets/934ce4e4-aa13-431c-a6d6-80c7f4c9fcc4)
 
 
