@@ -108,9 +108,14 @@
   **롤백**하는 방식입니다. <br> 
 
 
+<br> 
+
+
 
 (3) **두 가지 접근 법 비교 및 선택** <br> 
-![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf)
+![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf) <br> 
 
 - 
+
+
 ```
