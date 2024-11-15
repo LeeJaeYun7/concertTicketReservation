@@ -162,7 +162,8 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
   이 때, 결제 작업이 성공하면 다시 예약 서버에 Kafka를 통해 성공 이벤트를 전달합니다. <br>
   만약 실패하면, 실패 이벤트를 전달합니다. <br>
 
-- 여기서 외부 결제 시스템이 존재하는 것으로 가정하였습니다. <br> 
+- 여기서 외부 결제 시스템이 존재하는 것으로 가정하였습니다. <br>
+  
 ```
 @Transactional
 @KafkaListener(topics = "payment-request-topic", groupId = "payment-service")
@@ -209,7 +210,10 @@ private boolean externalPaymentSystemCall(String uuid, long price) {
 
 
 (3) **결제 완료 시 추가적으로 실행되는 예약 기능**
-
+- 결제 완료 시, 이를 Kafka를 통해 이벤트로 전달 받고 추가적인 예약 기능이 실행됩니다. <br>
+  이 때, 예약 작업 도중에 예외가 발생하면, 이전에 커밋되었던 결제 트랜잭션이 취소되어야 하므로, <br>
+  결제 서버에 이벤트로 보상 트랜잭션을 실시할 것을 전달합니다. <br> 
+  
 ```
 @Transactional
 @KafkaListener(topics = "payment-confirmed-topic")
@@ -246,7 +250,11 @@ public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
 
 <br> 
 
-(4) **예약 실패 시, 결제 서비스에서 발생하는 보상 트랜잭션**
+(4) **예약 실패 시, 결제 서버에서 발생하는 보상 트랜잭션**
+
+- 결제 서버는 보상 트랜잭션 요청 이벤트를 전달 받으면, <br>
+  이에 따라 보상 트랜잭션을 실시합니다. <br>
+  이를 통해 이전에 성공했던 결제 트랜잭션은 취소가 됩니다. <br> 
 
 ```
 @Transactional
