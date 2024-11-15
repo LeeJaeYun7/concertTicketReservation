@@ -1,4 +1,4 @@
-
+![image](https://github.com/user-attachments/assets/aa9da2e3-d040-4eb1-ac67-c905fc81e62d)
 # MSA 기반 서비스 분리에 따른 트랜잭션 처리 한계 및 해결 방안 보고서 
 
 ## 개요
@@ -84,8 +84,8 @@
 
 (2) **Saga 패턴** <br> 
 <br> 
-![image](https://github.com/user-attachments/assets/9eaadd1d-b181-4a6c-9e6a-0d2ab4d14ed2) <br> 
 ![image](https://github.com/user-attachments/assets/91b26c4c-13ca-4343-9f1a-413d505f8722) <br> 
+![image](https://github.com/user-attachments/assets/c686d098-26b5-4ea2-a428-d2afc5d89634) <br> 
 
 
 
