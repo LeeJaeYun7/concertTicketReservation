@@ -230,4 +230,42 @@ public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
             throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);
         }
 }
+
 ```
+
+<br> 
+
+(4) **예약 실패 시, 결제 서비스에서 발생하는 보상 트랜잭션**
+
+```
+@Transactional
+@KafkaListener(topics = "payment-compensation-topic", groupId = "payment-service")
+public void handleCompensationEvent(PaymentRequestEvent paymentRequestEvent) {
+
+        long concertId = paymentRequestEvent.getConcertId();
+        long concertScheduleId = paymentRequestEvent.getConcertScheduleId();
+        String uuid = paymentRequestEvent.getUuid();
+        long seatNumber = paymentRequestEvent.getSeatNumber();
+        long price = paymentRequestEvent.getPrice();
+
+        try {
+            Payment payment = paymentRepository.findByConcertIdAndConcertScheduleIdAndUuid(concertId, concertScheduleId, uuid)
+                    .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOT_FOUND, Loggable.ALWAYS));
+
+            paymentRepository.delete(payment);
+
+            kafkaTemplate.send("payment-compensation-success-topic", new PaymentCompensationSuccessEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price, "Payment canceled successfully"
+            ));
+        } catch (Exception e) {
+            kafkaTemplate.send("payment-compensation-failed-topic", new PaymentCompensationFailedEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price, "Compensation failed"
+            ));
+        }
+}
+
+
+```
+
+
+
