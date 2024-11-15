@@ -85,6 +85,10 @@
 
 
 
+![image](https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df)
+
+
+
 (2) **Saga 패턴** <br> 
 <br> 
 ![image](https://github.com/user-attachments/assets/91b26c4c-13ca-4343-9f1a-413d505f8722) <br> 
