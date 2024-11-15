@@ -136,6 +136,7 @@
 ```
 @Transactional
 public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) {
+
       validateSeatReservation(concertScheduleId, seatNumber);
       checkBalanceOverPrice(uuid, concertScheduleId);
 
@@ -157,6 +158,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 @Transactional
 @KafkaListener(topics = "payment-request-topic", groupId = "payment-service")
 public void createPayment(PaymentRequestEvent paymentRequestEvent){
+
         long concertId = paymentRequestEvent.getConcertId();
         long concertScheduleId = paymentRequestEvent.getConcertScheduleId();
         String uuid = paymentRequestEvent.getUuid();
@@ -201,6 +203,7 @@ private boolean externalPaymentSystemCall(String uuid, long price) {
 @Transactional
 @KafkaListener(topics = "payment-confirmed-topic")
 public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
+
         long concertScheduleId = event.getConcertScheduleId();
         String uuid = event.getUuid();
         long seatNumber = event.getSeatNumber();
