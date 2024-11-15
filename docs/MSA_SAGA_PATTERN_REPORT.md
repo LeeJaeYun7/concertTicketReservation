@@ -61,8 +61,13 @@
   즉, 예약, 결제, 멤버 서비스가 모두 완료되어야만, 트랜잭션이 종료된다는 특징을 갖고 있습니다. <br>  
 
 
-**3) 분산 트랜잭션 및 Saga 패턴** <br>
-
 <br> 
 
+
+**3) 분산 트랜잭션 및 Saga 패턴** <br>
+![image](https://github.com/user-attachments/assets/934ce4e4-aa13-431c-a6d6-80c7f4c9fcc4)
+![image](https://github.com/user-attachments/assets/91b26c4c-13ca-4343-9f1a-413d505f8722)
+![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf)
+
+- 
 ```
