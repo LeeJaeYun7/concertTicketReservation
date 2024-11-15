@@ -192,7 +192,4 @@ public void createPayment(PaymentRequestEvent paymentRequestEvent){
 private boolean externalPaymentSystemCall(String uuid, long price) {
         return false;
 }
-
-
-
 ```
