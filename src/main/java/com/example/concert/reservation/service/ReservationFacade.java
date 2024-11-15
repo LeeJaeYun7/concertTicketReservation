@@ -18,6 +18,7 @@ import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.service.SeatService;
 import com.example.concert.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ReservationFacade {
 
     private final TimeProvider timeProvider;
@@ -37,7 +39,6 @@ public class ReservationFacade {
     private final SeatService seatService;
     private final ConcertService concertService;
     private final ConcertScheduleService concertScheduleService;
-
     private final KafkaTemplate kafkaTemplate;
 
     private final CompletableFuture<ReservationVO> reservationFuture = new CompletableFuture<>();
@@ -63,20 +64,39 @@ public class ReservationFacade {
         long seatNumber = event.getSeatNumber();
         long price = event.getPrice();
 
-        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        Seat seat = seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
+        try {
+            ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+            Seat seat = seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
 
-        memberService.decreaseBalance(uuid, price);
-        updateStatus(concertScheduleId, seatNumber);
+            memberService.decreaseBalance(uuid, price);
+            updateStatus(concertScheduleId, seatNumber);
 
-        reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
+            reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
 
-        String name = getMember(uuid).getName();
-        String concertName = getConcert(concertScheduleId).getName();
-        LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
+            String name = getMember(uuid).getName();
+            String concertName = getConcert(concertScheduleId).getName();
+            LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
 
-        ReservationVO reservationVO = ReservationVO.of(name, concertName, dateTime, price);
-        reservationFuture.complete(reservationVO);
+            ReservationVO reservationVO = ReservationVO.of(name, concertName, dateTime, price);
+            reservationFuture.complete(reservationVO);
+
+        } catch (Exception ex) {
+            handleCompensation(event);
+            throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);
+        }
+    }
+
+    private void handleCompensation(PaymentConfirmedEvent event) {
+        try {
+            PaymentRequestEvent compensationEvent = new PaymentRequestEvent(
+                    event.getConcertId(), event.getConcertScheduleId(),
+                    event.getUuid(), event.getSeatNumber(), event.getPrice());
+
+            kafkaTemplate.send("payment-compensation-topic", compensationEvent);
+        } catch (Exception compensationEx) {
+            log.error("Failed to send compensation request to Payment server", compensationEx);
+            throw new CustomException(ErrorCode.PAYMENT_COMPENSATION_FAILED, Loggable.ALWAYS);
+        }
     }
 
     @KafkaListener(topics = "payment-failed-topic")

@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
                 ex.getErrorCode().getHttpStatus(),
                 ex.getErrorCode().getMessage()
         );
+
         return ResponseEntity.status(ex.getErrorCode().getHttpStatus()).body(errorResponse);
     }
 }
