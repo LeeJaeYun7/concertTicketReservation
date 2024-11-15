@@ -149,6 +149,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 }
 ```
 
+
 <br> 
 
 
@@ -195,6 +196,8 @@ private boolean externalPaymentSystemCall(String uuid, long price) {
         return false;
 }
 ```
+
+<br> 
 
 
 (3) **결제 완료 시 추가적으로 실행되는 예약 기능**
