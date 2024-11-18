@@ -13,8 +13,9 @@
 
 <br> 
 
-### 1) 레디스 대기열이란? 도입 이유
-![image](https://github.com/user-attachments/assets/1717a0e7-f7fb-43a3-8108-a09e2b5376d4)
+### 1) 레디스 대기열이란? 
+![image](https://github.com/user-attachments/assets/da19bff3-8c3a-4432-b7ec-36c04a249212)
+
 
 
 
