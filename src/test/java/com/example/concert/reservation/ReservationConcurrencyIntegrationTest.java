@@ -22,7 +22,6 @@ import com.example.concert.seatinfo.enums.SeatStatus;
 import com.example.concert.seatinfo.repository.SeatInfoRepository;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
 import com.example.concert.waitingQueue.repository.WaitingQueueRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;

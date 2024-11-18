@@ -1,7 +1,6 @@
 package com.example.concert.concertschedule.repository;
 
 import com.example.concert.concertschedule.domain.ConcertSchedule;
-import com.example.concert.concertschedule.vo.ConcertScheduleVO;
 import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

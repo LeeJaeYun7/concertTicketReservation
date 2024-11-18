@@ -1,6 +1,5 @@
 package com.example.concert.seatinfo.domain;
 
-import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.global.entity.BaseTimeEntity;
 import com.example.concert.seat.domain.Seat;
@@ -44,6 +43,8 @@ public class SeatInfo extends BaseTimeEntity {
         this.concertSchedule = concertSchedule;
         this.seatGrade = seatGrade;
         this.status = status;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public static SeatInfo of(Seat seat, ConcertSchedule concertSchedule, SeatGrade seatGrade, SeatStatus status){
