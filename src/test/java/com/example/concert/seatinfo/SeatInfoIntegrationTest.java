@@ -1,4 +1,4 @@
-package com.example.concert.seat;
+package com.example.concert.seatinfo;
 
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.enums.ConcertAgeRestriction;
@@ -8,10 +8,13 @@ import com.example.concert.concerthall.repository.ConcertHallRepository;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatGrade;
-import com.example.concert.seat.enums.SeatStatus;
 import com.example.concert.seat.repository.SeatRepository;
-import com.example.concert.seat.service.SeatService;
+import com.example.concert.seatgrade.domain.SeatGrade;
+import com.example.concert.seatgrade.enums.Grade;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
+import com.example.concert.seatinfo.repository.SeatInfoRepository;
+import com.example.concert.seatinfo.service.SeatInfoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,10 +29,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Transactional
-public class SeatIntegrationTest {
+public class SeatInfoIntegrationTest {
 
     @Autowired
-    private SeatService sut;
+    private SeatInfoService sut;
 
     @Autowired
     private ConcertRepository concertRepository;
@@ -39,9 +42,10 @@ public class SeatIntegrationTest {
 
     @Autowired
     private ConcertScheduleRepository concertScheduleRepository;
-
     @Autowired
     private SeatRepository seatRepository;
+    @Autowired
+    private SeatInfoRepository seatInfoRepository;
 
     @Nested
     @DisplayName("예약 가능한 좌석을 조회할 때")
@@ -61,20 +65,28 @@ public class SeatIntegrationTest {
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
             concertRepository.save(concert);
 
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
             ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-            Seat seat1 = Seat.of(savedConcertHall, 11, 50000, SeatGrade.ALL);
-            seat1.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
-            Seat seat2 = Seat.of(savedConcertHall, 22, 50000, SeatGrade.ALL);
-            seat2.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
+            Seat seat11 = Seat.of(savedConcertHall, 11);
+            seat11.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
+            Seat seat22 = Seat.of(savedConcertHall, 22);
+            seat22.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
 
-            seatRepository.save(seat1);
-            seatRepository.save(seat2);
+            seatRepository.save(seat11);
+            seatRepository.save(seat22);
 
-            List<Seat> result = sut.getAllAvailableSeats(savedConcertSchedule.getId());
-            assertEquals(result.get(0).getNumber(), seat1.getNumber());
-            assertEquals(result.get(1).getNumber(), seat2.getNumber());
+            SeatGrade vipSeatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo vipSeatInfo = SeatInfo.of(seat11, concertSchedule, vipSeatGrade, SeatStatus.AVAILABLE);
+            SeatGrade RseatGrade = SeatGrade.of(concert, Grade.R, 80000);
+            SeatInfo RSeatInfo = SeatInfo.of(seat22, concertSchedule, RseatGrade, SeatStatus.AVAILABLE);
+
+            seatInfoRepository.save(vipSeatInfo);
+            seatInfoRepository.save(RSeatInfo);
+
+            List<SeatInfo> result = sut.getAllAvailableSeats(savedConcertSchedule.getId());
+            assertEquals(result.get(0).getSeat().getNumber(), seat11.getNumber());
+            assertEquals(result.get(1).getSeat().getNumber(), seat22.getNumber());
         }
     }
 
@@ -96,10 +108,10 @@ public class SeatIntegrationTest {
             concertRepository.save(concert);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
             ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-            Seat seat = Seat.of(savedConcertHall, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(savedConcertHall, 1);
             seatRepository.save(seat);
 
             sut.changeUpdatedAtWithPessimisticLock(savedConcertSchedule.getId(), 1);
@@ -124,15 +136,19 @@ public class SeatIntegrationTest {
             concertRepository.save(concert);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
             ConcertSchedule savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-            Seat seat = Seat.of(savedConcertHall, 11, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(savedConcertHall, 11);
             seatRepository.save(seat);
+
+            SeatGrade vipSeatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo vipSeatInfo = SeatInfo.of(seat, concertSchedule, vipSeatGrade, SeatStatus.AVAILABLE);
+            seatInfoRepository.save(vipSeatInfo);
 
             sut.updateSeatStatus(savedConcertSchedule.getId(), 11, SeatStatus.RESERVED);
 
-            assertEquals(seat.getStatus(), SeatStatus.RESERVED);
+            assertEquals(vipSeatInfo.getStatus(), SeatStatus.RESERVED);
         }
     }
 }

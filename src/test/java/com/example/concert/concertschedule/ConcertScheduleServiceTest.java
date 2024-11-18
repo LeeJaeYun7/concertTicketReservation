@@ -49,13 +49,13 @@ public class ConcertScheduleServiceTest {
             Concert IUConcert = Concert.of("아이유 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, IUstartAt, IUendAt);
 
             LocalDateTime IUdateTime = LocalDateTime.of(2024, 10, 18, 22, 30);
-            ConcertSchedule IUconcertSchedule = ConcertSchedule.of(IUConcert, IUdateTime, 50000);
+            ConcertSchedule IUconcertSchedule = ConcertSchedule.of(IUConcert, IUdateTime);
 
             when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
 
             given(concertScheduleRepository.findAllAfterNowByConcertId(1L, timeProvider.now())).willReturn(List.of(IUconcertSchedule));
 
-            List<ConcertSchedule> result = sut.getAllConcertSchedulesAfterNowByConcertId(1L);
+            List<LocalDateTime> result = sut.getAllAvailableDateTimes(1L);
 
             assertEquals(1, result.size());
         }

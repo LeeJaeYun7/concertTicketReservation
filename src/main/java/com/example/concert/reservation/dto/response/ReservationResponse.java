@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public class ReservationResponse {
 
     private final String name;
-
     private final String concertName;
     private final LocalDateTime dateTime;
     private final long price;

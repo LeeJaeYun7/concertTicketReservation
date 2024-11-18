@@ -11,8 +11,13 @@ import com.example.concert.reservation.domain.Reservation;
 import com.example.concert.reservation.repository.ReservationRepository;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatGrade;
 import com.example.concert.seat.repository.SeatRepository;
+import com.example.concert.seatgrade.domain.SeatGrade;
+import com.example.concert.seatgrade.enums.Grade;
+import com.example.concert.seatgrade.repository.SeatGradeRepository;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
+import com.example.concert.seatinfo.repository.SeatInfoRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,6 +48,12 @@ public class ReservationIntegrationTest {
     private SeatRepository seatRepository;
 
     @Autowired
+    private SeatGradeRepository seatGradeRepository;
+
+    @Autowired
+    private SeatInfoRepository seatInfoRepository;
+
+    @Autowired
     private ReservationRepository reservationRepository;
 
     @Nested
@@ -60,23 +71,28 @@ public class ReservationIntegrationTest {
             Concert concert = Concert.of("브루노 마스 콘서트", savedConcertHall, "장충체육관", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
 
             concertRepository.save(concert);
             concertScheduleRepository.save(concertSchedule);
 
             String uuid = UUID.randomUUID().toString();
-            Seat seat = Seat.of(savedConcertHall, 1, 50000, SeatGrade.ALL);
-            seatRepository.save(seat);
+            Seat seat = Seat.of(savedConcertHall, 1);
+            SeatGrade seatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo seatInfo = SeatInfo.of(seat, concertSchedule, seatGrade, SeatStatus.AVAILABLE);
 
-            Reservation reservation = Reservation.of(concertSchedule.getConcert(), concertSchedule, uuid, seat, 50000);
+            seatRepository.save(seat);
+            seatGradeRepository.save(seatGrade);
+            seatInfoRepository.save(seatInfo);
+
+            Reservation reservation = Reservation.of(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, 50000);
             reservationRepository.save(reservation);
 
-            Reservation savedReservation = sut.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, 50000);
+            Reservation savedReservation = sut.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, 50000);
 
             assertEquals("브루노 마스 콘서트", savedReservation.getConcertSchedule().getConcert().getName());
-            assertEquals(50000, savedReservation.getConcertSchedule().getPrice());
-            assertEquals(1, savedReservation.getSeat().getNumber());
+            assertEquals(50000, savedReservation.getPrice());
+            assertEquals(1, savedReservation.getSeatInfo().getSeat().getNumber());
         }
     }
 }

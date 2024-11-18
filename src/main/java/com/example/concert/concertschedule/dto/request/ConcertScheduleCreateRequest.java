@@ -12,13 +12,10 @@ public class ConcertScheduleCreateRequest {
 
     private String concertName;
     private LocalDateTime dateTime;
-    private long price;
 
     @Builder
-    public ConcertScheduleCreateRequest(String concertName, LocalDateTime dateTime, long price){
+    public ConcertScheduleCreateRequest(String concertName, LocalDateTime dateTime){
         this.concertName = concertName;
         this.dateTime = dateTime;
-        this.price = price;
     }
-
 }

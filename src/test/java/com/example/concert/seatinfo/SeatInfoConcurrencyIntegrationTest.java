@@ -1,10 +1,9 @@
-package com.example.concert.seat;
+package com.example.concert.seatinfo;
 
 import com.example.concert.concert.enums.ConcertAgeRestriction;
 import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concerthall.repository.ConcertHallRepository;
-import com.example.concert.seat.enums.SeatGrade;
-import com.example.concert.seat.service.SeatFacade;
+import com.example.concert.seatinfo.service.SeatInfoFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Slf4j
-public class SeatConcurrencyIntegrationTest {
+public class SeatInfoConcurrencyIntegrationTest {
     @Autowired
-    private SeatFacade seatFacade;
+    private SeatInfoFacade seatInfoFacade;
 
     @Autowired
     private MemberService memberService;
@@ -87,10 +86,10 @@ public class SeatConcurrencyIntegrationTest {
         savedConcert = concertRepository.save(concert);
 
         LocalDateTime dateTime = LocalDateTime.of(2024, 11, 25, 22, 30);
-        ConcertSchedule concertSchedule = ConcertSchedule.of(savedConcert, dateTime, 50000);
+        ConcertSchedule concertSchedule = ConcertSchedule.of(savedConcert, dateTime);
         savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
-        Seat seat = Seat.of(savedConcertHall, 1, 50000, SeatGrade.ALL);
+        Seat seat = Seat.of(savedConcertHall, 1);
         seat.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
         savedSeat = seatRepository.save(seat);
     }
@@ -125,7 +124,7 @@ public class SeatConcurrencyIntegrationTest {
 
                 executorService.submit(() -> {
                     try {
-                        seatFacade.createSeatReservationWithPessimisticLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
+                        seatInfoFacade.createSeatInfoReservationWithPessimisticLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
                         successCount.incrementAndGet();
                     } finally {
                         latch.countDown();
@@ -160,7 +159,7 @@ public class SeatConcurrencyIntegrationTest {
 
                 executorService.submit(() -> {
                     try {
-                        seatFacade.createSeatReservationWithOptimisticLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
+                        seatInfoFacade.createSeatInfoReservationWithOptimisticLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
                         successCount.incrementAndGet();
                     } finally {
                         latch.countDown();
@@ -195,7 +194,7 @@ public class SeatConcurrencyIntegrationTest {
 
                 executorService.submit(() -> {
                     try {
-                        seatFacade.createSeatReservationWithDistributedLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
+                        seatInfoFacade.createSeatInfoReservationWithDistributedLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
                         successCount.incrementAndGet();
                     } finally {
                         latch.countDown();

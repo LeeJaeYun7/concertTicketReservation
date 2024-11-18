@@ -3,7 +3,7 @@ package com.example.concert.reservation.domain;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.global.entity.BaseTimeEntity;
-import com.example.concert.seat.domain.Seat;
+import com.example.concert.seatinfo.domain.SeatInfo;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,27 +30,28 @@ public class Reservation extends BaseTimeEntity {
     private String uuid;
 
     @OneToOne
-    @JoinColumn(name = "seat_id")
-    private Seat seat;
+    @JoinColumn(name = "seat_info_id")
+    private SeatInfo seatInfo;
 
     private long price;
+
     @Builder
-    public Reservation(Concert concert, ConcertSchedule concertSchedule, String uuid, Seat seat, long price){
+    public Reservation(Concert concert, ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price){
         this.concert = concert;
         this.concertSchedule = concertSchedule;
         this.uuid = uuid;
-        this.seat = seat;
+        this.seatInfo = seatInfo;
         this.price = price;
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static Reservation of(Concert concert, ConcertSchedule concertSchedule, String uuid, Seat seat, long price){
+    public static Reservation of(Concert concert, ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price){
         return Reservation.builder()
                           .concert(concert)
                           .concertSchedule(concertSchedule)
                           .uuid(uuid)
-                          .seat(seat)
+                          .seatInfo(seatInfo)
                           .price(price)
                           .build();
     }

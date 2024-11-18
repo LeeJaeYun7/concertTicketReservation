@@ -4,7 +4,7 @@ import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.reservation.domain.Reservation;
 import com.example.concert.reservation.repository.ReservationRepository;
-import com.example.concert.seat.domain.Seat;
+import com.example.concert.seatinfo.domain.SeatInfo;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,9 +16,9 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public Reservation createReservation(Concert concert, ConcertSchedule concertSchedule, String uuid, Seat seat, long price) {
-        reservationRepository.findReservationByConcertScheduleIdAndSeatId(concertSchedule.getId(), seat.getId());
-        Reservation reservation = Reservation.of(concert, concertSchedule, uuid, seat, price);
+    public Reservation createReservation(Concert concert, ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price) {
+        reservationRepository.findReservation(concertSchedule.getId(), seatInfo.getId());
+        Reservation reservation = Reservation.of(concert, concertSchedule, uuid, seatInfo, price);
         return reservationRepository.save(reservation);
     }
 }

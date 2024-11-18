@@ -8,7 +8,10 @@ import com.example.concert.reservation.domain.Reservation;
 import com.example.concert.reservation.repository.ReservationRepository;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatGrade;
+import com.example.concert.seatgrade.domain.SeatGrade;
+import com.example.concert.seatgrade.enums.Grade;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -49,16 +52,18 @@ public class ReservationServiceTest {
             Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
 
             String uuid = UUID.randomUUID().toString();
-            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, 1);
+            SeatGrade seatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo seatInfo = SeatInfo.of(seat, concertSchedule, seatGrade, SeatStatus.AVAILABLE);
 
-            Reservation reservation = Reservation.of(concertSchedule.getConcert(), concertSchedule, uuid, seat, 50000);
+            Reservation reservation = Reservation.of(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, 50000);
 
             given(reservationRepository.save(any(Reservation.class))).willReturn(reservation);
 
-            sut.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, 50000);
+            sut.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, 50000);
 
             verify(reservationRepository, times(1)).save(any(Reservation.class));
         }

@@ -1,4 +1,4 @@
-package com.example.concert.seat.dto.response;
+package com.example.concert.seatinfo.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class SeatNumbersResponse {
 
     public static SeatNumbersResponse of(List<Long> availableSeatNumbers){
         return SeatNumbersResponse.builder()
-                            .availableSeatNumbers(availableSeatNumbers)
-                            .build();
+                .availableSeatNumbers(availableSeatNumbers)
+                .build();
     }
 }

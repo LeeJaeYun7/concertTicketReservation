@@ -8,14 +8,15 @@ import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
-import com.example.concert.payment.service.PaymentService;
 import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatGrade;
-import com.example.concert.seat.enums.SeatStatus;
-import com.example.concert.seat.service.SeatService;
+import com.example.concert.seatgrade.domain.SeatGrade;
+import com.example.concert.seatgrade.enums.Grade;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
+import com.example.concert.seatinfo.service.SeatInfoService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
@@ -30,6 +31,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -46,16 +49,13 @@ public class ReservationFacadeTest {
     private ReservationService reservationService;
 
     @Mock
-    private SeatService seatService;
+    private SeatInfoService seatInfoService;
 
     @Mock
     private ConcertService concertService;
 
     @Mock
     private ConcertScheduleService concertScheduleService;
-
-    @Mock
-    private PaymentService paymentService;
 
     @Mock
     private WaitingQueueService waitingQueueService;
@@ -69,7 +69,7 @@ public class ReservationFacadeTest {
     class 예약을_생성할때 {
         @Test
         @DisplayName("유효성 검사를 통과하고, 좌석과 대기열의 status를 업데이트한다.")
-        void 유효성_검사를_통과하고_좌석과_대기열의_status를_업데이트한다() {
+        void 유효성_검사를_통과하고_좌석과_대기열의_status를_업데이트한다() throws ExecutionException, InterruptedException {
 
             String token = RandomStringGenerator.generateRandomString(16);
 
@@ -82,28 +82,30 @@ public class ReservationFacadeTest {
 
             Concert concert = ConcertFixtureFactory.createConcertWithIdAndName(1L, "박효신 콘서트");
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
             long concertScheduleId = 1L;
             WaitingQueue element = WaitingQueue.of(concert, uuid, token, 0);
 
-            Seat seat = Seat.of(concertHall, seatNumber, 50000, SeatGrade.ALL);
-            seat.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
+            Seat seat10 = Seat.of(concertHall, seatNumber);
+            SeatGrade vipSeatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo vipSeatInfo = SeatInfo.of(seat10, concertSchedule, vipSeatGrade, SeatStatus.AVAILABLE);
 
-            given(seatService.getSeatByConcertHallIdAndNumber(concertScheduleId, seatNumber)).willReturn(seat);
+            vipSeatInfo.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
+
+            given(seatInfoService.getSeatInfo(concertScheduleId, seatNumber)).willReturn(vipSeatInfo);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 3));
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(1L)).willReturn(concertSchedule);
-            seat.updateStatus(SeatStatus.RESERVED);
+            vipSeatInfo.updateStatus(SeatStatus.RESERVED);
             element.updateWaitingQueueStatus(WaitingQueueStatus.DONE);
             element.updateWaitingNumber();
 
             given(concertService.getConcertById(1L)).willReturn(concert);
-            ReservationVO reservationVO = sut.createReservation(token, uuid, concertScheduleId, seatNumber);
+            CompletableFuture<ReservationVO> reservationVO = sut.createReservation(uuid, concertScheduleId, seatNumber);
 
-            assertEquals("Tom Cruise", reservationVO.getName());
-            assertEquals("박효신 콘서트", reservationVO.getConcertName());
-            assertEquals(concertSchedule.getDateTime(), reservationVO.getDateTime());
-            assertEquals(concertSchedule.getPrice(), reservationVO.getPrice());
+            assertEquals("Tom Cruise", reservationVO.get().getName());
+            assertEquals("박효신 콘서트", reservationVO.get().getConcertName());
+            assertEquals(concertSchedule.getDateTime(), reservationVO.get().getDateTime());
         }
     }
 }
