@@ -1,7 +1,7 @@
-package com.example.concert.concertgrade.domain;
+package com.example.concert.seatgrade.domain;
 
 import com.example.concert.concert.domain.Concert;
-import com.example.concert.concertgrade.enums.Grade;
+import com.example.concert.seatgrade.enums.Grade;
 import com.example.concert.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "concert_grade")
+@Table(name = "seat_grade")
 @NoArgsConstructor
-public class ConcertGrade extends BaseTimeEntity {
+public class SeatGrade extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +29,17 @@ public class ConcertGrade extends BaseTimeEntity {
     private long price;
 
     @Builder
-    public ConcertGrade(Concert concert, Grade grade, long price){
+    public SeatGrade(Concert concert, Grade grade, long price){
         this.concert = concert;
         this.grade = grade;
         this.price = price;
+    }
+
+    public static SeatGrade of(Concert concert, Grade grade, long price){
+        return SeatGrade.builder()
+                        .concert(concert)
+                        .grade(grade)
+                        .price(price)
+                        .build();
     }
 }

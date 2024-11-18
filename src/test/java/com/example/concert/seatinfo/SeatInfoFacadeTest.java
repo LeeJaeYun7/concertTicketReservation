@@ -1,4 +1,4 @@
-package com.example.concert.seat;
+package com.example.concert.seatinfo;
 
 import com.example.concert.common.CustomException;
 import com.example.concert.concert.domain.Concert;
@@ -9,9 +9,12 @@ import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatGrade;
-import com.example.concert.seat.service.SeatFacade;
-import com.example.concert.seat.service.SeatService;
+import com.example.concert.seatgrade.domain.SeatGrade;
+import com.example.concert.seatgrade.enums.Grade;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
+import com.example.concert.seatinfo.service.SeatInfoFacade;
+import com.example.concert.seatinfo.service.SeatInfoService;
 import com.example.concert.utils.TimeProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class SeatFacadeTest {
+public class SeatInfoFacadeTest {
     @Mock
     private TimeProvider timeProvider;
     @Mock
@@ -35,9 +38,9 @@ public class SeatFacadeTest {
     @Mock
     private ConcertScheduleService concertScheduleService;
     @Mock
-    private SeatService seatService;
+    private SeatInfoService seatInfoService;
     @InjectMocks
-    private SeatFacade sut;
+    private SeatInfoFacade sut;
 
     @Nested
     @DisplayName("좌석 예약을 할 때")
@@ -58,18 +61,20 @@ public class SeatFacadeTest {
             Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad",120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
 
             long number = 1L;
-            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, 1);
+            SeatGrade seatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo seatInfo = SeatInfo.of(seat, concertSchedule, seatGrade, SeatStatus.AVAILABLE);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
+            given(seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, number)).willReturn(seatInfo);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(6));
 
-            sut.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number);
+            sut.createSeatInfoReservationWithPessimisticLock(uuid, concertScheduleId, number);
         }
 
         @Test
@@ -87,18 +92,20 @@ public class SeatFacadeTest {
             Concert concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
 
             long number = 1L;
-            Seat seat = Seat.of(concertHall, 1, 50000, SeatGrade.ALL);
+            Seat seat = Seat.of(concertHall, 1);
+            SeatGrade seatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo seatInfo = SeatInfo.of(seat, concertSchedule, seatGrade, SeatStatus.AVAILABLE);
 
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(concertScheduleId)).willReturn(concertSchedule);
-            given(seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, number)).willReturn(seat);
+            given(seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, number)).willReturn(seatInfo);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
             seat.setUpdatedAt(timeProvider.now().minusMinutes(4));
 
-            assertThrows(CustomException.class, () -> sut.createSeatReservationWithPessimisticLock(uuid, concertScheduleId, number));
+            assertThrows(CustomException.class, () -> sut.createSeatInfoReservationWithPessimisticLock(uuid, concertScheduleId, number));
         }
     }
 }

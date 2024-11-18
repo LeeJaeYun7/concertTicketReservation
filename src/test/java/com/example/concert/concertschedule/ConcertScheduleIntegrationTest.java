@@ -52,15 +52,15 @@ public class ConcertScheduleIntegrationTest {
             Concert concert = Concert.of("김연우 콘서트", savedConcertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime1 = LocalDateTime.of(2024, 11, 25, 22, 30);
-            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert, dateTime1, 50000);
+            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert, dateTime1);
             LocalDateTime dateTime2 = LocalDateTime.of(2024, 11, 28, 22, 30);
-            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert, dateTime2, 50000);
+            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert, dateTime2);
 
             Concert savedConcert = concertRepository.save(concert);
             concertScheduleRepository.save(concertSchedule1);
             concertScheduleRepository.save(concertSchedule2);
 
-            List<ConcertSchedule> result = sut.getAllConcertSchedulesAfterNowByConcertId(savedConcert.getId());
+            List<LocalDateTime> result = sut.getAllAvailableDateTimes(savedConcert.getId());
 
             assertEquals(2, result.size());
         }
@@ -77,15 +77,15 @@ public class ConcertScheduleIntegrationTest {
             Concert concert = Concert.of("김연우 콘서트", savedConcertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
             LocalDateTime dateTime1 = LocalDateTime.of(2024, 9, 25, 22, 30);
-            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert, dateTime1, 50000);
+            ConcertSchedule concertSchedule1 = ConcertSchedule.of(concert, dateTime1);
             LocalDateTime dateTime2 = LocalDateTime.of(2024, 11, 28, 22, 30);
-            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert, dateTime2, 50000);
+            ConcertSchedule concertSchedule2 = ConcertSchedule.of(concert, dateTime2);
 
             Concert saveConcert = concertRepository.save(concert);
             concertScheduleRepository.save(concertSchedule1);
             concertScheduleRepository.save(concertSchedule2);
 
-            List<ConcertSchedule> result = sut.getAllConcertSchedulesAfterNowByConcertId(saveConcert.getId());
+            List<LocalDateTime> result = sut.getAllAvailableDateTimes(saveConcert.getId());
 
             assertEquals(1, result.size());
         }

@@ -3,7 +3,7 @@ package com.example.concert.concertschedule.controller;
 import com.example.concert.concertschedule.dto.request.ConcertScheduleCreateRequest;
 import com.example.concert.concertschedule.dto.response.AvailableDateTimesResponse;
 import com.example.concert.concertschedule.service.ConcertScheduleFacade;
-import com.example.concert.seat.dto.response.SeatNumbersResponse;
+import com.example.concert.seatinfo.dto.response.SeatNumbersResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,8 @@ public class ConcertScheduleController {
     public ResponseEntity<Void> createConcertSchedule(@RequestBody ConcertScheduleCreateRequest concertScheduleCreateRequest) throws JsonProcessingException {
         String concertName = concertScheduleCreateRequest.getConcertName();
         LocalDateTime dateTime = concertScheduleCreateRequest.getDateTime();
-        long price = concertScheduleCreateRequest.getPrice();
 
-        concertScheduleFacade.createConcertSchedule(concertName, dateTime, price);
+        concertScheduleFacade.createConcertSchedule(concertName, dateTime);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

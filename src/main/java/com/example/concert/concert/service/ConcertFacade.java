@@ -21,8 +21,8 @@ public class ConcertFacade {
 
         return concerts.stream()
                        .map(ConcertVO::of)
-                       .map(ConcertResponse::of)  // Concert 객체를 ConcertResponse로 변환
-                       .collect(Collectors.toList());  // 리스트로 수집
+                       .map(ConcertResponse::of)
+                       .collect(Collectors.toList());
     }
 
     public void saveTop30ConcertsIntoRedis() throws JsonProcessingException {

@@ -23,7 +23,7 @@ public class ConcertScheduler {
     private final TimeProvider timeProvider;
     private final ConcertCache concertCache;
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 20000)
     public void updateTop30Concerts() throws JsonProcessingException {
         LocalDateTime now = timeProvider.now();
         LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));

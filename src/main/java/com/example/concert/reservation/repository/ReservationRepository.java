@@ -17,8 +17,8 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT r FROM Reservation r WHERE r.concertSchedule.id = :concertScheduleId AND r.seat.id = :seatId")
-    Optional<Reservation> findReservationByConcertScheduleIdAndSeatId(@Param(value="concertScheduleId") long concertScheduleId, @Param(value="seatId") long seatId);
+    @Query("SELECT r FROM Reservation r WHERE r.concertSchedule.id = :concertScheduleId AND r.seatInfo.id = :seatInfoId")
+    Optional<Reservation> findReservation(@Param(value="concertScheduleId") long concertScheduleId, @Param(value="seatInfoId") long seatInfoId);
 
     // 최근 3일 간 콘서트 티켓 예약량 기준으로 Top30을 반환
     @Query("SELECT c, r.salesCount " +

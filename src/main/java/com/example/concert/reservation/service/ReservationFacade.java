@@ -13,13 +13,12 @@ import com.example.concert.reservation.event.PaymentConfirmedEvent;
 import com.example.concert.reservation.event.PaymentFailedEvent;
 import com.example.concert.reservation.event.PaymentRequestEvent;
 import com.example.concert.reservation.vo.ReservationVO;
-import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatStatus;
-import com.example.concert.seat.service.SeatService;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
+import com.example.concert.seatinfo.service.SeatInfoService;
 import com.example.concert.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,7 @@ public class ReservationFacade {
     private final TimeProvider timeProvider;
     private final MemberService memberService;
     private final ReservationService reservationService;
-    private final SeatService seatService;
+    private final SeatInfoService seatInfoService;
     private final ConcertService concertService;
     private final ConcertScheduleService concertScheduleService;
     private final KafkaTemplate kafkaTemplate;
@@ -45,11 +44,13 @@ public class ReservationFacade {
 
     @Transactional
     public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) {
+        SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
+        long price = seatInfo.getSeatGrade().getPrice();
+
         validateSeatReservation(concertScheduleId, seatNumber);
-        checkBalanceOverPrice(uuid, concertScheduleId);
+        checkBalanceOverPrice(uuid, price);
 
         ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-        long price = getConcertSchedule(concertScheduleId).getPrice();
 
         kafkaTemplate.send("payment-request-topic", new PaymentRequestEvent(concertSchedule.getConcert().getId(), concertScheduleId, uuid, seatNumber, price));
 
@@ -57,7 +58,7 @@ public class ReservationFacade {
     }
 
     @Transactional
-    @KafkaListener(topics = "payment-confirmed-topic")
+    // @KafkaListener(topics = "payment-confirmed-topic")
     public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
         long concertScheduleId = event.getConcertScheduleId();
         String uuid = event.getUuid();
@@ -66,12 +67,12 @@ public class ReservationFacade {
 
         try {
             ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-            Seat seat = seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
+            SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
 
             memberService.decreaseBalance(uuid, price);
             updateStatus(concertScheduleId, seatNumber);
 
-            reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
+            reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, price);
 
             String name = getMember(uuid).getName();
             String concertName = getConcert(concertScheduleId).getName();
@@ -99,26 +100,25 @@ public class ReservationFacade {
         }
     }
 
-    @KafkaListener(topics = "payment-failed-topic")
+    // @KafkaListener(topics = "payment-failed-topic")
     public void handlePaymentFailed(PaymentFailedEvent event) {
         throw new CustomException(ErrorCode.PAYMENT_FAILED, Loggable.NEVER);
     }
 
     private void updateStatus(long concertScheduleId, long seatNumber) {
-        seatService.updateSeatStatus(concertScheduleId, seatNumber, SeatStatus.RESERVED);
+        seatInfoService.updateSeatStatus(concertScheduleId, seatNumber, SeatStatus.RESERVED);
     }
 
     private void validateSeatReservation(long concertScheduleId, long seatNumber) {
-         Seat seat = seatService.getSeatByConcertHallIdAndNumber(concertScheduleId, seatNumber);
+         SeatInfo seatInfo = seatInfoService.getSeatInfo(concertScheduleId, seatNumber);
 
-         if(isFiveMinutesPassed(seat.getUpdatedAt())){
+         if(isFiveMinutesPassed(seatInfo.getUpdatedAt())){
              throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED, Loggable.ALWAYS);
          }
     }
 
-    private void checkBalanceOverPrice(String uuid, long concertScheduleId) {
+    private void checkBalanceOverPrice(String uuid, long price) {
         long balance = getMember(uuid).getBalance();
-        long price = getConcertSchedule(concertScheduleId).getPrice();
 
         if(balance - price < 0){
             throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE, Loggable.NEVER);

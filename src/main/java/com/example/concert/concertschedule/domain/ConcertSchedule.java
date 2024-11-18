@@ -25,22 +25,18 @@ public class ConcertSchedule extends BaseTimeEntity {
 
     private LocalDateTime dateTime;
 
-    private long price;
-
     @Builder
-    public ConcertSchedule(Concert concert, LocalDateTime dateTime, long price){
+    public ConcertSchedule(Concert concert, LocalDateTime dateTime){
         this.concert = concert;
         this.dateTime = dateTime;
-        this.price = price;
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static ConcertSchedule of(Concert concert, LocalDateTime dateTime, long price){
+    public static ConcertSchedule of(Concert concert, LocalDateTime dateTime){
         return ConcertSchedule.builder()
                               .concert(concert)
                               .dateTime(dateTime)
-                              .price(price)
                               .build();
     }
 }

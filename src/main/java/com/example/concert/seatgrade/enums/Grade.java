@@ -1,4 +1,4 @@
-package com.example.concert.concertgrade.enums;
+package com.example.concert.seatgrade.enums;
 
 public enum Grade {
 

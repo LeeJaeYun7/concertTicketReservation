@@ -13,8 +13,13 @@ import com.example.concert.member.service.MemberService;
 import com.example.concert.reservation.repository.ReservationRepository;
 import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatGrade;
 import com.example.concert.seat.repository.SeatRepository;
+import com.example.concert.seatgrade.domain.SeatGrade;
+import com.example.concert.seatgrade.enums.Grade;
+import com.example.concert.seatgrade.repository.SeatGradeRepository;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
+import com.example.concert.seatinfo.repository.SeatInfoRepository;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
 import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
@@ -60,6 +65,13 @@ public class ReservationConcurrencyIntegrationTest {
     private SeatRepository seatRepository;
 
     @Autowired
+    private SeatInfoRepository seatInfoRepository;
+
+
+    @Autowired
+    private SeatGradeRepository seatGradeRepository;
+
+    @Autowired
     private ReservationRepository reservationRepository;
     private String token;
     private String memberUuid;
@@ -72,6 +84,10 @@ public class ReservationConcurrencyIntegrationTest {
     private ConcertSchedule savedConcertSchedule;
 
     private Seat savedSeat;
+
+    private SeatGrade savedSeatGrade;
+
+    private SeatInfo savedSeatInfo;
 
     private WaitingQueue savedWaitingQueue;
     @BeforeEach
@@ -93,16 +109,18 @@ public class ReservationConcurrencyIntegrationTest {
         savedConcert = concertRepository.save(concert);
 
         LocalDateTime dateTime = LocalDateTime.of(2024, 11, 25, 22, 30);
-        ConcertSchedule concertSchedule = ConcertSchedule.of(savedConcert, dateTime, 50000);
+        ConcertSchedule concertSchedule = ConcertSchedule.of(savedConcert, dateTime);
         savedConcertSchedule = concertScheduleRepository.save(concertSchedule);
 
         Seat seat = Seat.of(savedConcertHall, 1);
         seat.setUpdatedAt(LocalDateTime.now());
         savedSeat = seatRepository.save(seat);
 
-        WaitingQueue waitingQueue = WaitingQueue.of(savedConcert, memberUuid, token, 0);
-        waitingQueue.updateWaitingQueueStatus(WaitingQueueStatus.ACTIVE);
-        savedWaitingQueue = waitingQueueRepository.save(waitingQueue);
+        SeatGrade vipSeatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+        savedSeatGrade = seatGradeRepository.save(vipSeatGrade);
+        SeatInfo vipSeatInfo = SeatInfo.of(seat, concertSchedule, savedSeatGrade, SeatStatus.AVAILABLE);
+
+        savedSeatInfo = seatInfoRepository.save(vipSeatInfo);
     }
 
     @Nested
@@ -121,7 +139,7 @@ public class ReservationConcurrencyIntegrationTest {
             for (int i = 0; i < requestCount; i++) {
                 executorService.submit(() -> {
                     try {
-                        reservationFacade.createReservation(memberUuid, savedConcertSchedule.getId(), savedSeat.getNumber());
+                        reservationFacade.createReservation(memberUuid, savedConcertSchedule.getId(), savedSeatInfo.getSeat().getNumber());
                         successCount.incrementAndGet();
                     } finally {
                         latch.countDown();

@@ -12,9 +12,11 @@ import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.enums.SeatGrade;
-import com.example.concert.seat.enums.SeatStatus;
-import com.example.concert.seat.service.SeatService;
+import com.example.concert.seatgrade.domain.SeatGrade;
+import com.example.concert.seatgrade.enums.Grade;
+import com.example.concert.seatinfo.domain.SeatInfo;
+import com.example.concert.seatinfo.enums.SeatStatus;
+import com.example.concert.seatinfo.service.SeatInfoService;
 import com.example.concert.utils.RandomStringGenerator;
 import com.example.concert.utils.TimeProvider;
 import com.example.concert.waitingQueue.domain.WaitingQueue;
@@ -47,7 +49,7 @@ public class ReservationFacadeTest {
     private ReservationService reservationService;
 
     @Mock
-    private SeatService seatService;
+    private SeatInfoService seatInfoService;
 
     @Mock
     private ConcertService concertService;
@@ -80,18 +82,21 @@ public class ReservationFacadeTest {
 
             Concert concert = ConcertFixtureFactory.createConcertWithIdAndName(1L, "박효신 콘서트");
             LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime, 50000);
+            ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
             long concertScheduleId = 1L;
             WaitingQueue element = WaitingQueue.of(concert, uuid, token, 0);
 
-            Seat seat = Seat.of(concertHall, seatNumber);
-            seat.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
+            Seat seat10 = Seat.of(concertHall, seatNumber);
+            SeatGrade vipSeatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
+            SeatInfo vipSeatInfo = SeatInfo.of(seat10, concertSchedule, vipSeatGrade, SeatStatus.AVAILABLE);
 
-            given(seatService.getSeatByConcertHallIdAndNumber(concertScheduleId, seatNumber)).willReturn(seat);
+            vipSeatInfo.changeUpdatedAt(LocalDateTime.of(2024, 10, 18, 0, 0));
+
+            given(seatInfoService.getSeatInfo(concertScheduleId, seatNumber)).willReturn(vipSeatInfo);
             given(timeProvider.now()).willReturn(LocalDateTime.of(2024, 10, 18, 0, 3));
             given(memberService.getMemberByUuid(uuid)).willReturn(member);
             given(concertScheduleService.getConcertScheduleById(1L)).willReturn(concertSchedule);
-            seat.updateStatus(SeatStatus.RESERVED);
+            vipSeatInfo.updateStatus(SeatStatus.RESERVED);
             element.updateWaitingQueueStatus(WaitingQueueStatus.DONE);
             element.updateWaitingNumber();
 
@@ -101,7 +106,6 @@ public class ReservationFacadeTest {
             assertEquals("Tom Cruise", reservationVO.get().getName());
             assertEquals("박효신 콘서트", reservationVO.get().getConcertName());
             assertEquals(concertSchedule.getDateTime(), reservationVO.get().getDateTime());
-            assertEquals(concertSchedule.getPrice(), reservationVO.get().getPrice());
         }
     }
 }
