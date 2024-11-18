@@ -14,7 +14,7 @@
 <br> 
 
 ### 1) 레디스 대기열 도입 이유
-![image](https://github.com/user-attachments/assets/b9eff2cc-a72b-4642-9517-d4625f8a81fc)
+![image](https://github.com/user-attachments/assets/1717a0e7-f7fb-43a3-8108-a09e2b5376d4)
 
 
 - **콘서트 티켓 예약 서비스**는 사용자가 콘서트 티켓을 예약할 수 있는 기능을 제공합니다. <br>
