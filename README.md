@@ -14,7 +14,7 @@
 ### 9. ['최근 3일간 판매량 Top30 콘서트' 캐시 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CACHE_REPORT.md)
 ### 10. [1만 RPM 레디스 대기열 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_REPORT.md)
 ### 11. ['최근 3일간 판매량 Top30 콘서트' 조회 시 인덱스 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/INDEX_REPORT.md)
-### 12. [MSA 기반 서비스 분리 시, Saga 패턴을 통한 분산 트랜잭션 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/MSA_SAGA_PATTERN_REPORT.md)
+### 12. [MSA 기반 서비스 분리 시, Saga 패턴을 활용한 분산 트랜잭션 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/MSA_SAGA_PATTERN_REPORT.md)
 ### 13. [MSA 기반 서비스 분리 시, Kafka 메시지 통신과 Transactional Outbox Pattern 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/MSA_KAFKA_TRANSACTIONAL_OUTBOX_PATTERN.md)
 <!-- ### 12. ['26만 row 예약 테이블' 조회 시 쿼리 튜닝 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/INDEX_REPORT.md)
 ### 10. [10만 RPM 레디스 대기열 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_REPORT.md)
