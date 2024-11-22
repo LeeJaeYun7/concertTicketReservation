@@ -76,11 +76,11 @@ b. 지정한 횟수 (permittedNumberOfCallsInHalfOpenState 횟수만큼) 수행 
 ```
 // build.gradle
 
-	// Resilience4j 의존성 추가
-	implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.0'
+// Resilience4j 의존성 추가
+implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.0'
 
-	// Spring Actuator 추가
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+// Spring Actuator 추가
+implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 ```
 
