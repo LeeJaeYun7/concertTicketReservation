@@ -79,8 +79,7 @@
   이 때, 고객은 평균 2초에 한 번 요청을 보내게 되므로, <br>
   이에 대응하기 위한 3330/2 = **1665 TPS**의 서버를 구축하는 것을 목표로 하였습니다. 
 
-- 그리고 [web.dev](https://web.dev/articles/ttfb?hl=ko#what-is-a-good-ttfb-score)를 참고해 <br>
-  **응답 시간을 0.8s 이내**로 하는 것을 목표로 하였습니다. 
+- 그리고 [web.dev](https://web.dev/articles/ttfb?hl=ko#what-is-a-good-ttfb-score)를 참고해, **응답 시간을 0.8s 이내**로 하는 것을 목표로 하였습니다. 
 
 
 
