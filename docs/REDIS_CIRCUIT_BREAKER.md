@@ -125,7 +125,8 @@ resilience4j.circuitbreaker:
 
 ```
 
-- 이 중 가장 중요한 설정 정보는 **slidingWindowSize와 failureThreshold** 그리고 **automaticTransitionFromOpenToHalfOpenEnabled** 입니다. <br>
+- 이 중 가장 중요한 설정 정보는 **slidingWindowSize와 failureThreshold** <br>
+  그리고 **automaticTransitionFromOpenToHalfOpenEnabled** 입니다. <br>
 
 <br>   
 
