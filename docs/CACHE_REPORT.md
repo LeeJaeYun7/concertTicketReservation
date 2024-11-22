@@ -208,12 +208,12 @@ resilience4j.circuitbreaker:
   configs:
     default:
       registerHealthIndicator: true
-      slidingWindowSize: 10
+      slidingWindowSize: 100
       minimumNumberOfCalls: 5
       permittedNumberOfCallsInHalfOpenState: 3
       automaticTransitionFromOpenToHalfOpenEnabled: true
       waitDurationInOpenState: 5s
-      failureRateThreshold: 50
+      failureRateThreshold: 10
       eventConsumerBufferSize: 10
       recordExceptions:
         - org.springframework.web.client.HttpServerErrorException
@@ -222,10 +222,6 @@ resilience4j.circuitbreaker:
       ignoreExceptions:
         - io.github.robwin.exception.BusinessException
 ```
-
-#### Spring Actuator 헬스체크를 통한 CircuitBreaker 동작 확인
-![image](https://github.com/user-attachments/assets/2a1b7404-e6ea-4371-ba5f-d02007cfb1a9)
-
 
 
 
