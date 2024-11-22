@@ -136,6 +136,7 @@ resilience4j.circuitbreaker:
 - 한편, **slidingWindowSize를 100으로 설정한 이유**는 **너무 작은 횟수**로 실패율을 계산할 경우 서킷 브레이커가 자주 **Open** 상태로 전환될 수 있기 때문입니다. <br>
   이를 방지하고, **더 안정적인 동작**을 보장하기 위해 충분한 호출 데이터(100번)를 기반으로 실패율을 계산하도록 설정했습니다. <br>
 
+<br> 
   
 (2) **automaticTransitionFromOpenToHalfOpenEnabled: true** <br>
 - automaticTransitionFromOpenToHalfOpenEnabled는 서킷 브레이커의 중요한 설정 중 하나로, 자동 복구 기능을 활성화합니다. <br>
