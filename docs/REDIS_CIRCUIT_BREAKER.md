@@ -70,9 +70,10 @@ b. 지정한 횟수 (permittedNumberOfCallsInHalfOpenState 횟수만큼) 수행 
 
 <br> 
 
-### 4) Redis 서킷 브레이커 도입 
+### 4) Redis 서킷 브레이커 도입 <br> 
 
 
+(1) **Gradle 의존성 추가** 
 ```
 // build.gradle
 
