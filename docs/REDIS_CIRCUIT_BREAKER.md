@@ -125,7 +125,8 @@ resilience4j.circuitbreaker:
 ```
 
 - 이 중 가장 중요한 설정 정보는 **slidingWindowSize와 failureThreshold** 그리고 **automaticTransitionFromOpenToHalfOpenEnabled** 입니다. <br>
-  
+
+<br>   
 
 (1) **slidingWindowSize: 100 & failureRateThreshold: 10**
 - 이 설정은 최근 **100개의 호출**을 기준으로, 그 중 **10%가 실패**하면 서킷 브레이커가 **Open 상태**로 전환된다는 의미입니다. <br>
@@ -139,7 +140,7 @@ resilience4j.circuitbreaker:
 <br> 
   
 (2) **automaticTransitionFromOpenToHalfOpenEnabled: true** <br>
-- automaticTransitionFromOpenToHalfOpenEnabled는 서킷 브레이커의 중요한 설정 중 하나로, 자동 복구 기능을 활성화합니다. <br>
+- automaticTransitionFromOpenToHalfOpenEnabled는 **서킷 브레이커의 중요한 설정** 중 하나로, 자동 복구 기능을 활성화합니다. <br>
   이 설정이 중요한 이유는 다음과 같습니다. <br> 
 
 
