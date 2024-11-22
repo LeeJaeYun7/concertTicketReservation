@@ -108,12 +108,12 @@ resilience4j.circuitbreaker:
   configs:
     default:
       registerHealthIndicator: true
-      slidingWindowSize: 10
+      slidingWindowSize: 100
       minimumNumberOfCalls: 5
       permittedNumberOfCallsInHalfOpenState: 3
       automaticTransitionFromOpenToHalfOpenEnabled: true
       waitDurationInOpenState: 5s
-      failureRateThreshold: 50
+      failureRateThreshold: 10
       eventConsumerBufferSize: 10
       recordExceptions:
         - org.springframework.web.client.HttpServerErrorException
@@ -124,17 +124,15 @@ resilience4j.circuitbreaker:
 
 ```
 
-- 이를 표로 간략히 정리하면 다음과 같습니다. <br>
+- 이 중 가장 중요한 설정 정보는 slidingWindowSize와 failureThreshold 입니다.
 
-| **설정 항목**                                              | **설명**                                                                                               |
-|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| **registerHealthIndicator**                               | 회로 차단기의 상태를 health indicator로 등록하여 회로 차단기의 상태를 확인할 수 있도록 설정합니다.     |
-| **slidingWindowSize**                                      | 실패율을 계산할 때 사용하는 최근 호출의 수를 설정합니다.                                               |
-| **minimumNumberOfCalls**                                   | 실패율 계산을 위해 최소 호출 횟수를 설정합니다.                                                          |
-| **permittedNumberOfCallsInHalfOpenState**                  | 반열림 상태에서 허용할 호출 횟수를 설정합니다. 이 값을 넘으면 다시 열림 상태로 전환됩니다.               |
-| **automaticTransitionFromOpenToHalfOpenEnabled**           | 열림 상태에서 반열림 상태로 자동 전환을 활성화합니다.                                                   |
-| **waitDurationInOpenState**                                | 열림 상태에서 반열림 상태로 전환되기까지 기다리는 시간을 설정합니다.                                     |
-| **failureRateThreshold**                                   | 실패율이 이 비율을 초과하면 회로 차단기가 열림 상태로 전환됩니다.                                          |
-| **eventConsumerBufferSize**                                | 이벤트 소비자를 위한 버퍼 크기를 설정합니다. 보통 이벤트 큐의 크기를 의미합니다.                        |
-| **recordExceptions**                                       | 실패로 간주할 예외들을 설정합니다. 이 예외들이 발생하면 실패로 처리됩니다.                              |
-| **ignoreExceptions**                                       | 실패로 처리하지 않을 예외들을 설정합니다. 이 예외들은 실패로 간주되지 않습니다.                        |
+(1) **slidingWindowSize: 100 & failureRateThreshold: 10**
+- 이 설정은 최근 **100개의 호출**을 기준으로, 그 중 **10%가 실패**하면 서킷 브레이커가 **Open 상태**로 전환된다는 의미입니다. <br>
+  
+- **failureRateThreshold**를 **10%로 설정한 이유**는 Redis가 **캐시**, **분산 락** 등 **핵심 기능**을 담당하기 때문에 **빠른 실패 및 회복**이 중요하다고 판단했기 때문입니다. <br>
+- 따라서, 시스템 장애가 발생했을 때 즉시 대응할 수 있도록 **낮은 임계값**을 설정했습니다. <br>
+  
+- 한편, **slidingWindowSize를 100으로 설정한 이유**는 **너무 작은 횟수**로 실패율을 계산할 경우 서킷 브레이커가 자주 **Open** 상태로 전환될 수 있기 때문입니다. <br>
+  이를 방지하고, **더 안정적인 동작**을 보장하기 위해 충분한 호출 데이터(100번)를 기반으로 실패율을 계산하도록 설정했습니다. <br>
+
+  
