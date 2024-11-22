@@ -168,7 +168,6 @@ resilience4j.circuitbreaker:
 (3) **Spring Actuator 헬스체크를 통한 CircuitBreaker 동작 확인** <br> 
 ![image](https://github.com/user-attachments/assets/2a1b7404-e6ea-4371-ba5f-d02007cfb1a9)
 
-<br>
 <br> 
 
 ### 5) 결론
