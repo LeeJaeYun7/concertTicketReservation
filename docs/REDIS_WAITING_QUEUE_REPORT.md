@@ -92,7 +92,8 @@
 
 **(3) 서버 인프라 구성**
 
-- 
+![image](https://github.com/user-attachments/assets/7556ef92-e66d-47a6-a937-a8711e18bb2d)
+
 
 
 <br> 
