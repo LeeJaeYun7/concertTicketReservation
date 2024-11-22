@@ -67,6 +67,7 @@
 
 
 **(2) 목표 TPS 산출**
+
 ![image](https://github.com/user-attachments/assets/735502ef-17db-410a-8d50-eeaccb0bbb2b)
 
 - 1차적으로 **1만 RPM**(Request Per Minute)을 효과적으로 처리하는 것을 목표로 설정했습니다. 그 이유는 다음과 같습니다: <br> 
