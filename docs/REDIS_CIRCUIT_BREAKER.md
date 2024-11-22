@@ -86,6 +86,7 @@ implementation 'org.springframework.boot:spring-boot-starter-actuator'
 ```
 
 
+(2) **application.yml에 resilience4j 설정 추가** <br> 
 
 ```
 // application.yml
