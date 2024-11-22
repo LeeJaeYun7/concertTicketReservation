@@ -57,31 +57,12 @@
 
 - 서킷 브레이커의 상태 변경을 순서대로 나타내면 다음과 같습니다. <br>
 
-(1) **Closed 상태에서 정상 요청 수행**
-
-- 시스템은 기본적으로 요청을 정상적으로 처리합니다.
-- 이 때는 실패율(failure rate)이나 지연율(slow call rate)이 임계치를 초과하지 않으면 요청을 계속해서 처리합니다.
-
-(2) **실패 임계치 도달 시 Open 상태로 전이**
-
-- 시스템의 실패율(failure rate)이나 지연율(slow call rate)이 설정된 **임계치**(failureRateThreshold, slowCallRateThreshold)를 초과하면 <br>
-  시스템은 Closed 상태에서 Open 상태로 전환됩니다. <br> 
-
-(3) **Open 상태에서 일정 시간 경과 후 Half Open 상태로 전이**
-
-- Open 상태에서 일정 시간이 지나면 대기 시간(waitDurationInOpenState)이 경과하여 시스템이 Half Open 상태로 전환됩니다. <br>
-  이 상태에서는 시스템이 일부 요청을 허용하여 서비스 상태를 점검합니다.
-
-(4) **Half Open 상태에서 요청 수행**  
-
-- Half Open 상태에서는 시스템이 특정 횟수(permittedNumberOfCallsInHalfOpenState) 만큼 요청을 받아들이고, 그 결과에 따라 다음 상태로 전이됩니다.
-  a. **성공 시 Closed 상태로 전환**
-- 만약 지정된 횟수만큼의 요청을 성공적으로 처리하면 Half Open 상태에서 다시 Closed 상태로 돌아가 정상적으로 요청을 처리합니다.
-  b. **실패 시 Open 상태로 전환**
-- 지정된 횟수만큼의 요청을 처리한 후 여전히 실패율이 높은 경우, 시스템은 Half Open 상태에서 다시 Open 상태로 전환되어 요청을 차단합니다.
-
-
-
+(1) **Closed** 상태에선 정상 요청 수행
+(2) **실패 임계치**(failureRateThreshold or slowCallRateThreshold) 도달시 Closed 에서 Open 으로 상태 변경
+(3) Open 상태에서 **일정 시간**(waitDurationInOpenState) 소요시 **Half Open** 으로 상태 변경
+(4) **Half Open** 상태에서의 요청 수행
+a. 지정한 횟수 (permittedNumberOfCallsInHalfOpenState 횟수만큼) 수행 후 **성공** 시 Half Open 상태에서 Closed 상태로 변경
+b. 지정한 횟수 (permittedNumberOfCallsInHalfOpenState 횟수만큼) 수행 후 **실패** 시 Half Open 상태에서 Open 상태로 변경
 
 
 ### 4) Redis 서킷 브레이커 도입 
