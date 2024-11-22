@@ -126,15 +126,15 @@ resilience4j.circuitbreaker:
 
 - 이를 표로 간략히 정리하면 다음과 같습니다. <br>
 
-| **설정 항목**                                              | **값**                                                    | **설명**                                                                                               |
-|-----------------------------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| **registerHealthIndicator**                               | `true`                                                  | 회로 차단기의 상태를 헬스 인디케이터로 등록하여 회로 차단기의 상태를 확인할 수 있도록 설정합니다.     |
-| **slidingWindowSize**                                      | `10`                                                    | 실패율을 계산할 때 사용하는 최근 호출의 수를 설정합니다.                                               |
-| **minimumNumberOfCalls**                                   | `5`                                                     | 실패율 계산을 위해 최소 호출 횟수를 설정합니다.                                                          |
-| **permittedNumberOfCallsInHalfOpenState**                  | `3`                                                     | 반열림 상태에서 허용할 호출 횟수를 설정합니다. 이 값을 넘으면 다시 열림 상태로 전환됩니다.               |
-| **automaticTransitionFromOpenToHalfOpenEnabled**           | `true`                                                  | 열림 상태에서 반열림 상태로 자동 전환을 활성화합니다.                                                   |
-| **waitDurationInOpenState**                                | `5s`                                                    | 열림 상태에서 반열림 상태로 전환되기까지 기다리는 시간을 설정합니다.                                     |
-| **failureRateThreshold**                                   | `50` (백분율)                                            | 실패율이 이 비율을 초과하면 회로 차단기가 열림 상태로 전환됩니다.                                          |
-| **eventConsumerBufferSize**                                | `10`                                                    | 이벤트 소비자를 위한 버퍼 크기를 설정합니다. 보통 이벤트 큐의 크기를 의미합니다.                        |
-| **recordExceptions**                                       | `org.springframework.web.client.HttpServerErrorException` <br> `java.util.concurrent.TimeoutException` <br> `java.io.IOException` | 실패로 간주할 예외들을 설정합니다. 이 예외들이 발생하면 실패로 처리됩니다.                              |
-| **ignoreExceptions**                                       | `io.github.robwin.exception.BusinessException`          | 실패로 처리하지 않을 예외들을 설정합니다. 이 예외들은 실패로 간주되지 않습니다.                        |
+| **설정 항목**                                              | **설명**                                                                                               |
+|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| **registerHealthIndicator**                               | 회로 차단기의 상태를 헬스 인디케이터로 등록하여 회로 차단기의 상태를 확인할 수 있도록 설정합니다.     |
+| **slidingWindowSize**                                      | 실패율을 계산할 때 사용하는 최근 호출의 수를 설정합니다.                                               |
+| **minimumNumberOfCalls**                                   | 실패율 계산을 위해 최소 호출 횟수를 설정합니다.                                                          |
+| **permittedNumberOfCallsInHalfOpenState**                  | 반열림 상태에서 허용할 호출 횟수를 설정합니다. 이 값을 넘으면 다시 열림 상태로 전환됩니다.               |
+| **automaticTransitionFromOpenToHalfOpenEnabled**           | 열림 상태에서 반열림 상태로 자동 전환을 활성화합니다.                                                   |
+| **waitDurationInOpenState**                                | 열림 상태에서 반열림 상태로 전환되기까지 기다리는 시간을 설정합니다.                                     |
+| **failureRateThreshold**                                   | 실패율이 이 비율을 초과하면 회로 차단기가 열림 상태로 전환됩니다.                                          |
+| **eventConsumerBufferSize**                                | 이벤트 소비자를 위한 버퍼 크기를 설정합니다. 보통 이벤트 큐의 크기를 의미합니다.                        |
+| **recordExceptions**                                       | 실패로 간주할 예외들을 설정합니다. 이 예외들이 발생하면 실패로 처리됩니다.                              |
+| **ignoreExceptions**                                       | 실패로 처리하지 않을 예외들을 설정합니다. 이 예외들은 실패로 간주되지 않습니다.                        |
