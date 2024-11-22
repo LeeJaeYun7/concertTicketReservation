@@ -46,8 +46,6 @@ public class ReservationService {
     @Transactional
     public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
 
-        log.info("handlePaymentConfirmed 시작!");
-
         long concertScheduleId = event.getConcertScheduleId();
         String uuid = event.getUuid();
         long seatNumber = event.getSeatNumber();
@@ -60,7 +58,6 @@ public class ReservationService {
             memberService.decreaseBalance(uuid, price);
             updateStatus(concertScheduleId, seatNumber);
 
-            log.info("createReservation 시작!");
             createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, price);
 
             String name = getMember(uuid).getName();
@@ -68,8 +65,8 @@ public class ReservationService {
             LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
 
             ReservationVO reservationVO = ReservationVO.of(name, concertName, dateTime, price);
-            reservationFacade.getReservationFuture().complete(reservationVO);
 
+            reservationFacade.getReservationFuture().complete(reservationVO);
         } catch (Exception ex) {
             kafkaMessageProducer.sendPaymentConfirmedEvent("payment-compensation-topic", event);
             throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);

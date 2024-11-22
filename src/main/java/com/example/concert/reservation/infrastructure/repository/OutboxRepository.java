@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface OutboxRepository extends JpaRepository<Outbox, Long> {
 
-    @Query("SELECT o FROM Outbox o WHERE o.sent = false ORDER BY o.createdAt ASC")
+    @Query("SELECT o FROM Outbox o WHERE o.sent = false ORDER BY o.createdAt ASC LIMIT 10")
     List<Outbox> findTop10UnsentEvents();
 }
