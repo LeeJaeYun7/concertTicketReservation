@@ -124,7 +124,8 @@ resilience4j.circuitbreaker:
 
 ```
 
-- 이 중 가장 중요한 설정 정보는 slidingWindowSize와 failureThreshold 입니다.
+- 이 중 가장 중요한 설정 정보는 slidingWindowSize와 failureThreshold 입니다. <br>
+  
 
 (1) **slidingWindowSize: 100 & failureRateThreshold: 10**
 - 이 설정은 최근 **100개의 호출**을 기준으로, 그 중 **10%가 실패**하면 서킷 브레이커가 **Open 상태**로 전환된다는 의미입니다. <br>
