@@ -99,7 +99,6 @@
 
 (2) **Saga 패턴** <br> 
 <br> 
-![image](https://github.com/user-attachments/assets/91b26c4c-13ca-4343-9f1a-413d505f8722) <br> 
 ![image](https://github.com/user-attachments/assets/c686d098-26b5-4ea2-a428-d2afc5d89634) <br> 
 
 
