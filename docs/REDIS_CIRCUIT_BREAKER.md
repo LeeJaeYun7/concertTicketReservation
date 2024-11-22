@@ -22,11 +22,12 @@
 ![image](https://github.com/user-attachments/assets/f0dd10af-ca83-4bce-8537-467f2dd43a67)
 
 
+<br>
 
 
 ### 2) 서킷 브레이커의 3가지 상태 
 
-- 서킷 브레이커에는 3가지 상태가 있는데, 바로 Closed, Open, Half Open입니다. <br>
+- 서킷 브레이커에는 3가지 상태가 있는데, 바로 **Closed, Open, Half Open**입니다. <br>
   이를 표로 나타내면 다음과 같습니다. <br>
 
 | 상태         | Closed                                 | Open                                    | Half Open                                |
