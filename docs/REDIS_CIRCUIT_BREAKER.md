@@ -90,7 +90,8 @@ implementation 'org.springframework.boot:spring-boot-starter-actuator'
   Resilience4j는 서킷 브레이커, 재시도, 타임아웃, 제한, 서지 처리 등 다양한 패턴을 지원하여, <br>
   MSA 환경에서의 신뢰성을 크게 향상시킬 수 있습니다.. <br> 
 
-- **Spring Actuator**는 **Redis 서킷 브레이커의 상태**를 모니터링하고, 실제로 잘 동작하는지 확인하는 **헬스 체크** 기능을 제공합니다
+- **Spring Actuator**는 **Redis 서킷 브레이커의 상태**를 모니터링하고, <br>
+  실제로 잘 동작하는지 확인하는 **헬스 체크** 기능을 제공합니다
 
 
 <br> 
