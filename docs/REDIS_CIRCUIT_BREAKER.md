@@ -85,9 +85,12 @@ implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 ```
 
-- Resilience4j는 Netflix의 Hystrix에서 영감을 받아 개발된 가벼운 **Fault Tolerance** 라이브러리로, 시스템 장애나 성능 저하 상황에서 안정성을 유지할 수 있도록 돕습니다. <br>
-  Resilience4j는 서킷 브레이커, 재시도, 타임아웃, 제한, 서지 처리 등 다양한 패턴을 지원하여, 마이크로서비스 환경에서의 신뢰성을 크게 향상시킬 수 있습니다.. <br> 
-  Spring Actuator는 **Redis 서킷 브레이커의 상태**를 모니터링하고, 실제로 잘 동작하는지 확인하는 **헬스 체크** 기능을 제공합니다
+- **Resilience4j**는 Netflix의 Hystrix에서 영감을 받아 개발된 가벼운 **Fault Tolerance** 라이브러리로, <br>
+  시스템 장애나 성능 저하 상황에서 안정성을 유지할 수 있도록 돕습니다. <br>
+  Resilience4j는 서킷 브레이커, 재시도, 타임아웃, 제한, 서지 처리 등 다양한 패턴을 지원하여, <br>
+  마이크로서비스 환경에서의 신뢰성을 크게 향상시킬 수 있습니다.. <br> 
+
+- **Spring Actuator**는 **Redis 서킷 브레이커의 상태**를 모니터링하고, 실제로 잘 동작하는지 확인하는 **헬스 체크** 기능을 제공합니다
 
 
 <br> 
