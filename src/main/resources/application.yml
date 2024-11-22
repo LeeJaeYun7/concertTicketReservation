@@ -16,6 +16,19 @@ spring:
     host: localhost
     port: 6379
 
+  kafka:
+    producer:
+      ## bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    consumer:
+      ## bootstrap-servers: localhost:9092
+      group-id: hello_group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
 logging.level:
   org.hibernate.SQL: debug
 
@@ -42,3 +55,4 @@ resilience4j.circuitbreaker:
         - java.io.IOException
       ignoreExceptions:
         - io.github.robwin.exception.BusinessException
+
