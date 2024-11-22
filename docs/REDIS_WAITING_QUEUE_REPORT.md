@@ -178,7 +178,7 @@ public class WaitingQueueDao {
 
 
 ### 6) 참고 자료
-- **네이버 메인 페이지의 트래픽 처리**(https://d2.naver.com/helloworld/6070967)
+- **네이버 메인 페이지의 트래픽 처리** (https://d2.naver.com/helloworld/6070967)
 
 
 
