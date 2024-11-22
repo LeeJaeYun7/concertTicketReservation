@@ -73,8 +73,45 @@ b. 지정한 횟수 (permittedNumberOfCallsInHalfOpenState 횟수만큼) 수행 
 ### 4) Redis 서킷 브레이커 도입 
 
 
+```
+// build.gradle
+
+	// Resilience4j 의존성 추가
+	implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.0'
+
+	// Spring Actuator 추가
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+```
 
 
+
+```
+// application.yml
+
+... 
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.util.concurrent.TimeoutException
+        - java.io.IOException
+      ignoreExceptions:
+        - io.github.robwin.exception.BusinessException
+
+
+
+```
 
 
 
