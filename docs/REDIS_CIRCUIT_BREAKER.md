@@ -130,7 +130,7 @@ resilience4j.circuitbreaker:
 
 <br>   
 
-(1) **slidingWindowSize: 100 & failureRateThreshold: 10**
+(2-1) **slidingWindowSize: 100 & failureRateThreshold: 10**
 - 이 설정은 최근 **100개의 호출**을 기준으로, 그 중 **10%가 실패**하면 서킷 브레이커가 **Open 상태**로 전환된다는 의미입니다. <br>
   
 - **failureRateThreshold**를 **10%로 설정한 이유**는 Redis가 **캐시**, **분산 락** 등 **핵심 기능**을 담당하기 때문에 **빠른 실패 및 회복**이 중요하다고 판단했기 때문입니다. <br>
@@ -142,13 +142,13 @@ resilience4j.circuitbreaker:
 
 <br> 
   
-(2) **automaticTransitionFromOpenToHalfOpenEnabled: true** <br>
+(2-2) **automaticTransitionFromOpenToHalfOpenEnabled: true** <br>
 - automaticTransitionFromOpenToHalfOpenEnabled는 **서킷 브레이커의 중요한 설정** 중 하나로, 자동 복구 기능을 활성화합니다. <br>
   이 설정이 중요한 이유는 다음과 같습니다. <br> 
 
 <br> 
 
-(2-1) **자동 상태 전환**
+(2-2-1) **자동 상태 전환**
 - **서킷 브레이커**가 **Open** 상태로 전환되면, 외부 서비스가 일시적으로 실패하거나 장애가 발생한 상태임을 나타냅니다. <br>
   Open 상태에서는 시스템이 더 이상 외부 요청을 처리하지 않거나 제한된 수의 요청만 받습니다. <br> 
 
@@ -156,7 +156,7 @@ resilience4j.circuitbreaker:
   이 상태에서는 제한된 수의 요청을 다시 보내서, 서비스가 정상 상태로 복구될 수 있는지 테스트합니다. <br>
   이를 통해 **수동 개입 없이도** 시스템이 자동으로 회복을 시도할 수 있습니다.
 
-(2-2) **빠른 회복 가능**
+(2-2-2) **빠른 회복 가능**
 - 시스템 장애 발생 후, **자동으로 Half-Open 상태로 전환**되므로, 시스템이 정상화되었는지 검증하는 프로세스가 빠르게 진행됩니다. <br>
   이로 인해 **서비스 복구 시간**을 단축시킬 수 있습니다. <br> 
   예를 들어, Redis와 같은 중요한 서비스에서는 **빠른 회복**이 필요합니다. <br> 
