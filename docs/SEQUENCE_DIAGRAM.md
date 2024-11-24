@@ -11,9 +11,8 @@
 
 
 
-### 좌석 예약 요청 API
-![콘서트 대기열의 복사본 drawio (3)](https://github.com/user-attachments/assets/e291ddef-72e9-49a7-8803-aa75717be7ea)
-
+### 좌석 선점 예약 및 좌석 예약 요청 API
+![Uploading image.png…]()
 
 ### 잔액 충전/조회 API 
 
