@@ -186,6 +186,8 @@ resilience4j.circuitbreaker:
   서킷 브레이커를 효과적으로 설정하고 활용함으로써, **서비스의 가용성과 안정성을 더욱 강화**할 수 있습니다. <br>
 
 
+<br> 
+
 ### 6) 참고 자료
 - **Circuitbreaker를 사용한 장애 전파 방지**(https://oliveyoung.tech/blog/2023-08-31/circuitbreaker-inventory-squad/)
 
