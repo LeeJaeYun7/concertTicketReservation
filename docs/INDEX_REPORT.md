@@ -99,10 +99,16 @@
 
 #### 조회 쿼리
 ```
-SELECT r.concert, COUNT(r) AS salesCount FROM Reservation r
-                                         WHERE r.createdAt >= :threeDaysAgo
-                                         GROUP BY r.concert.id
-                                         ORDER BY salesCount DESC
+SELECT c.*, r.salesCount
+FROM Concert c
+JOIN (
+    SELECT r.concert_id AS concertId, COUNT(*) AS salesCount
+    FROM Reservation r
+    WHERE r.created_at >= NOW() - INTERVAL 3 DAY  -- 현재 시각 기준으로 3일 전
+    GROUP BY r.concert_id
+) AS r ON c.id = r.concertId
+ORDER BY r.salesCount DESC
+LIMIT 30;
 ```
 
 #### (2-4) 결론
