@@ -7,7 +7,8 @@
 
 
 ### 예약 가능 날짜 / 좌석 API 
-![콘서트 대기열의 복사본 drawio (1)](https://github.com/user-attachments/assets/c9b0ffac-d5a4-467b-b8ab-74a3c382235f)
+![image](https://github.com/user-attachments/assets/0b50f34e-37ac-438a-abde-eb99e8a1bf42)
+
 
 
 ### 좌석 예약 요청 API
