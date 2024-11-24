@@ -12,7 +12,8 @@
 
 
 ### 좌석 선점 예약 및 좌석 예약 요청 API
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/85d2a009-3887-4111-ad97-644067035b03)
+
 
 ### 잔액 충전/조회 API 
 
