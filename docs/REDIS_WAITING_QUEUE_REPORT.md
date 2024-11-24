@@ -161,7 +161,7 @@ public class WaitingQueueDao {
     }
 
     // 각 콘서트 대기열 마다
-    // 250개의 queueEntry를 10초마다 활성화열로 이동
+    // 333개의 queueEntry를 1초마다 활성화열로 이동
     public void getAndRemoveTop250FromQueue(long concertId) {
         RSortedSet<String> waitingQueue = redisson.getSortedSet("waitingQueue:" + concertId);
         Collection<String> total = waitingQueue.readAll();
@@ -171,8 +171,8 @@ public class WaitingQueueDao {
         }
 
         RMapCache<String, String> activeQueue = redisson.getMapCache("activeQueue:" + concertId);  // RMapCache 사용
-        Collection<String> top250 = total.stream()
-                                         .limit(250)
+        Collection<String> top333 = total.stream()
+                                         .limit(333)
                                          .toList();
 
         top250.forEach(entry -> {
