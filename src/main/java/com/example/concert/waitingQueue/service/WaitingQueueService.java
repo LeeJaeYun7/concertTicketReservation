@@ -14,13 +14,17 @@ public class WaitingQueueService {
 
     private final WaitingQueueDao waitingQueueDao;
 
-    public TokenResponse retrieveToken(long concertId, String uuid) {
-        String token = waitingQueueDao.addToWaitingQueue(concertId, uuid);
-        return TokenResponse.of(token);
+    public String retrieveToken(long concertId, String uuid) {
+        return waitingQueueDao.addToWaitingQueue(concertId, uuid);
     }
 
     public WaitingRankResponse retrieveWaitingRank(long concertId, String uuid) {
         long rank = waitingQueueDao.getWaitingRank(concertId, uuid);
-        return WaitingRankResponse.of(rank);
+
+        if(rank == -1){
+            return WaitingRankResponse.of(rank, "active");
+        }
+
+        return WaitingRankResponse.of(rank, "waiting");
     }
 }

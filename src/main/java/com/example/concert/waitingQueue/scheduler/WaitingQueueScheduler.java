@@ -18,7 +18,7 @@ public class WaitingQueueScheduler {
     private final ConcertService concertService;
     private final WaitingQueueDao waitingQueueDao;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 100000)
     public void processWaitingQueue() {
         List<Long> concertIds = concertService.getAllConcertIds();
 
