@@ -80,6 +80,36 @@
         "2024-11-30T09:00:00"
     ]
 }
+```
+### Exception 
+```
+{
+    "status": "NOT_FOUND",
+    "message": "해당 콘서트를 찾을 수 없습니다."
+}
+```
+
+
+
+## 4. 예약 가능한 콘서트 좌석 조회 
+
+### Description
+- 콘서트 일정 중 예약 가능한 콘서트 좌석을 조회합니다.
+
+### Request
+- URL: api/v1/concertSchedule
+- Method: GET
+- URL Params<br>
+(1) concertId: Long (콘서트 ID) <br>
+
+### Response
+```
+{
+    "availableDateTimes": [
+        "2024-11-30T09:00:00",
+        "2024-11-30T09:00:00"
+    ]
+}
  
 ```
 
