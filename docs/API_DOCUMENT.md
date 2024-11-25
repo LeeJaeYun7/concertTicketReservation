@@ -107,9 +107,8 @@
 ### Response
 ```
 {
-    "availableDateTimes": [
-        "2024-11-30T09:00:00",
-        "2024-11-30T09:00:00"
+    "availableSeatNumbers": [
+        1
     ]
 }
  
