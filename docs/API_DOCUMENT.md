@@ -49,15 +49,8 @@
 ### Response
 ```
 {
-    "token": "1732522359737:f00338f1-3a0e-4d1b-94d8-3a8ba14bbe36"
+    "waitingRank": 1
 }
 
 ```
 
-### Exception 
-```
-{
-    "status": "NOT_FOUND",
-    "message": "해당 사용자를 찾을 수 없습니다."
-}
-```
