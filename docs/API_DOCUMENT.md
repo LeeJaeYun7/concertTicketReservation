@@ -61,3 +61,25 @@
 
 ```
 
+## 3. 예약 가능한 콘서트 일정 조회 
+
+### Description
+- 콘서트 중 예약 가능한 콘서트 일정을 조회합니다.
+
+### Request
+- URL: api/v1/concertSchedule
+- Method: GET
+- URL Params<br>
+(1) concertId: Long (콘서트 ID) <br>
+
+### Response
+```
+{
+    "availableDateTimes": [
+        "2024-11-30T09:00:00",
+        "2024-11-30T09:00:00"
+    ]
+}
+ 
+```
+
