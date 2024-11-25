@@ -5,27 +5,27 @@
 ## 1. 대기열 토큰 발급
 
 ### Description
-- 대기열에 사용자를 추가하고 대기열 토큰을 반환합니다.
+- 콘서트 대기열에 사용자를 추가하고 대기열 토큰을 반환합니다.
 
 ### Request
-- URL: /v1/queue-tokens/users/{userId}
-- Method: POST
+- URL: api/v1/waitingQueue/token
+- Method: GET
 - URL Params:
-- userId: Long (사용자 ID)
+- concertId: Long (콘서트 ID)
+- uuid: String(사용자 ID)
 
 ### Response
 ```
 {
-  "tokenId": 1,
-  "createdAt": "2024-07-04T10:00:00",
-  "expiredAt": "2024-07-04T10:10:00"
+    "token": "1732522359737:f00338f1-3a0e-4d1b-94d8-3a8ba14bbe36"
 }
+
 ```
 
 ### Error
 ```
 {
-  "code": 404,
-  "message": "user not found"
+    "status": "NOT_FOUND",
+    "message": "해당 사용자를 찾을 수 없습니다."
 }
 ```
