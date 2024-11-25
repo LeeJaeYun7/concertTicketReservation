@@ -111,6 +111,13 @@ ORDER BY r.salesCount DESC
 LIMIT 30;
 ```
 
+#### 조회 쿼리 분석 
+```
+
+```
+
+
+
 #### (2-4) 결론
 
 - 예약 테이블의 DDL과 조회 쿼리를 고려할 때, **created_at과 concert_id 필드에 복합 인덱스를 적용**하기로 결정했습니다.
