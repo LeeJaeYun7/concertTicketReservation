@@ -99,10 +99,10 @@
 - 콘서트 일정 중 예약 가능한 콘서트 좌석을 조회합니다.
 
 ### Request
-- URL: api/v1/concertSchedule
+- URL: api/v1/concertSchedule/seats
 - Method: GET
 - URL Params<br>
-(1) concertId: Long (콘서트 ID) <br>
+(1) concertScheduleId: Long (콘서트 스케줄 ID) <br>
 
 ### Response
 ```
