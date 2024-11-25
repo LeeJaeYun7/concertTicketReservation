@@ -49,12 +49,14 @@
 ### Response
 ```
 {
-    "waitingRank": 1
+    "waitingRank": 1,
+    "status": "waiting" 
 }
 
 // 사용자가 대기열 -> 활성화열로 전환된 경우 
 {
-    "waitingRank": -1
+    "waitingRank": -1,
+    "status": "active"
 }
 
 ```
