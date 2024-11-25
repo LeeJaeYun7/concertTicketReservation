@@ -11,8 +11,8 @@
 - URL: api/v1/waitingQueue/token
 - Method: GET
 - URL Params:
-- concertId: Long (콘서트 ID)
-- uuid: String(사용자 ID)
+(1) concertId: Long (콘서트 ID)
+(2) uuid: String(사용자 ID)
 
 ### Response
 ```
