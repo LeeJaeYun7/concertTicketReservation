@@ -20,31 +20,33 @@ public class WaitingQueueDao {
         this.redisson = redisson;
     }
 
-    public void addToWaitingQueue(long concertId, String uuid){
+    public String addToWaitingQueue(long concertId, String uuid){
         String timestamp = Long.toString(System.currentTimeMillis());
 
-        String queueEntry = new StringBuilder(timestamp).append(":").append(uuid).toString();
+        String token = new StringBuilder(timestamp).append(":").append(uuid).toString();
         RSortedSet<String> waitingQueue = redisson.getSortedSet("waitingQueue:" + concertId);
-        waitingQueue.add(queueEntry);
+        waitingQueue.add(token);
+
+        return token;
     }
 
     public long getWaitingRank(long concertId, String uuid){
         RSortedSet<String> waitingQueue = redisson.getSortedSet("waitingQueue:" + concertId);
-        Collection<String> waitingQueueList = waitingQueue.readAll();
+        Collection<String> tokenList = waitingQueue.readAll();
 
         long rank = 1L;
 
         // rank 계산
-        for(String queueEntry: waitingQueueList){
-            String[] splits = queueEntry.split(":");
-            if(splits[1].equals(uuid)){
+        for(String token: tokenList){
+            String[] tokenInfo = token.split(":");
+            if(tokenInfo[1].equals(uuid)){
                 break;
             }
             rank += 1;
         }
 
         // uuid가 대기열에 없음 -> -1을 반환
-        if(rank > waitingQueueList.size()){
+        if(rank > tokenList.size()){
             return -1;
         }
 
@@ -63,21 +65,21 @@ public class WaitingQueueDao {
     }
 
     // 각 콘서트 대기열 마다
-    // 250개의 queueEntry를 10초마다 활성화열로 이동
-    public void getAndRemoveTop250FromQueue(long concertId) {
+    // 333개의 queueEntry를 1초마다 활성화열로 이동
+    public void removeTop333FromWaitingQueue(long concertId) {
         RSortedSet<String> waitingQueue = redisson.getSortedSet("waitingQueue:" + concertId);
-        Collection<String> total = waitingQueue.readAll();
+        Collection<String> tokenList = waitingQueue.readAll();
 
-        if (total.isEmpty()) {
+        if (tokenList.isEmpty()) {
              return;
         }
 
         RMapCache<String, String> activeQueue = redisson.getMapCache("activeQueue:" + concertId);  // RMapCache 사용
-        Collection<String> top250 = total.stream()
-                                         .limit(250)
+        Collection<String> top333 = tokenList.stream()
+                                         .limit(333)
                                          .toList();
 
-        top250.forEach(entry -> {
+        top333.forEach(entry -> {
             String[] parts = entry.split(":");
             String uuid = parts[1];
             String token = RandomStringGenerator.generateRandomString(16);
@@ -85,6 +87,6 @@ public class WaitingQueueDao {
             activeQueue.putIfAbsent(uuid, token, 300, TimeUnit.SECONDS);
         });
 
-        top250.forEach(waitingQueue::remove);
+        top333.forEach(waitingQueue::remove);
     }
 }
