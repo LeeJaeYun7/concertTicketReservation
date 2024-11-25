@@ -112,20 +112,19 @@ LIMIT 30;
 ```
 
 #### 조회 쿼리 분석 
-```
-(1) 서브 쿼리 & GROUP BY 
+##### (1) 서브 쿼리 & GROUP BY 
 - 예약(Reservation) 테이블에서 최근 3일 간 판매량을 concert_id로 그룹 지어서 분류하는 서브 쿼리를 작성했습니다.
   쿼리를 작성할 때, 서브쿼리를 사용하면 단위 처리별로 쿼리를 독립적으로 작성할 수 있다는 이점이 있습니다.
 
 - GROUP BY는 concert_id 칼럼으로 레코드를 그루핑하고, 그룹별로 집계된 결과를 하나의 레코드인 salesCount로 나타내기 위해
   사용하였습니다.
 
-(2) ORDER BY DESC & LIMIT
+##### (2) ORDER BY DESC & LIMIT
 - ORDER BY DESC는 예약 테이블의 salesCount 기준으로 내림차순 정렬을 하기 위해 사용했습니다.
   LIMIT 30은 salesCount가 높은 순으로 30개의 콘서트만 보여주기 위해서 사용했습니다.
 
-```
 
+<br>
 
 
 #### (2-4) 결론
