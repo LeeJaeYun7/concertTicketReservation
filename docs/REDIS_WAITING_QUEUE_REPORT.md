@@ -162,7 +162,7 @@ public class WaitingQueueDao {
 
     // 각 콘서트 대기열 마다
     // 333개의 queueEntry를 1초마다 활성화열로 이동
-    public void getAndRemoveTop250FromQueue(long concertId) {
+    public void getAndRemoveTop333FromQueue(long concertId) {
         RSortedSet<String> waitingQueue = redisson.getSortedSet("waitingQueue:" + concertId);
         Collection<String> total = waitingQueue.readAll();
 
