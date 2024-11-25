@@ -114,3 +114,11 @@
  
 ```
 
+### Exception 
+```
+{
+    "status": "NOT_FOUND",
+    "message": "해당 콘서트 스케을 찾을 수 없습니다."
+}
+```
+
