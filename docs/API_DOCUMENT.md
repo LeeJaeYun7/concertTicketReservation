@@ -10,9 +10,9 @@
 ### Request
 - URL: api/v1/waitingQueue/token
 - Method: GET
-- URL Params:
-(1) concertId: Long (콘서트 ID)
-(2) uuid: String(사용자 ID)
+- URL Params<br>
+(1) concertId: Long (콘서트 ID) <br>
+(2) uuid: String(사용자 ID) <br> 
 
 ### Response
 ```
@@ -22,7 +22,7 @@
 
 ```
 
-### Error
+### Exception 
 ```
 {
     "status": "NOT_FOUND",
