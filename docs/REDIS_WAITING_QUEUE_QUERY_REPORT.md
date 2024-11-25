@@ -1,4 +1,4 @@
-# 레디스 조회 Polling API -> Websocket 개선 보고서 
+# 대기 번호 조회 및 좌석 선점 기능 개선: Polling API에서 WebSocket으로의 전환
 
 
 ## 개요
