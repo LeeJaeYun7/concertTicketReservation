@@ -122,3 +122,59 @@
 }
 ```
 
+## 5. 잔액 충전 
+
+### Description
+- 사용자의 잔액을 충전합니다.
+
+### Request
+- URL: api/v1/charge
+- Method: POST
+- URL Params<br>
+(1) uuid: String (사용자 ID) <br>
+(2) amount: Long (충전 금액) <br>
+
+### Response
+```
+{
+    "updatedBalance": 120000
+}
+ 
+```
+
+### Exception 
+```
+{
+    "status": "NOT_FOUND",
+    "message": "해당 사용자를 찾을 수 없습니다."
+}
+```
+
+
+## 6. 잔액 조회 
+
+### Description
+- 사용자의 잔액을 조회합니다.
+
+### Request
+- URL: api/v1/member/balance
+- Method: GET
+- URL Params<br>
+(1) uuid: String (사용자 ID) <br>
+
+### Response
+```
+{
+    "balance": 110000
+}
+ 
+```
+
+### Exception 
+```
+{
+    "status": "NOT_FOUND",
+    "message": "해당 사용자를 찾을 수 없습니다."
+}
+```
+
