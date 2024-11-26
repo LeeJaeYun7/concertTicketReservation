@@ -140,7 +140,7 @@
 <br>
 
 
-(2-1) **코레오그래피**(Choreography) 방식
+#### (2-1) 코레오그래피(Choreography) 방식
 
 
 
@@ -148,7 +148,9 @@
 
 
 
-(2-2) **오케스트레이션**(Orchestration) 방식
+#### (2-2) 오케스트레이션(Orchestration) 방식
+
+
 
 
 
