@@ -78,8 +78,8 @@
 <br> 
 <table>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3" alt="Image 1" width="300"></td>
-    <td><img src="https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df" alt="Image 2" width="300"></td>
+    <td><img src="https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3" alt="Image 1" width="450"></td>
+    <td><img src="https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df" alt="Image 2" width="450"></td>
   </tr>
 </table>
 
