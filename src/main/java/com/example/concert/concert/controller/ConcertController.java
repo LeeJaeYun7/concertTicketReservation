@@ -2,7 +2,6 @@ package com.example.concert.concert.controller;
 
 import com.example.concert.concert.dto.response.ConcertResponse;
 import com.example.concert.concert.service.ConcertFacade;
-import com.example.concert.concert.service.ConcertService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
