@@ -8,7 +8,7 @@
 ### 3. [ERD](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/DB_DIAGRAM.md) 
 ### 4. [Swagger](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/swagger.md) 
 ### 5. [콘서트 대기열 설계를 위한 조사](https://www.notion.so/12656c2f14698029b57ad790fcf08d59)
-### 6. ['콘서트 좌석 5분간 선점 예약' 동시성 제어 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CONCURRENCY_REPORT.md)
+### 6. ['콘서트 좌석 5분간 선점' 동시성 제어 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CONCURRENCY_REPORT.md)
 ### 7. [Redis 분산락 Deep Dive 발표](https://www.canva.com/design/DAGVN6DetjU/mnwdH7gKAJyBjOb2c4_waA/edit)
 ### 8. ['최근 3일간 판매량 Top30 콘서트' 캐시 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CACHE_REPORT.md)
 ### 9. [Redis 서킷 브레이커 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_CIRCUIT_BREAKER.md)
@@ -22,4 +22,7 @@
 ### 4. [API 명세 문서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/API_DOCUMENT.md) 
 ### 13. [MSA 기반 서비스 분리 시, Kafka 메시지 통신과 Transactional Outbox Pattern 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/MSA_KAFKA_TRANSACTIONAL_OUTBOX_PATTERN.md)
 ### 14. [Kafka 통합 테스트 시, TestContainer 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
+### 14. [데이터 모델 도출 과정](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
+### 14. ['콘서트 좌석 5분간 선점' Redis 분산락 Trouble Shooting](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
+### 14. ['콘서트 좌석 5분간 선점' Redis 분산락 Trouble Shooting](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
 -->
