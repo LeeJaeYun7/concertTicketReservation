@@ -157,6 +157,9 @@
 
 #### (2-2) 오케스트레이션(Orchestration) 방식
 
+<br>
+
+![hello drawio (1)](https://github.com/user-attachments/assets/f7aa12bf-22b2-4e3a-a3a1-39683f86db43)
 
 
 
