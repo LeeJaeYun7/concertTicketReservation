@@ -142,7 +142,12 @@
 
 #### (2-1) 코레오그래피(Choreography) 방식
 
+<br> 
+
 ![hello drawio](https://github.com/user-attachments/assets/9c1fba82-7327-4423-adbf-1511ca2f5258)
+
+
+
 
 
 
