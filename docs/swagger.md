@@ -13,11 +13,15 @@
 ### 예약 가능 날짜, 좌석 API
 
 #### 예약 가능 날짜
-![image](https://github.com/user-attachments/assets/de50bd3e-fa64-49ec-8d53-b67c6f248081)
+![image](https://github.com/user-attachments/assets/a7b9381a-5a76-463f-92f4-9cc239852298)
+![image](https://github.com/user-attachments/assets/4a4ae720-1433-4446-b2e3-267071080f91)
+
 
 
 #### 예약 가능 좌석
-![image](https://github.com/user-attachments/assets/8428a4ac-764d-4f30-8400-553cdac74f57)
+![image](https://github.com/user-attachments/assets/1e81c8af-3270-49ad-aeda-ee876fab5377)
+![image](https://github.com/user-attachments/assets/f641d775-843b-4936-b3ee-ed02bd8def76)
+
 
 
 ### 좌석 예약 요청 API
