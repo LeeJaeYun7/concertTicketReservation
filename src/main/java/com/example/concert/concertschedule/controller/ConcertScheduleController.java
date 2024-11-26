@@ -19,7 +19,7 @@ public class ConcertScheduleController {
 
     private final ConcertScheduleFacade concertScheduleFacade;
 
-    @PostMapping("/concertSchedule")
+    @PostMapping("/api/v1/concertSchedule")
     public ResponseEntity<Void> createConcertSchedule(@RequestBody ConcertScheduleCreateRequest concertScheduleCreateRequest) throws JsonProcessingException {
         String concertName = concertScheduleCreateRequest.getConcertName();
         LocalDateTime dateTime = concertScheduleCreateRequest.getDateTime();
@@ -28,16 +28,16 @@ public class ConcertScheduleController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/concertSchedule")
-    public ResponseEntity<AvailableDateTimesResponse> retrieveAvailableDateTimes(@RequestParam long concertId) {
+    @GetMapping("/api/v1/concertSchedule")
+    public ResponseEntity<AvailableDateTimesResponse> retrieveAvailableDateTimes(@RequestParam(value="concertId") long concertId) {
         List<LocalDateTime> availableDateTimes = concertScheduleFacade.getAvailableDateTimes(concertId);
         AvailableDateTimesResponse availableDateTimesResponse = AvailableDateTimesResponse.of(availableDateTimes);
 
         return ResponseEntity.status(HttpStatus.OK).body(availableDateTimesResponse);
     }
 
-    @GetMapping("/concertSchedule/seats")
-    public ResponseEntity<SeatNumbersResponse> retrieveAvailableSeats(@RequestParam long concertScheduleId) {
+    @GetMapping("/api/v1/concertSchedule/seats")
+    public ResponseEntity<SeatNumbersResponse> retrieveAvailableSeats(@RequestParam(value="concertScheduleId") long concertScheduleId) {
         List<Long> availableSeatNumbers = concertScheduleFacade.getAvailableSeatNumbers(concertScheduleId);
         SeatNumbersResponse seatsResponse = SeatNumbersResponse.of(availableSeatNumbers);
 
