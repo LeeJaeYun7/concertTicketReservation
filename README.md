@@ -20,7 +20,6 @@
 ### 13. [대기 번호 조회 및 좌석 선점 기능 개선: Polling API에서 WebSocket으로의 전환](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_QUERY_REPORT.md)
 ### 13. [레디스 대기열 조회 Polling vs Websocket](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_QUERY_REPORT.md)
 ### 12. [1만명 동시 접속자 Redis 대기열 보고서 2편](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_REPORT(2).md)
-### 4. [API 명세 문서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/API_DOCUMENT.md) 
 ### 13. [MSA 기반 서비스 분리 시, Kafka 메시지 통신과 Transactional Outbox Pattern 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/MSA_KAFKA_TRANSACTIONAL_OUTBOX_PATTERN.md)
 ### 14. [Kafka 통합 테스트 시, TestContainer 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
 ### 14. [데이터 모델 도출 과정](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
