@@ -78,8 +78,8 @@
 <br> 
 <table>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3" alt="Image 1" width="450"></td>
-    <td><img src="https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df" alt="Image 2" width="450"></td>
+    <td><img src="https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3" alt="Image 1" width="600"></td>
+    <td><img src="https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df" alt="Image 2" width="600"></td>
   </tr>
 </table>
 
@@ -88,9 +88,6 @@
   첫 번째 단계는 **투표 단계**인데, 코디네이터가 각 트랜잭션 참가자들에게 **커밋 가능 여부**를 질의합니다. <br>
   각 트랜잭션 참여자들은 트랜잭션을 열고, **커밋 가능 여부**를 답하게 됩니다. <br>   
 
-<br> 
-
-![image](https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df)
 
 - 두 번째 단계는 **커밋 단계**입니다. 모든 참여자들이 **트랜잭션 커밋 가능**이라고 응답했을 경우에 <br>
   **코디네이터**가 커밋 요청을 보내, 트랜잭션을 **성공적으로 종료**합니다. <br>
