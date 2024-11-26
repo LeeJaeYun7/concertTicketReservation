@@ -115,9 +115,9 @@
 
 <br>   
 <br>
-  
+<br>   
 
-(2) **Saga 패턴** <br> 
+#### (2) Saga 패턴 <br> 
 <br>
 <table>
   <tr>
@@ -161,7 +161,7 @@
 
 
 
-(3) **두 가지 접근 법 비교 및 선택** <br> 
+(3) **2PC과 Saga 패턴 비교 및 선택** <br> 
 <br> 
 ![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf) <br> 
 
