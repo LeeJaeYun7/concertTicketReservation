@@ -3,12 +3,12 @@
 
 ### 대기열 토큰 API
 #### 토큰 생성 
-![image](https://github.com/user-attachments/assets/a65e6afa-a52e-48ee-b075-072b524f4169)
-![image](https://github.com/user-attachments/assets/c909b32a-97a7-49b9-bca7-d4ac8007a804)
+![image](https://github.com/user-attachments/assets/2b8825a8-ad72-4d8f-9ee9-811d847cec84)
+![image](https://github.com/user-attachments/assets/60a5a247-1637-40f8-bf36-71b6ac7ff3fe)
 
 #### 대기번호 Polling
-![image](https://github.com/user-attachments/assets/039622f2-f57e-4d39-9174-a7ae24cf37ac)
-![image](https://github.com/user-attachments/assets/170623aa-682f-4f96-a8f8-f89d88e03cac)
+![image](https://github.com/user-attachments/assets/591f00f3-6944-48b1-8789-25a6d1c0ebe1)
+![image](https://github.com/user-attachments/assets/bd3a6ebf-534e-4dc1-94e8-a2240c502995)
 
 ### 예약 가능 날짜, 좌석 API
 
