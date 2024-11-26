@@ -25,16 +25,22 @@
 
 
 ### 좌석 예약 요청 API
-![image](https://github.com/user-attachments/assets/e3d92cff-5f65-4b16-8c56-cd6bbbda9d99)
+![image](https://github.com/user-attachments/assets/4b6ae391-8f9e-4650-b733-bc3df50b8203)
+![image](https://github.com/user-attachments/assets/546c8d49-7b99-46b1-9af9-c0aaac775156)
+
 
 
 ### 잔액 충전/ 조회 API
 
 #### 잔액 충전 
-![image](https://github.com/user-attachments/assets/7f016d36-8be5-411c-9e42-4412a2c495bd)
+![image](https://github.com/user-attachments/assets/b8b751b8-4021-4c5b-86b0-88fb9036e67c)
+![image](https://github.com/user-attachments/assets/326f0177-f675-48b3-961d-d47d066bcd4f)
+
 
 #### 잔액 조회
-![image](https://github.com/user-attachments/assets/646e8d14-9a8c-4fc1-a9ec-f877099fcccb)
+![image](https://github.com/user-attachments/assets/776ba15b-9bd2-4e42-b526-6bcc95de6aa9)
+![image](https://github.com/user-attachments/assets/f95bde95-ca87-431b-a8d9-1129b0aec6c2)
+
 
 
 ### 결제 API
