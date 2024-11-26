@@ -113,11 +113,19 @@
 
 
 <br>   
-
+<br>
   
 
 (2) **Saga 패턴** <br> 
-<br> 
+<br>
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/4215561b-5c6f-404d-afc2-08c9ee783af0" alt="Image 1" width="800"></td>
+    <td><img src="https://github.com/user-attachments/assets/c686d098-26b5-4ea2-a428-d2afc5d89634" alt="Image 2" width="800"></td>
+  </tr>
+</table>
+![image](https://github.com/user-attachments/assets/4215561b-5c6f-404d-afc2-08c9ee783af0)
+
 ![image](https://github.com/user-attachments/assets/c686d098-26b5-4ea2-a428-d2afc5d89634) <br> 
 
 
