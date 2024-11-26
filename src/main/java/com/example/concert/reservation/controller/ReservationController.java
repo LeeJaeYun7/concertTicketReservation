@@ -20,7 +20,7 @@ public class ReservationController {
 
     private final ReservationFacade reservationFacade;
 
-    @PostMapping("/reservation")
+    @PostMapping("/api/v1/reservation")
     public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest reservationRequest) throws ExecutionException, InterruptedException, JsonProcessingException {
         String uuid = reservationRequest.getUuid();
         long concertScheduleId = reservationRequest.getConcertScheduleId();
