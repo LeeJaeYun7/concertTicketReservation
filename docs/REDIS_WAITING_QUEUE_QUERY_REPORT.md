@@ -26,7 +26,9 @@
 
 **(1) 대기 번호 조회**
 
-![image](https://github.com/user-attachments/assets/e9a32bfd-9fc5-45ba-bef9-2ced9f3b33cd)
+
+![image](https://github.com/user-attachments/assets/ae775b68-a15f-49a3-a76e-cec11c942bdf)
+
 
 
 - **목적**: 대기열을 통해 사용자가 자신의 예약 가능 시간을 파악할 수 있도록 돕는 기능입니다. <br> 
