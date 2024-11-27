@@ -27,7 +27,7 @@
 ### (1) 대기 번호 조회
 
 
-![image](https://github.com/user-attachments/assets/ae775b68-a15f-49a3-a76e-cec11c942bdf)
+<img src="https://github.com/user-attachments/assets/ae775b68-a15f-49a3-a76e-cec11c942bdf" width="70%" />
 
 
 
