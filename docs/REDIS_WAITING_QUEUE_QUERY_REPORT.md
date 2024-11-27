@@ -1,4 +1,4 @@
-# 대기 번호 조회 및 좌석 선점 기능 개선: Polling API to WebSocket
+# 대기 번호 조회 및 좌석 선점 기능 개선: Polling -> WebSocket 개선
 
 
 ## 개요
@@ -119,6 +119,55 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/gs-guide-websocket");
     }
 }
+```
+
+**(2) WaitingQueueController 클래스 설정**
+```
+// WaitingQueueController.java
+
+package com.example.concertTicket_websocket.waitingQueue.controller;
+
+import com.example.concertTicket_websocket.waitingQueue.dto.request.TokenRequest;
+import com.example.concertTicket_websocket.waitingQueue.dto.request.WaitingRankRequest;
+import com.example.concertTicket_websocket.waitingQueue.dto.response.TokenResponse;
+import com.example.concertTicket_websocket.waitingQueue.dto.response.WaitingRankResponse;
+import com.example.concertTicket_websocket.waitingQueue.service.WaitingQueueService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class WaitingQueueController {
+
+    private final WaitingQueueService waitingQueueService;
+
+    @MessageMapping("/waitingQueue/token")
+    @SendTo("/topic/token")
+    public TokenResponse retrieveToken(TokenRequest tokenRequest) throws Exception {
+        long concertId = tokenRequest.getConcertId();
+        String uuid = tokenRequest.getUuid();
+
+        String token = waitingQueueService.addToWaitingQueue(concertId, uuid);
+        return TokenResponse.of(token);
+    }
+
+    @MessageMapping("/waitingQueue/rank")
+    @SendTo("/topic/rank")
+    public WaitingRankResponse retrieveWaitingRank(WaitingRankRequest waitingRankRequest) {
+        long concertId = waitingRankRequest.getConcertId();
+        String token = waitingRankRequest.getToken();
+        String uuid = token.split(":")[1];
+
+        return waitingQueueService.retrieveWaitingRank(concertId, uuid);
+    }
+}
+
 ```
 
 
