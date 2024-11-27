@@ -1,4 +1,4 @@
-# 대기 번호 조회 및 좌석 선점 기능 개선: Polling API에서 WebSocket으로의 전환
+# 대기 번호 조회 및 좌석 선점 기능 개선: Polling API to WebSocket
 
 
 ## 개요
