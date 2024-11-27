@@ -1,4 +1,4 @@
-# 대기 번호 조회 및 좌석 선점 기능 개선: Polling -> WebSocket 개선
+# 대기 번호 조회 및 좌석 선점 기능 개선: Polling -> WebSocket 
 
 
 ## 개요
