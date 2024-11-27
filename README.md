@@ -24,7 +24,7 @@
 ### 13. [아웃박스 테이블 이벤트 데이터 스케줄링 방식 성능 비교 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/MSA_KAFKA_TRANSACTIONAL_OUTBOX_PATTERN.md)
 ### 14. [Kafka 통합 테스트 시, TestContainer 적용 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
 ### 14. [데이터 모델 도출 과정](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
-
+### 14. [조회 성능 향상을 위한 로컬 캐시 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
 ### 15. [Kafka 메시지 브로커에서 Consumer 서버 장애로 인한 메시지 발행 실패 시, 재처리를 위한 Kafka 메시지 스케줄러 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
 ### 14. ['콘서트 좌석 5분간 선점' Redis 분산락 Trouble Shooting](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
 -->
