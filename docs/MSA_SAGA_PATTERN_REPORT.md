@@ -171,7 +171,7 @@
 
 #### (3) 2PC 방식과 Saga 패턴 비교 및 선택 <br> 
 <br> 
-![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf) <br> 
+![image](https://github.com/user-attachments/assets/58c632a2-a3ff-433c-91c0-cac931921faf) 
 
 - **2PC 방식**은 모든 참여자들이 트랜잭션을 열고, **가장 느린 참여자**의 투표까지 기다려야 한다는 점에서 <br>
   **낮은 가용성**과 **확장성**을 갖는다는 문제가 있습니다. <br>
