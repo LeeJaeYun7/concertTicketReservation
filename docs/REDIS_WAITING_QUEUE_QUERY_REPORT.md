@@ -7,12 +7,9 @@
   
 **1) 콘서트 예약 서비스의 두 가지 기능 - 대기 번호 조회, 5분간 좌석 선점** <br>
 **2) 문제 정의** <br>
-**3) 3가지 락 구현** <br>
-**4) 3가지 락 동시성 통합 테스트 구현** <br>
-**5) 결론** <br> 
-**6) 앞으로 고민할 포인트** <br> 
-
+**3) 문제 해결 - WebSocket 도입** <br>
 <br> 
+
 
 ## 1) 콘서트 예약 서비스의 두 가지 기능 - 대기번호 조회, 5분간 좌석 선점
 - **콘서트 예약 서비스**에는  대기번호를 조회하고고, 동시에 5분간 좌석을 선점하는 두 가지 중요한 기능이 있습니다 <br>
@@ -71,7 +68,63 @@
 
 
 
+## 3) 문제 해결 - 웹소켓 도입  
 
-   
+- 위의 문제를 해결하기 위해서 **웹소켓 도입**을 선택하게 되었습니다. 
+
+<br>
+
+(1) **웹소켓 도입 시 이점**
+
+
+
+
+
+## 4) 웹소켓 도입 과정   
+
+- 웹소켓 도입 과정은 다음과 같습니다.
+
+
+**(1) WebSocketConfig 클래스 설정**
+```
+// WebSocketConfig.java
+
+package com.example.concertTicket_websocket.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+// Spring 설정 클래스임을 나타냅니다 
+@Configuration
+// Message Broker로 웹소켓을 활성화합니다. 
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        // /topic이라는 prefix로 시작하는 메모리 기반 Message Broker를 활성화합니다. 
+        config.enableSimpleBroker("/topic");
+        // @MessageMapping 어노테이션이 붙은 메소드에 /app이라는 prefix를 추가합니다. 
+        config.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Websocket 연결을 위한 end-point를 등록합니다. 
+        registry.addEndpoint("/gs-guide-websocket");
+    }
+}
+```
+
+
+
+
+
+
+
+
 
 
