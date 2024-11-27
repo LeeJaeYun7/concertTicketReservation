@@ -204,7 +204,7 @@ public class WaitingQueueController {
 
 ```
 
-## 5) WebSocket 연결 결과 <
+## 5) WebSocket 연결 결과 
 - WebSocket 연결이 맺어진 상태에서, 사용자의 UUID가 발송이 되면 토큰이 응답합니다. <br>
   또한, 토큰을 발송하면, 사용자의 Redis 대기열 대기번호가 응답합니다. <br> 
 
