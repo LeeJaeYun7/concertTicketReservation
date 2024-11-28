@@ -128,7 +128,7 @@ export default function () {
 }
 ```
 
-![image](https://github.com/user-attachments/assets/612abf8e-d737-4d05-a101-e23fe07c2530)
+![image](https://github.com/user-attachments/assets/0c28b034-738e-44f4-a360-9bdab10f1ada)
 
 
 #### (1) 분석
