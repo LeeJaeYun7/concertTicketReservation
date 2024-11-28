@@ -309,6 +309,162 @@ export default function () {
 
 <br> 
 
+### (5) 대기열 토큰 발급 테스트
+
+```
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+// 부하 테스트 설정
+export let options = {
+  stages: [
+    { duration: '60s', target: 1000 }, // 60초 동안 1000명의 가상 사용자가 요청을 보냄
+  ],
+  thresholds: {
+    http_req_duration: ['p(99)<1000'], // 99%의 요청이 1000ms 이내에 처리되어야 함
+    http_req_failed: ['rate<0.01'], // 실패율이 1% 미만이어야 함
+  },
+  summaryTrendStats: ['avg', 'p(90)', 'p(95)', 'p(99)', 'max'],
+};
+
+export default function () {
+  // retrieveToken API 테스트
+  let concertId = 101; // 공연 ID 예시
+  let uuid = 'f00338f1-3a0e-4d1b-94d8-3a8ba14bbe36'; // UUID 예시
+  let url = `http://localhost:8080/api/v1/waitingQueue/token?concertId=${concertId}&uuid=${uuid}`;
+  
+  // GET 요청 보내기
+  let response = http.get(url);
+  
+  // 응답이 201이어야 한다는 검증
+  check(response, {
+    'status is 201': (r) => r.status === 201,
+    'body contains token': (r) => r.body.includes('token'), // 응답에 'token' 키가 있어야 함
+  });
+
+  // 요청 간 간격을 주기 위한 sleep
+  sleep(1);
+}
+
+```
+
+![image](https://github.com/user-attachments/assets/261ded8a-c025-4b79-a7d8-f5f6d8601b59)
+
+#### (1) 분석
+
+##### (1-1) 처리량
+= 초당 약 111개의 요청을 처리했다.
+  총 7825개의 요청이 처리되었다.
+
+##### (1-2) 응답 시간
+- 평균 응답 시간: 3.53s
+- 90번째 백분위 응답 시간: 6.98s
+- 95번째 백분위 응답 시간: 8.85s
+- 에러율: 0%로, 모든 요청이 성공적으로 처리되었다.
+
+
+##### (1-3) 동시 사용자
+- 동시 사용자: 최대 1,000명의 가상 사용자(VU)가 동시에 테스트를 수행했다.
+
+##### (1-4) 네트워크 지연
+- 요청 차단 시간(avg): 412.35µs
+- 연결 시간(avg): 344.23µs 
+
+
+#### (2) 테스트 분석 결론
+- 평균 응답 시간이 3.53s로 느린 편이다.
+- 95번째 백분위 응답 시간이 6.98s로 높아, 일부 요청에서 지연이 발생할 수 있다.
+- 시스템이 초당 111개의 요청을 처리했다.
+
+
+
+
+### (6) 대기열 대기 번호 발급 테스트
+
+```
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+// 부하 테스트 설정
+export let options = {
+  stages: [
+    { duration: '60s', target: 1000 }, // 60초 동안 1000명의 가상 사용자가 요청을 보냄
+  ],
+  thresholds: {
+    http_req_duration: ['p(99)<1000'], // 99%의 요청이 1000ms 이내에 처리되어야 함
+    http_req_failed: ['rate<0.01'], // 실패율이 1% 미만이어야 함
+  },
+  summaryTrendStats: ['avg', 'p(90)', 'p(95)', 'p(99)', 'max'],
+};
+
+export default function () {
+  // retrieveWaitingRank API 테스트
+  let concertId = 101; // 공연 ID 예시
+  let token = '21732810616808:f00338f1-3a0e-4d1b-94d8-3a8ba14bbe36'; // 'retrieveToken'에서 받은 token 예시
+  let url = `http://localhost:8080/api/v1/waitingQueue/rank?concertId=${concertId}&token=${token}`;
+  
+  // GET 요청 보내기
+  let response = http.get(url);
+  
+  // 응답이 201이어야 한다는 검증
+  check(response, {
+    'status is 200': (r) => r.status === 200,
+    'body contains rank': (r) => r.body.includes('rank'), // 응답에 'rank' 키가 있어야 함
+  });
+
+  // 요청 간 간격을 주기 위한 sleep
+  sleep(1);
+}
+```
+
+![image](https://github.com/user-attachments/assets/2685f500-1bad-42c5-8547-e2a02adad5b3)
+
+
+#### (1) 분석
+
+##### (1-1) 처리량
+= 초당 약 101개의 요청을 처리했다.
+  총 6948개의 요청이 처리되었다.
+
+##### (1-2) 응답 시간
+- 평균 응답 시간: 3.86s
+- 90번째 백분위 응답 시간: 6.59s
+- 95번째 백분위 응답 시간: 7.58s
+- 에러율: 0%로, 모든 요청이 성공적으로 처리되었다.
+
+
+##### (1-3) 동시 사용자
+- 동시 사용자: 최대 1,000명의 가상 사용자(VU)가 동시에 테스트를 수행했다.
+
+##### (1-4) 네트워크 지연
+- 요청 차단 시간(avg): 3.56ms
+- 연결 시간(avg): 1.9ms 
+
+
+#### (2) 테스트 분석 결론
+- 평균 응답 시간이 3.86s로 느린 편이다.
+- 95번째 백분위 응답 시간이 6.59s로 높아, 일부 요청에서 지연이 발생할 수 있다.
+- 시스템이 초당 101개의 요청을 처리했다.
+
+
+
+
+
+## 2. 종합 평가 및 결론
+
+- 대부분의 테스트가 thresholds를 만족시키지 못해서 이에 대한 개선이 필요해 보입니다.
+-> 이는 테스트를 local 서버에서 진행한 영향도가 있어 보입니다.
+  
+  thresholds: {
+      http_req_duration: ['p(99)<1000'], // 99%의 요청이 1000ms 이내에 처리되어야 함
+      http_req_failed: ['rate<0.01'], // 실패율이 1% 미만이어야 함
+  }
+
+- 예약 API 테스트 같은 경우는, 현재 스크립트로는 같은 좌석에 대한 중복 예약이 발생할 수 있어서,
+  테스트 스크립트의 수정이 필요합니다. 
+
+- 로컬 환경에서 테스트 했기 때문에, 도커+Grafana를 활용한 테스트가 필요합니다. 
+
 
 
 # 2. 가상 장애 대응 방안에 관한 보고서
