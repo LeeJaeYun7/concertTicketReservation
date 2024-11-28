@@ -8,24 +8,7 @@
 
 **(1) 잔액 조회 API 테스트**
 
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
-  <style>
-    pre {
-      background-color: #f0f0f0;
-      padding: 10px;
-    }
-    code {
-      color: #007700;
-      font-size: 16px;
-    }
-  </style>
-</head>
-<body>
-
-<pre><code class="javascript">
+```
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
@@ -68,11 +51,4 @@ export default function () {
   // 요청 간 간격을 주기 위한 sleep
   sleep(1);
 }
-</code></pre>
-
-</body>
-</html>
-
-
-
-![image](https://github.com/user-attachments/assets/d1d997ec-9073-43ce-a7f5-e1b93ab8f08b)
+```
