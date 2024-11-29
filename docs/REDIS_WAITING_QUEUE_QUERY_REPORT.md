@@ -117,10 +117,7 @@
 
 - **Polling 방식**에서는 주기적으로 서버에 요청을 보내야 하므로 CPU 리소스를 많이 소모하는 반면, <br> 
   웹소켓은 **지속적인 연결을 유지**하기 때문에 서버의 부담을 줄이고, CPU 사용률을 **낮출 수 있는 장점**이 있습니다.
-
- (참고 자료: https://velog.io/@sadik/%ED%8F%B4%EB%A7%81Polling-%EC%9B%B9%EC%86%8C%EC%BC%93WebSocket-%EC%84%B1%EB%8A%A5-%EB%B9%84%EA%B5%90) 
-
-
+  
 
 <br> 
 
@@ -223,6 +220,7 @@ public class WaitingQueueController {
 
 
 ## 6) 참고 자료 
+- 폴링(Polling), 웹소켓(WebSocket) 성능 비교(https://velog.io/@sadik/%ED%8F%B4%EB%A7%81Polling-%EC%9B%B9%EC%86%8C%EC%BC%93WebSocket-%EC%84%B1%EB%8A%A5-%EB%B9%84%EA%B5%90)
 - 네이버페이 주문에 적용된 확장 가능한 대기열 개발기(https://d2.naver.com/helloworld/6480558)
 
 
