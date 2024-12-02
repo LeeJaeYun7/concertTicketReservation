@@ -95,7 +95,64 @@
 
 <br> 
 
-(1) **예약 서비스 수행 시, Outbox 테이블에 이벤트 메시지 저장**
+(1) **Outbox 엔티티 생성**
+- Outbox 테이블을 생성하기 위해 **Outbox 엔티티를 정의**해서 생성했습니다. 
+
+```
+@NoArgsConstructor
+@Entity
+@Getter
+@Table(name = "outbox")
+public class Outbox extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "sender")
+    private String sender;
+
+    @Column(name = "recipient")
+    private String recipient;
+
+    @Column(name = "subject")
+    private String subject;
+
+    @Column(name = "message")
+    private String message;
+
+    private boolean sent;
+
+    @Builder
+    public Outbox(String sender, String recipient, String subject, String message, boolean sent) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.subject = subject;
+        this.message = message;
+        this.sent = sent;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
+    }
+
+    public static Outbox of(String sender, String recipient, String subject, String message, boolean sent){
+        return Outbox.builder()
+                .sender(sender)
+                .recipient(recipient)
+                .subject(subject)
+                .message(message)
+                .sent(sent)
+                .build();
+    }
+
+    public void updateSent(boolean sent){
+        this.sent = sent;
+    }
+}
+
+
+```
+
+(2) **예약 서비스 수행 시, Outbox 테이블에 이벤트 메시지 저장**
 - 현재는 **예약 서버와 결제 서버가 분리**되어 있습니다. <br> 
   따라서 예약 서비스 수행 시, **Outbox 테이블에 걸제 요청 이벤트를 저장**했습니다. <br>
   해당 이벤트는 **별도의 스케줄러를 통해 결제 서버로 전달**될 것입니다. <br> 
@@ -137,7 +194,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 
 
-(2) **별도의 스케줄러를 통한 결제 요청 이벤트 메시지 발송**
+(3) **별도의 스케줄러를 통한 결제 요청 이벤트 메시지 발송**
 - **별도의 스케줄러를 구현하여**, 10초마다 **발송되지 않은 결제 요청 이벤트 메시지**를<br>
   **최대 10개씩 발송**하도록 처리하였습니다.
 
