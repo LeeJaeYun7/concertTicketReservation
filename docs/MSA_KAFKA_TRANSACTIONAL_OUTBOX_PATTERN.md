@@ -38,6 +38,9 @@
   즉, 상품 정보가 동기화되지 않는 문제가 발생할 수 있습니다. <br> 
   
 
+<br> 
+
+
 #### (2) 발행되지 않아야 하는 메시지가 발행되는 경우
 
 ![image](https://github.com/user-attachments/assets/de5a074e-f2bb-4f5e-aa2d-87cc7a185d5c)
