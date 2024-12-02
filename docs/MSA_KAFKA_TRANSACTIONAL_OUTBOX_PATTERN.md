@@ -64,6 +64,10 @@
 
 ### 2) 문제 해결 - Transctional Outbox Pattern 도입 
 
+- 위와 같은 문제는 Transactional Outbox Pattern을 도입함으로써 해결할 수 있습니다. <br>
+
+**(1) Transactional Outbox Pattern 이란?**
+![image](https://github.com/user-attachments/assets/97492b36-862c-47b7-a21d-7ab170a2222d)
 
 
 
