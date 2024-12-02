@@ -320,7 +320,7 @@ public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
   이를 통해 이전에 **성공한 결제 트랜잭션은 취소**가 됩니다. <br> 
 
 ```
- @Transactional
+@Transactional
 public void handleCompensationEvent(PaymentRequestEvent paymentRequestEvent) {
         long concertId = paymentRequestEvent.getConcertId();
         long concertScheduleId = paymentRequestEvent.getConcertScheduleId();
