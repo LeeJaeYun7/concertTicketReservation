@@ -19,6 +19,7 @@
   이러한 경우, **데이터 일관성을 확보하는 것이 어렵습니다**. <br> 
   이 문제를 예시를 통해 좀 더 자세하게 살펴보겠습니다. <br> 
 
+<br> 
 
 #### (1) 발행되어야 하는 메시지가 발행되지 않는 경우
 ![image](https://github.com/user-attachments/assets/00e85476-f3cf-4dec-82d4-35cd8f17dbda)
