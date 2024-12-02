@@ -59,11 +59,11 @@ public class ReservationServiceTest {
             SeatGrade seatGrade = SeatGrade.of(concert, Grade.VIP, 100000);
             SeatInfo seatInfo = SeatInfo.of(seat, concertSchedule, seatGrade, SeatStatus.AVAILABLE);
 
-            Reservation reservation = Reservation.of(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, 50000);
+            Reservation reservation = Reservation.of(concertSchedule, uuid, seatInfo, 50000);
 
             given(reservationRepository.save(any(Reservation.class))).willReturn(reservation);
 
-            sut.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, 50000);
+            sut.createReservation(concertSchedule, uuid, seatInfo, 50000);
 
             verify(reservationRepository, times(1)).save(any(Reservation.class));
         }

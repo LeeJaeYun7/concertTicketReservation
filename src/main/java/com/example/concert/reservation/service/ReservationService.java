@@ -37,9 +37,9 @@ public class ReservationService {
     private final KafkaMessageProducer kafkaMessageProducer;
     private final ReservationRepository reservationRepository;
 
-    public Reservation createReservation(Concert concert, ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price) {
+    public Reservation createReservation(ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price) {
         reservationRepository.findReservation(concertSchedule.getId(), seatInfo.getId());
-        Reservation reservation = Reservation.of(concert, concertSchedule, uuid, seatInfo, price);
+        Reservation reservation = Reservation.of(concertSchedule, uuid, seatInfo, price);
         return reservationRepository.save(reservation);
     }
 
@@ -58,7 +58,7 @@ public class ReservationService {
             memberService.decreaseBalance(uuid, price);
             updateStatus(concertScheduleId, seatNumber);
 
-            createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, price);
+            createReservation(concertSchedule, uuid, seatInfo, price);
 
             String name = getMember(uuid).getName();
             String concertName = getConcert(concertScheduleId).getName();
