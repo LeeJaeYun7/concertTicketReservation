@@ -66,7 +66,8 @@
 
 - 위와 같은 문제는 Transactional Outbox Pattern을 도입함으로써 해결할 수 있습니다. <br>
 
-**(1) Transactional Outbox Pattern 이란?**
+**(1) Transactional Outbox Pattern 이란?** 
+
 ![image](https://github.com/user-attachments/assets/97492b36-862c-47b7-a21d-7ab170a2222d)
 
 
@@ -78,5 +79,6 @@
 
 ### 6) 참고 자료
 - 분산 시스템에서 메시지 안전하게 다루기(https://blog.gangnamunni.com/post/transactional-outbox/)
+- Transactional Outbox 패턴으로 메시지 발행 보장하기(https://ridicorp.com/story/transactional-outbox-pattern-ridi/)
 - 
 
