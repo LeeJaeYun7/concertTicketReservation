@@ -6,7 +6,7 @@
   
 **1) 문제 정의 - 분산 시스템에서 데이터 일관성 확보의 어려움** <br>
 **2) 문제 해결 - Transactional Outbox Pattern 도입** <br>
-**3) Transctional Outbox Pattern 구현** <br> 
+**3) 예약 서버-결제 서버 메시지 통신 시, Transctional Outbox Pattern 구현** <br> 
 **4) 참고 자료** <br> 
 
 
@@ -91,7 +91,7 @@
 <br> 
 
 
-### 3) Transactional Outbox Pattern 구현 
+### 3)  예약 서버-결제 서버 메시지 통신 시, Transactional Outbox Pattern 구현 
 
 <br> 
 
