@@ -88,6 +88,7 @@
   배치 프로세스 등을 이용해 **미발행된 데이터에 대한 Fallback 처리**가 용이하다는 이점이 있습니다. <br>
 
 
+<br> 
 
 
 ### 3) Transactional Outbox Pattern 구현 
