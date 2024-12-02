@@ -35,9 +35,6 @@ public class EventPublishing {
 
                 kafkaMessageProducer.sendPaymentRequestEvent("payment-request-topic", paymentRequestEvent);
                 log.info("PaymentEvent Sent");
-
-                event.updateSent(true);
-                outboxRepository.save(event);
             }
         }
     }
