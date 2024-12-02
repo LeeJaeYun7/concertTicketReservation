@@ -133,6 +133,10 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 ```
 
 
+<br> 
+
+
+
 (2) **별도의 스케줄러를 통한 결제 요청 이벤트 메시지 발송**
 
 ```
