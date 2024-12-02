@@ -138,6 +138,8 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 
 (2) **별도의 스케줄러를 통한 결제 요청 이벤트 메시지 발송**
+- **별도의 스케줄러를 구현하여**, 10초마다 **발송되지 않은 결제 요청 이벤트 메시지**를<br>
+  **최대 10개씩 발송**하도록 처리하였습니다.
 
 ```
  @Scheduled(fixedRate = 10000)
