@@ -57,6 +57,13 @@
   즉, **등록되지 않아야 하는 상품 정보가 등록된다는 문제**가 발생합니다. <br>  
 
 
+<br> 
+
+
+### 2) 문제 해결 - Transctional Outbox Pattern 도입 
+
+
+
 
 ### 6) 참고 자료
 - 분산 시스템에서 메시지 안전하게 다루기(https://blog.gangnamunni.com/post/transactional-outbox/)
