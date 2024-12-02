@@ -198,17 +198,31 @@
 
 ```
 @Transactional
-public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) {
+    public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) throws JsonProcessingException {
+        SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
+        long price = seatInfo.getSeatGrade().getPrice();
 
-      validateSeatReservation(concertScheduleId, seatNumber);
-      checkBalanceOverPrice(uuid, concertScheduleId);
+        validateSeatReservation(concertScheduleId, seatNumber);
+        checkBalanceOverPrice(uuid, price);
 
-      ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-      long price = getConcertSchedule(concertScheduleId).getPrice();
+        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
 
-      kafkaTemplate.send("payment-request-topic", new PaymentRequestEvent(concertSchedule.getConcert().getId(), concertScheduleId, uuid, seatNumber, price));
+        PaymentRequestEvent event = PaymentRequestEvent.builder()
+                                                       .concertId(concertSchedule.getConcert().getId())
+                                                       .concertScheduleId(concertSchedule.getId())
+                                                       .uuid(uuid)
+                                                       .seatNumber(seatNumber)
+                                                       .price(price)
+                                                       .build();
 
-      return reservationFuture;
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        Outbox outbox = Outbox.of("reservation", "payment-request-topic", "PaymentRequest", eventJson, false);
+        outboxRepository.save(outbox);
+
+        return reservationFuture;
+    }
 }
 ```
 
@@ -225,7 +239,6 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 ```
 @Transactional
-@KafkaListener(topics = "payment-request-topic", groupId = "payment-service")
 public void createPayment(PaymentRequestEvent paymentRequestEvent){
 
         long concertId = paymentRequestEvent.getConcertId();
@@ -238,7 +251,7 @@ public void createPayment(PaymentRequestEvent paymentRequestEvent){
             boolean paymentSuccess = externalPaymentSystemCall(uuid, price);
 
             if (!paymentSuccess) {
-                kafkaTemplate.send("payment-failed-topic", new PaymentFailedEvent(
+                kafkaMessageProducer.sendPaymentFailedEvent("payment-failed-topic", new PaymentFailedEvent(
                         concertId, concertScheduleId, uuid, seatNumber, price, "Payment system error"
                 ));
                 return;
@@ -247,22 +260,15 @@ public void createPayment(PaymentRequestEvent paymentRequestEvent){
             Payment payment = Payment.of(concertId, concertScheduleId, uuid, price);
             paymentRepository.save(payment);
 
-            kafkaTemplate.send("payment-confirmed-topic", new PaymentConfirmedEvent(
+            kafkaMessageProducer.sendPaymentConfirmedEvent("payment-confirmed-topic", new PaymentConfirmedEvent(
                     concertId, concertScheduleId, uuid, seatNumber, price));
 
         } catch (Exception e) {
-            kafkaTemplate.send("payment-failed-topic", new PaymentFailedEvent(
+            kafkaMessageProducer.sendPaymentFailedEvent("payment-failed-topic", new PaymentFailedEvent(
                     concertId, concertScheduleId, uuid, seatNumber, price, "System error"
             ));
         }
-}
-
-@Retryable(value = {CustomException.class},
-           maxAttempts = 5,
-           backoff = @Backoff(delay = 1000, multiplier = 3))
-private boolean externalPaymentSystemCall(String uuid, long price) {
-        return false;
-}
+    }
 ```
 
 <br> 
@@ -275,7 +281,6 @@ private boolean externalPaymentSystemCall(String uuid, long price) {
   
 ```
 @Transactional
-@KafkaListener(topics = "payment-confirmed-topic")
 public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
 
         long concertScheduleId = event.getConcertScheduleId();
@@ -285,26 +290,25 @@ public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
 
         try {
             ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-            Seat seat = seatService.getSeatByConcertHallIdAndNumberWithPessimisticLock(concertScheduleId, seatNumber);
+            SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
 
             memberService.decreaseBalance(uuid, price);
             updateStatus(concertScheduleId, seatNumber);
 
-            reservationService.createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seat, price);
+            createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, price);
 
             String name = getMember(uuid).getName();
             String concertName = getConcert(concertScheduleId).getName();
             LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
 
             ReservationVO reservationVO = ReservationVO.of(name, concertName, dateTime, price);
-            reservationFuture.complete(reservationVO);
 
+            reservationFacade.getReservationFuture().complete(reservationVO);
         } catch (Exception ex) {
-            handleCompensation(event);
+            kafkaMessageProducer.sendPaymentConfirmedEvent("payment-compensation-topic", event);
             throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);
         }
-}
-
+    }
 ```
 
 <br> 
@@ -316,10 +320,8 @@ public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
   이를 통해 이전에 **성공한 결제 트랜잭션은 취소**가 됩니다. <br> 
 
 ```
-@Transactional
-@KafkaListener(topics = "payment-compensation-topic", groupId = "payment-service")
+ @Transactional
 public void handleCompensationEvent(PaymentRequestEvent paymentRequestEvent) {
-
         long concertId = paymentRequestEvent.getConcertId();
         long concertScheduleId = paymentRequestEvent.getConcertScheduleId();
         String uuid = paymentRequestEvent.getUuid();
@@ -332,17 +334,15 @@ public void handleCompensationEvent(PaymentRequestEvent paymentRequestEvent) {
 
             paymentRepository.delete(payment);
 
-            kafkaTemplate.send("payment-compensation-success-topic", new PaymentCompensationSuccessEvent(
+            kafkaMessageProducer.sendPaymentCompensationSuccessEvent("payment-compensation-success-topic", new PaymentCompensationSuccessEvent(
                     concertId, concertScheduleId, uuid, seatNumber, price, "Payment canceled successfully"
             ));
         } catch (Exception e) {
-            kafkaTemplate.send("payment-compensation-failed-topic", new PaymentCompensationFailedEvent(
+            kafkaMessageProducer.sendPaymentCompensationFailedEvent("payment-compensation-failed-topic", new PaymentCompensationFailedEvent(
                     concertId, concertScheduleId, uuid, seatNumber, price, "Compensation failed"
             ));
         }
 }
-
-
 ```
 
 
