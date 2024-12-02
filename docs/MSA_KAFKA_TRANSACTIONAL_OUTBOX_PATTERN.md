@@ -90,8 +90,12 @@
 
 
 
+### 3) Transactional Outbox Pattern 구현 
 
-### 6) 참고 자료
+
+
+
+### 4) 참고 자료
 - 분산 시스템에서 메시지 안전하게 다루기(https://blog.gangnamunni.com/post/transactional-outbox/)
 - Transactional Outbox 패턴으로 메시지 발행 보장하기(https://ridicorp.com/story/transactional-outbox-pattern-ridi/)
   
