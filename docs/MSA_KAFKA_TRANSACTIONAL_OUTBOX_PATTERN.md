@@ -229,9 +229,9 @@ public void publishPaymentRequestEvents() throws JsonProcessingException {
 ```
 
 (4) **결제 서버로부터 결제 확인 이벤트 수신 시, Outbox 발송 여부 업데이트 처리**
-- 결제 서버에서 결제가 완료되면, 결제 확인 이벤트를 발송합니다. <br>
-  이 때, 예약 서버에서는 Kafka Consumer 클래스에서 결제 확인 이벤트를 수신한 후에<br>
-  Outbox 이벤트의 발송 여부를 최종적으로 업데이트 처리 합니다. <br>
+- 결제 서버에서 **결제가 완료되면, 결제 확인 이벤트**를 발송합니다. <br>
+  이 때, **예약 서버는 Kafka Consumer 클래스**를 사용하여 결제 확인 이벤트를 **수신**합니다<br>
+  그 후, 예약 서버는 **Outbox 이벤트의 발송 여부**를 **최종적으로 업데이트 처리** 합니다. <br>
 
 
 ```
