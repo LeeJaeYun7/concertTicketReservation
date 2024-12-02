@@ -6,10 +6,8 @@
   
 **1) 문제 정의 - 분산 시스템에서 데이터 일관성 확보의 어려움** <br>
 **2) 문제 해결 - Transactional Outbox Pattern 도입** <br>
-**3) 2PC 방식 vs Saga 패턴** <br>
-**4) MSA로 분리된 예약&결제 기능** <br>
-**5) MSA 도입을 통해 개선된 점** <br> 
-**6) 참고 자료** <br> 
+**3) **Transctional Outbox Pattern 구현** <br> 
+**4) 참고 자료** <br> 
 
 
 <br> 
