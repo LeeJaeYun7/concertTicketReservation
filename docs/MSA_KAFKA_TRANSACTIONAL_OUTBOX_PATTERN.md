@@ -67,6 +67,11 @@
 
 
 
+
+
+
+
+
 ### 6) 참고 자료
 - 분산 시스템에서 메시지 안전하게 다루기(https://blog.gangnamunni.com/post/transactional-outbox/)
 - 
