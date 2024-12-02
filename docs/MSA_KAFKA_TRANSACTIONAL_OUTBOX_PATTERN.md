@@ -208,8 +208,8 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
   **최대 10개씩 발송**하도록 처리하였습니다.
 
 ```
- @Scheduled(fixedRate = 10000)
-    public void publishPaymentRequestEvents() throws JsonProcessingException {
+@Scheduled(fixedRate = 10000)
+public void publishPaymentRequestEvents() throws JsonProcessingException {
         log.info("publishPaymentRequestEvent 실행");
 
         List<Outbox> events = outboxRepository.findTop10UnsentEvents();
@@ -222,16 +222,33 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
                 kafkaMessageProducer.sendPaymentRequestEvent("payment-request-topic", paymentRequestEvent);
                 log.info("PaymentEvent Sent");
-
-                event.updateSent(true);
-                outboxRepository.save(event);
             }
         }
 }
 
 ```
 
+(4) **결제 서버로부터 결제 확인 이벤트 수신 시, Outbox 발송 여부 업데이트 처리**
+- 결제 서버에서 결제가 완료되면, 결제 확인 이벤트를 발송합니다. <br>
+  이 때, 예약 서버에서는 Kafka Consumer 클래스에서 결제 확인 이벤트를 수신한 후에<br>
+  Outbox 이벤트의 발송 여부를 최종적으로 업데이트 처리 합니다. <br>
 
+
+```
+@KafkaListener(topics = "payment-confirmed-topic")
+public void receivePaymentConfirmedEvent(String message) throws JsonProcessingException {
+        PaymentConfirmedEvent event = objectMapper.readValue(message, PaymentConfirmedEvent.class);
+        reservationService.handlePaymentConfirmed(event);
+
+        Optional<Outbox> outboxEvent = outboxRepository.findByMessage(message);
+
+        if(outboxEvent.isPresent()){
+            Outbox outbox = outboxEvent.get();
+            outbox.updateSent(true);
+            outboxRepository.save(outbox);
+        }
+}
+```
 
 
 ### 4) 참고 자료
