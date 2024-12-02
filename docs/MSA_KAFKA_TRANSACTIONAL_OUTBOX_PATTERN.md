@@ -78,6 +78,11 @@
 - 이를 통해 시스템의 일관성을 유지하며, 메시지 발송 과정에서 발생할 수 있는 오류를 방지할 수 있습니다.
 
 
+**(2) Transactional Outbox Pattern의 수행 과정** 
+
+
+
+
 
 ### 6) 참고 자료
 - 분산 시스템에서 메시지 안전하게 다루기(https://blog.gangnamunni.com/post/transactional-outbox/)
