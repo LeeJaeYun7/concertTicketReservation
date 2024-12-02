@@ -62,7 +62,7 @@
 <br> 
 
 
-### 2) 문제 해결 - Transctional Outbox Pattern 도입 
+### 2) 문제 해결 - Transactional Outbox Pattern 도입 
 
 - 위와 같은 문제는 Transactional Outbox Pattern을 도입함으로써 해결할 수 있습니다. <br>
 
@@ -71,9 +71,10 @@
 ![image](https://github.com/user-attachments/assets/dedc0f33-efcd-49fa-9f25-21c5f8e5604a)
 
 
-
-
-
+- **Transacitonal Outbox Pattern**은 트랜잭셔널 메시징(Transactional Message)의 대표적인 패턴입니다. <br> 
+  트랜잭셔널 메시징(Transactional Messaging)은 결과적 일관성(Eventual Consistency)을 목표로 하여, <br> 
+  비즈니스 로직 수행과 후속 이벤트 발행을 **원자적으로** 함께 처하는 방식을 의미합니다. <br> 
+  이를 통해 시스템의 일관성을 유지하며, 메시지 발송 과정에서 발생할 수 있는 오류를 방지할 수 있습니다.
 
 
 
