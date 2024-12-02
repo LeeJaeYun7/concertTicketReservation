@@ -93,7 +93,11 @@
 
 ### 3) Transactional Outbox Pattern 구현 
 
+<br> 
+
 (1) **예약 서비스 수행 시, Outbox 테이블에 이벤트 메시지 저장**
+- 예약 서비스 수행 시, **Outbox 테이블에 이벤트를 저장**했습니다. <br> 
+  해당 이벤트는 **별도의 스케줄러를 통해 Payment 서버로 전달**될 것입니다. <br> 
 
 ```
 @Transactional
