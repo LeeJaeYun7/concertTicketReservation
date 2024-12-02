@@ -93,7 +93,7 @@
 
 ### 3) Transactional Outbox Pattern 구현 
 
-
+(1) **예약 서비스 수행 시, Outbox 테이블에 이벤트 메시지 저장**
 
 ```
 @Transactional
