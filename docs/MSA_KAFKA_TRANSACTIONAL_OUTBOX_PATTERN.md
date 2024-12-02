@@ -94,6 +94,41 @@
 
 
 
+```
+@Transactional
+public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) throws JsonProcessingException {
+
+        SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
+        long price = seatInfo.getSeatGrade().getPrice();
+
+        validateSeatReservation(concertScheduleId, seatNumber);
+        checkBalanceOverPrice(uuid, price);
+
+        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+
+        PaymentRequestEvent event = PaymentRequestEvent.builder()
+                                                       .concertId(concertSchedule.getConcert().getId())
+                                                       .concertScheduleId(concertSchedule.getId())
+                                                       .uuid(uuid)
+                                                       .seatNumber(seatNumber)
+                                                       .price(price)
+                                                       .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        Outbox outbox = Outbox.of("reservation", "payment-request-topic", "PaymentRequest", eventJson, false);
+        outboxRepository.save(outbox);
+
+        return reservationFuture;
+}
+
+
+```
+
+
+
+
 
 ### 4) 참고 자료
 - 분산 시스템에서 메시지 안전하게 다루기(https://blog.gangnamunni.com/post/transactional-outbox/)
