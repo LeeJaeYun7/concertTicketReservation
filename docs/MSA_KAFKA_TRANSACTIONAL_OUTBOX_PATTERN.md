@@ -133,6 +133,32 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 ```
 
 
+(2) **별도의 스케줄러를 통한 결제 요청 이벤트 메시지 발송**
+
+```
+ @Scheduled(fixedRate = 10000)
+    public void publishPaymentRequestEvents() throws JsonProcessingException {
+        log.info("publishPaymentRequestEvent 실행");
+
+        List<Outbox> events = outboxRepository.findTop10UnsentEvents();
+
+        if(!events.isEmpty()) {
+
+            for(Outbox event: events) {
+                String eventJson = event.getMessage();
+                PaymentRequestEvent paymentRequestEvent = objectMapper.readValue(eventJson, PaymentRequestEvent.class);
+
+                kafkaMessageProducer.sendPaymentRequestEvent("payment-request-topic", paymentRequestEvent);
+                log.info("PaymentEvent Sent");
+
+                event.updateSent(true);
+                outboxRepository.save(event);
+            }
+        }
+}
+
+```
+
 
 
 
