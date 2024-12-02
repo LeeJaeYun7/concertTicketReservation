@@ -68,7 +68,7 @@
 
 **(1) Transactional Outbox Pattern 이란?** 
 
-![image](https://github.com/user-attachments/assets/97492b36-862c-47b7-a21d-7ab170a2222d)
+![image](https://github.com/user-attachments/assets/dedc0f33-efcd-49fa-9f25-21c5f8e5604a)
 
 
 
