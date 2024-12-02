@@ -21,7 +21,8 @@
 
 
 #### (1) 발행되어야 하는 메시지가 발행되지 않는 경우
-  ![image](https://github.com/user-attachments/assets/51114dfa-b937-4663-850c-3c848aa97f75)
+![image](https://github.com/user-attachments/assets/51114dfa-b937-4663-850c-3c848aa97f75)
+![image](https://github.com/user-attachments/assets/4549fa3e-332c-4c23-9fbc-fb80a2da9a9d)
 
 
 
