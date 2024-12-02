@@ -39,6 +39,10 @@
   
 
 #### (2) 발행되지 않아야 하는 메시지가 발행되는 경우
+
+![image](https://github.com/user-attachments/assets/de5a074e-f2bb-4f5e-aa2d-87cc7a185d5c)
+![image](https://github.com/user-attachments/assets/a955f7c0-5d45-4bf7-99dd-a53c16199a40)
+
  
 
 
