@@ -1,5 +1,6 @@
 package com.example.concert.reservation.domain;
 
+import com.example.concert.concert.domain.Concert;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.global.entity.BaseTimeEntity;
 import com.example.concert.seatinfo.domain.SeatInfo;
@@ -17,6 +18,11 @@ public class Reservation extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "concert_id")
+    private Concert concert;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_schedule_id")

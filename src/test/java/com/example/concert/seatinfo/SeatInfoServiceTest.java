@@ -104,7 +104,7 @@ public class SeatInfoServiceTest {
 
             sut.changeUpdatedAtWithPessimisticLock(1L, 1);
 
-            assertEquals(seat.getUpdatedAt(), LocalDateTime.of(2024, 10, 18, 0, 0));
+            assertEquals(vipSeatInfo.getUpdatedAt(), LocalDateTime.of(2024, 10, 18, 0, 0));
         }
     }
 
