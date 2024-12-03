@@ -114,7 +114,86 @@
 
 #### 4) Kafka 도입  
 
+**(1) Kafka Docker 설정**
+- 기본적으로 Docker를 활용해서 Kafka 클러스터를 실행시켰습니다. <br>
+  Kafka 클러스터는 Zookeeper를 통해 관리하며, 세 개의 브로커(kafka-1, kafka-2, kafka-3)로 운영되도록 하였습니다. <br> 
+  또한, Kafka UI를 위한 kafka-ui도 포함시켰습니다. 
 
+
+```
+---
+version: '3.8'
+services:
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:5.5.1
+    container_name: zookeeper-1
+    ports:
+      - '32181:32181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka-1:
+    image: confluentinc/cp-kafka:5.5.1
+    container_name: kafka-1
+    ports:
+      - '9092:9092'
+    depends_on:
+      - zookeeper-1
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_NUM_PARTITIONS: 3
+
+  kafka-2:
+    image: confluentinc/cp-kafka:5.5.1
+    container_name: kafka-2
+    ports:
+      - '9093:9093'
+    depends_on:
+      - zookeeper-1
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://localhost:9093
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_NUM_PARTITIONS: 3
+
+  kafka-3:
+    image: confluentinc/cp-kafka:5.5.1
+    container_name: kafka-3
+    ports:
+      - '9094:9094'
+    depends_on:
+      - zookeeper-1
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:32181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29094,EXTERNAL://localhost:9094
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_NUM_PARTITIONS: 3
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8989:8080"
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-1:29092,kafka-2:29093,kafka-3:29094
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper-1:22181
+
+
+```
 
 
 
