@@ -82,6 +82,7 @@
 
 
 <br> 
+<br> 
 
 
 | **특징**                     | **Redis Pub/Sub**                                            | **RabbitMQ**                                              | **Apache Kafka**                                          |
