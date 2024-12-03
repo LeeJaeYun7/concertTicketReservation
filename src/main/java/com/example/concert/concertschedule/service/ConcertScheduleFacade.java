@@ -22,10 +22,14 @@ public class ConcertScheduleFacade {
         concertScheduleService.createConcertSchedule(concert, dateTime);
     }
     public List<LocalDateTime> getAvailableDateTimes(long concertId) {
+        concertService.getConcertById(concertId);
+
         return concertScheduleService.getAllAvailableDateTimes(concertId);
     }
 
     public List<Long> getAvailableSeatNumbers(long concertScheduleId) {
+        concertScheduleService.getConcertScheduleById(concertScheduleId);
+
         return seatInfoService.getAllAvailableSeatNumbers(concertScheduleId);
     }
 }

@@ -11,10 +11,14 @@ import com.example.concert.member.domain.Member;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.reservation.event.PaymentRequestEvent;
 import com.example.concert.reservation.infrastructure.kafka.producer.KafkaMessageProducer;
+import com.example.concert.reservation.infrastructure.messaging.Outbox;
+import com.example.concert.reservation.infrastructure.repository.OutboxRepository;
 import com.example.concert.reservation.vo.ReservationVO;
 import com.example.concert.seatinfo.domain.SeatInfo;
 import com.example.concert.seatinfo.service.SeatInfoService;
 import com.example.concert.utils.TimeProvider;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,13 +39,14 @@ public class ReservationFacade {
     private final SeatInfoService seatInfoService;
     private final ConcertService concertService;
     private final ConcertScheduleService concertScheduleService;
+    private final OutboxRepository outboxRepository;
     private final KafkaMessageProducer kafkaMessageProducer;
 
     @Getter
     private final CompletableFuture<ReservationVO> reservationFuture = new CompletableFuture<>();
 
     @Transactional
-    public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) {
+    public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) throws JsonProcessingException {
         SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
         long price = seatInfo.getSeatGrade().getPrice();
 
@@ -50,8 +55,19 @@ public class ReservationFacade {
 
         ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
 
-        System.out.println("sendPaymentEvent 시작 전");
-        kafkaMessageProducer.sendPaymentEvent("payment-request-topic", new PaymentRequestEvent(concertSchedule.getConcert().getId(), concertScheduleId, uuid, seatNumber, price));
+        PaymentRequestEvent event = PaymentRequestEvent.builder()
+                                                       .concertId(concertSchedule.getConcert().getId())
+                                                       .concertScheduleId(concertSchedule.getId())
+                                                       .uuid(uuid)
+                                                       .seatNumber(seatNumber)
+                                                       .price(price)
+                                                       .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        Outbox outbox = Outbox.of("reservation", "payment-request-topic", "PaymentRequest", eventJson, false);
+        outboxRepository.save(outbox);
 
         return reservationFuture;
     }

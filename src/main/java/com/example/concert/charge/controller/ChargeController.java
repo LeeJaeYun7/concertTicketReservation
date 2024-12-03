@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RestController
 public class ChargeController {
 
@@ -20,7 +18,7 @@ public class ChargeController {
         this.chargeFacade = chargeFacade;
     }
 
-    @PostMapping("/charge")
+    @PostMapping("/api/v1/charge")
     public ResponseEntity<ChargeResponse> chargeBalance(@RequestBody ChargeRequest chargeRequest) {
         String uuid = chargeRequest.getUuid();
         long amount = chargeRequest.getAmount();

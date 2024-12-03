@@ -2,6 +2,7 @@ package com.example.concert.concertschedule;
 
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.enums.ConcertAgeRestriction;
+import com.example.concert.concert.service.ConcertService;
 import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.service.ConcertScheduleFacade;
@@ -29,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class ConcertScheduleFacadeTest {
+
+    @Mock
+    private ConcertService concertService;
 
     @Mock
     private ConcertScheduleService concertScheduleService;
@@ -86,14 +90,11 @@ public class ConcertScheduleFacadeTest {
         @DisplayName("두 번의 공연 날짜에 대해서, 모두 예약 가능하다")
         void 두_번의_공연_날짜에_대해서_모두_예약_가능하다() {
             // given
+            given(concertService.getConcertById(concertId))
+                    .willReturn(concert);
+
             given(concertScheduleService.getAllAvailableDateTimes(concertId))
                     .willReturn(List.of(firstSchedule.getDateTime(), secondSchedule.getDateTime()));
-
-            given(seatInfoService.getAllAvailableSeats(firstSchedule.getId()))
-                    .willReturn(List.of(firstVIPSeatInfo, firstRSeatInfo));
-
-            given(seatInfoService.getAllAvailableSeats(secondSchedule.getId()))
-                    .willReturn(List.of(secondVIPSeatInfo, secondRSeatInfo));
 
             // when
             List<LocalDateTime> availableDateTimes = sut.getAvailableDateTimes(concertId);
@@ -106,12 +107,10 @@ public class ConcertScheduleFacadeTest {
         @DisplayName("두 번의 공연 날짜에 대해서, 모두 예약이 불가능하다")
         void 두_번의_공연_날짜에_대해서_모두_예약이_불가능하다() {
             // given
-            given(concertScheduleService.getAllAvailableDateTimes(concertId))
-                    .willReturn(List.of());
+            given(concertService.getConcertById(concertId))
+                    .willReturn(concert);
 
-            given(seatInfoService.getAllAvailableSeats(firstSchedule.getId()))
-                    .willReturn(List.of());
-            given(seatInfoService.getAllAvailableSeats(secondSchedule.getId()))
+            given(concertScheduleService.getAllAvailableDateTimes(concertId))
                     .willReturn(List.of());
 
             // when

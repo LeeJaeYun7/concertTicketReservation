@@ -24,6 +24,14 @@ repositories {
 }
 
 dependencies {
+
+	// SLF4J와 Logback 의존성 제거
+	// implementation 'org.slf4j:slf4j-api:1.7.32'
+	// implementation 'ch.qos.logback:logback-classic:1.4.7'
+
+	// Spring Boot 로깅 (자동 포함됨)
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.projectlombok:lombok:1.18.28'

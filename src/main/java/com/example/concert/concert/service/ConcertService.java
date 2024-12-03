@@ -11,6 +11,7 @@ import com.example.concert.utils.TimeProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class ConcertService {
         return concertRepository.findAll().stream().map(Concert::getId).collect(Collectors.toList());
     }
 
+    @Transactional
     public void saveTop30ConcertsIntoRedis() throws JsonProcessingException {
         LocalDateTime now = timeProvider.now();
         LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));
@@ -48,6 +50,7 @@ public class ConcertService {
         concertCache.saveTop30Concerts(top30concerts);
     }
 
+    @Transactional
     public List<Concert> getTop30ConcertsFromDB() {
         LocalDateTime now = timeProvider.now();
         LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));

@@ -26,6 +26,7 @@ public class SeatInfoService {
     public List<SeatInfo> getAllAvailableSeats(long concertScheduleId){
         LocalDateTime now = timeProvider.now();
         LocalDateTime threshold = now.minusMinutes(5);
+
         return seatInfoRepository.findAllAvailableSeats(concertScheduleId, SeatStatus.AVAILABLE, threshold);
     }
 
