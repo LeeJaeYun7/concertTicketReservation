@@ -11,7 +11,7 @@
 ### 6. [콘서트 대기열 설계를 위한 조사](https://www.notion.so/12656c2f14698029b57ad790fcf08d59)
 ### 7. ['콘서트 좌석 5분간 선점' 동시성 제어 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CONCURRENCY_REPORT.md)
 ### 8. [Redis 분산락 Deep Dive 발표](https://www.canva.com/design/DAGVN6DetjU/mnwdH7gKAJyBjOb2c4_waA/edit)
-### 9. ['콘서트 좌석 5분간 선점' Redis 분산락 Trouble Shooting](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/KAFKA_TEST_CONTAINER.md)
+### 9. ['콘서트 좌석 5분간 선점' Redis 분산락 Trouble Shooting](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_DISTRIBUTION_LOCK_TS.md)
 ### 10. ['최근 3일간 판매량 Top30 콘서트' 캐시 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/CACHE_REPORT.md)
 ### 11. [Redis 서킷 브레이커 도입 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_CIRCUIT_BREAKER.md)
 ### 12. [1만명 동시 접속자 Redis 대기열 보고서](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_WAITING_QUEUE_REPORT.md)
