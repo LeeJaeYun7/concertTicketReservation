@@ -1,4 +1,4 @@
-
+![image](https://github.com/user-attachments/assets/90872d6b-95c3-4d3d-b5f5-ad3dad83bb92)
 
 # MSA 기반 서비스 분리 시, Kafka 도입 보고서 
 
@@ -77,6 +77,11 @@
 
 - Message 브로커는 대표적으로 **Redis Pub/Sub, RabbitMQ, Apache Kafka**가 있습니다. <br>
   각각에 대해 비교해서 살펴보겠습니다. <br>         
+
+![image](https://github.com/user-attachments/assets/e7aa479a-d247-42e4-8a3b-6aa2f875fbc9)
+![image](https://github.com/user-attachments/assets/8b47c053-789a-47d7-bd90-abdad0747428)
+![image](https://github.com/user-attachments/assets/c45c5244-db7b-4e10-9b9d-1fd2f3aca215)
+
 
 
 | **특징**                     | **Redis Pub/Sub**                                            | **RabbitMQ**                                              | **Apache Kafka**                                          |
