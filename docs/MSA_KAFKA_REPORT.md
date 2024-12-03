@@ -231,11 +231,12 @@ spring:
 |              | `auto.offset.reset`     | Consumer가 예전에 오프셋을 커밋한 적이 없거나, 커밋된 오프셋이 유효하지 않을 때, 파티션을 읽기 시작할 때의 작동을 정의합니다. 기본값은 `latest`로, 유효한 오프셋이 없을 경우 최신 레코드부터 읽기 시작합니다. `earliest`로 설정하면 파티션의 맨 처음부터 모든 데이터를 읽습니다. |
 
 
+<br> 
 
 
 #### 5) 참고 자료
--카프카 핵심 가이드(https://product.kyobobook.co.kr/detail/S000201464167)
--라이브 채팅 플랫폼 구현기 1탄(https://kakaoentertainment-tech.tistory.com/109)
+-카프카 핵심 가이드(https://product.kyobobook.co.kr/detail/S000201464167) <br> 
+-라이브 채팅 플랫폼 구현기 1탄(https://kakaoentertainment-tech.tistory.com/109) <br> 
 
 
 
