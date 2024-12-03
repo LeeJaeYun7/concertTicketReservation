@@ -36,6 +36,7 @@ public class MemberService {
                                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND, Loggable.NEVER));
     }
 
+    @Transactional
     public long getMemberBalance(String uuid) {
         return getMemberByUuidWithLock(uuid).getBalance();
     }

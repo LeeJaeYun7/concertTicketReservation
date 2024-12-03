@@ -18,7 +18,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/member")
+    @PostMapping("/api/v1/member")
     public ResponseEntity<MemberResponse> createMember(@RequestBody MemberRequest memberRequest){
         String name = memberRequest.getName();
         MemberVO memberVO = memberService.createMember(name);
@@ -27,7 +27,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
     }
 
-    @GetMapping("/member/balance")
+    @GetMapping("/api/v1/member/balance")
     public ResponseEntity<MemberBalanceResponse> getMemberBalance(@RequestParam(value="uuid") String uuid) {
         long balance = memberService.getMemberBalance(uuid);
         MemberBalanceResponse memberBalanceResponse = MemberBalanceResponse.of(balance);

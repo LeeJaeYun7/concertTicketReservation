@@ -1,9 +1,12 @@
 package com.example.concert.concert;
 
+import com.example.concert.concert.cache.ConcertCache;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.fixtures.ConcertFixtureFactory;
 import com.example.concert.concert.repository.ConcertRepository;
 import com.example.concert.concert.service.ConcertService;
+import com.example.concert.reservation.infrastructure.repository.ReservationRepository;
+import com.example.concert.utils.TimeProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 public class ConcertServiceIntegrationTest {
 
+    @Autowired
+    private TimeProvider timeProvider;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    @Autowired
+    private ConcertCache concertCache;
     @Autowired
     private ConcertService sut;
 

@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "seat_grade")
@@ -33,6 +35,8 @@ public class SeatGrade extends BaseTimeEntity {
         this.concert = concert;
         this.grade = grade;
         this.price = price;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public static SeatGrade of(Concert concert, Grade grade, long price){

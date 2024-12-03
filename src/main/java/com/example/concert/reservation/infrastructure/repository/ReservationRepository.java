@@ -28,8 +28,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "WHERE r.createdAt >= :threeDaysAgo " +
             "GROUP BY r.concert.id) r " +
             "ON c.id = r.concertId " +
-            "ORDER BY r.salesCount DESC " +
-            "LIMIT 30")
+            "ORDER BY r.salesCount DESC")
     List<Concert> findTop30Concerts(@Param("threeDaysAgo") LocalDateTime threeDaysAgo);
 
 }
