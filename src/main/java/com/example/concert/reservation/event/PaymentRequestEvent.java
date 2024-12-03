@@ -1,5 +1,12 @@
 package com.example.concert.reservation.event;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@NoArgsConstructor
 public class PaymentRequestEvent {
     private long concertId;
     private long concertScheduleId;

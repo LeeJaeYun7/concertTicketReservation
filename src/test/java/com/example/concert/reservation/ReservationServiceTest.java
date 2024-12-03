@@ -5,7 +5,7 @@ import com.example.concert.concert.enums.ConcertAgeRestriction;
 import com.example.concert.concerthall.domain.ConcertHall;
 import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.reservation.domain.Reservation;
-import com.example.concert.reservation.repository.ReservationRepository;
+import com.example.concert.reservation.infrastructure.repository.ReservationRepository;
 import com.example.concert.reservation.service.ReservationService;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seatgrade.domain.SeatGrade;

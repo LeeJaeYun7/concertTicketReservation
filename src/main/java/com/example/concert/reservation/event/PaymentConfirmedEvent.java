@@ -1,8 +1,10 @@
 package com.example.concert.reservation.event;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class PaymentConfirmedEvent {
 
     private long concertId;

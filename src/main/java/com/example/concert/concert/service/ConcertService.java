@@ -6,7 +6,7 @@ import com.example.concert.common.Loggable;
 import com.example.concert.concert.cache.ConcertCache;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.repository.ConcertRepository;
-import com.example.concert.reservation.repository.ReservationRepository;
+import com.example.concert.reservation.infrastructure.repository.ReservationRepository;
 import com.example.concert.utils.TimeProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;

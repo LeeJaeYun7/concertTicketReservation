@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "member")
@@ -32,6 +34,8 @@ public class Member extends BaseTimeEntity {
         this.uuid = uuid;
         this.name = name;
         this.balance = balance;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public static Member of(String name) {
