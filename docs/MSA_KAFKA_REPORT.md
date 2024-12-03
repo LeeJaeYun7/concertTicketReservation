@@ -195,6 +195,34 @@ services:
 
 ```
 
+**(2) Kafka Producer & Consumer 설정**
+- Kafka를 활용해 네트워크 통신을 하기 위해서는 <br>
+  각각의 서버에 Producer, Consumer 설정이 필요합니다.
+  Spring 기준으로, 이 설정은 application.yml에 추가해서 관리합니다.
+
+```
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: my_group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+```
+
+- 각 설정에 대해 좀 더 자세히 살펴보겠습니다.
+
+- 
+
+
+
 
 
 #### 5) 참고 자료
