@@ -4,17 +4,18 @@
 
 ## 개요
 
-이 보고서는 크게 3가지 파트로 구성됩니다.
+이 보고서는 크게 4가지 파트로 구성됩니다.
   
-**1) Redis 분산 락 AOP 도입** <br> 
-**2) AOP 도입 시 발생한 문제점** <br>
-**3) 문제 해결** <br>
+**1) Redis 분산 락 AOP 도입 이유** <br> 
+**2) Redis 분산 락 AOP 도입 과정** <br> 
+**3) AOP 도입 시 발생한 문제점** <br>
+**4) 문제 해결** <br>
 
 
 <br> 
 
 
-**1) Redis 분산 락 AOP 도입** <br>
+**1) Redis 분산 락 AOP 도입 이유** <br>
 ![image](https://github.com/user-attachments/assets/bba5abe8-9d67-4930-94fa-b2e30b8519d4)
 
 - **'콘서트 좌석 5분간 선점 예약'** 기능에 **Redis 분산 락**을 도입할 때 **AOP**를 도입했습니다. <br>
@@ -27,6 +28,8 @@
 
 <br> 
 
+
+**2) Redis 분산 락 AOP 도입 과정** <br>
 
 (1) **DistributedLock 인터페이스 생성**
 - Redis 분산 락의 key, timeUnit, waitTime, leaseTime을 지정한 인터페이스를 생성했습니다. <br>
