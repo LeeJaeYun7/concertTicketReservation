@@ -29,7 +29,7 @@
 
 (1) **DistributedLock 인터페이스 생성**
 - Redis 분산 락의 key, timeUnit, waitTime, leaseTime을 지정한 인터페이스를 생성했습니다. <br>
-  이 때, 타겟 클래스에는 인터페이스가 따로 존재하지 않으므로, CGLIB 방식의 AOP가 적용됩니다.<br>
+  이 때, 타겟 클래스에는 인터페이스가 따로 존재하지 않으므로, **CGLIB 방식의 AOP가 적용**됩니다.<br>
 
 [@Target, @Retention에 대하여](https://velog.io/@s2feeling/Target-Retention%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC) <br> 
 [JDK Dynamic Proxy AOP vs CGLIB AOP 비교](https://velog.io/@s2feeling/JDK-Dynamic-Proxy-vs-CGLib-Proxy-%EB%B9%84%EA%B5%90) <br> 
@@ -66,6 +66,9 @@ public @interface DistributedLock {
 
 
 (2) **타겟 메소드에 @DistributedLock 어노테이션 지정**
+- '콘서트 좌석 5분간 선점 예약'을 수행하는 메소드에 커스텀 어노테이션인 @DistributedLock을 적용해줍니다.
+  이 때, **key로 메소드의 파라미터인 lockName이 지정**되었음을 확인할 수 있습니다. 
+
 ```
 @DistributedLock(key = "#lockName", waitTime = 60, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
 public SeatInfo getSeatInfoWithDistributedLock(String lockName, long concertScheduleId, long number) {
@@ -120,7 +123,7 @@ public class DistributedLockAop {
         log.info("LeaseTime: {}", distributedLock.leaseTime());
 
         try {
-            boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
+            boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  
 
             if (!available) {
                 log.warn("Unable to acquire lock for service: {}, key: {}", method.getName(), key);
@@ -128,7 +131,7 @@ public class DistributedLockAop {
             }
 
             log.info("Successfully acquired lock for service: {}, key: {}", method.getName(), key);
-            return aopForTransaction.proceed(joinPoint);  // (3)
+            return aopForTransaction.proceed(joinPoint);  
         } catch (InterruptedException e) {
             throw new InterruptedException();
         }
