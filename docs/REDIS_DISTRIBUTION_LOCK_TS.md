@@ -66,7 +66,7 @@ public @interface DistributedLock {
 
 
 (2) **타겟 메소드에 @DistributedLock 어노테이션 지정**
-- '콘서트 좌석 5분간 선점 예약'을 수행하는 메소드에 커스텀 어노테이션인 @DistributedLock을 적용해줍니다.
+- '콘서트 좌석 5분간 선점 예약'을 수행하는 메소드에 커스텀 어노테이션인 @DistributedLock을 적용해줍니다. <br> 
   이 때, **key로 메소드의 파라미터인 lockName이 지정**되었음을 확인할 수 있습니다. 
 
 ```
@@ -77,6 +77,7 @@ public SeatInfo getSeatInfoWithDistributedLock(String lockName, long concertSche
 }
 ```
 
+<br> 
 
 (3) **타겟 메소드 호출 시 수행되는 AOP 클래스**
 
