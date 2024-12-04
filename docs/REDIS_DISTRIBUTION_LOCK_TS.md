@@ -28,6 +28,8 @@
 
 
 (1) **DistributedLock 인터페이스 생성**
+- Redis 분산 락의 key, timeUnit, waitTime, leaseTime을 지정한 인터페이스를 생성했습니다.
+  
 
 ```
 package com.example.concert.lock;
