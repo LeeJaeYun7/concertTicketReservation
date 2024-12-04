@@ -3,8 +3,8 @@ package com.example.concert.filter;
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
-import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.repository.WaitingQueueRepository;
+import com.example.concert.redis.ActiveQueueDao;
+import com.example.concert.redis.WaitingQueueDao;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +13,14 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class TokenValidationFilter implements Filter {
 
-    private final WaitingQueueRepository waitingQueueRepository;
+    private final WaitingQueueDao waitingQueueDao;
+    private final ActiveQueueDao activeQueueDao;
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
@@ -28,35 +29,42 @@ public class TokenValidationFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
 
         if (isTokenValidationRequired(requestURI)) {
-            String token = httpRequest.getHeader("Authorization");
+            String token = httpRequest.getHeader("token");
+            long concertId = Long.parseLong(httpRequest.getHeader("concertId"));
 
-            if (!validateToken(token)) {
+            if (!validateToken(concertId, token)) {
                 throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.NEVER);
             }
         }
-
         chain.doFilter(request, response);
     }
 
     private boolean isTokenValidationRequired(String requestURI) {
         List<String> validURIs = Arrays.asList(
-                "/concertSchedule",
-                "/reservation",
-                "/seat"
+                "/api/v1/concertSchedule",
+                "/api/v1/reservation",
+                "/api/v1/seat"
         );
 
         return validURIs.stream().anyMatch(requestURI::startsWith);
     }
 
+    private boolean validateToken(long concertId, String token) {
 
-    private boolean validateToken(String token) {
-        System.out.println("여기로 진입");
+        String uuid = token.split(":")[1];
 
-        Optional<WaitingQueue> waitingQueueOpt = waitingQueueRepository.findByToken(token);
+        long rank = waitingQueueDao.getWaitingRank(concertId, uuid);
 
-        System.out.println("결과는?");
-        System.out.println(waitingQueueOpt.isPresent());
+        if (rank != -1) {
+            return true;
+        }
 
-        return waitingQueueOpt.isPresent();
+        String result = activeQueueDao.getToken(concertId, uuid);
+
+        if (result != null) {
+            return true;
+        }
+
+        return false;
     }
 }

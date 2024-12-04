@@ -59,11 +59,6 @@ public class WaitingQueueDao {
         return activeQueue.get(uuid);
     }
 
-    public void deleteActiveQueueToken(long concertId, String uuid){
-        RMapCache<String, String> activeQueue = redisson.getMapCache("activeQueue:" + concertId);  // RMapCache 사용
-        activeQueue.remove(uuid);
-    }
-
     // 각 콘서트 대기열 마다
     // 333개의 queueEntry를 1초마다 활성화열로 이동
     public void removeTop333FromWaitingQueue(long concertId) {
@@ -79,10 +74,9 @@ public class WaitingQueueDao {
                                          .limit(333)
                                          .toList();
 
-        top333.forEach(entry -> {
-            String[] parts = entry.split(":");
+        top333.forEach(token -> {
+            String[] parts = token.split(":");
             String uuid = parts[1];
-            String token = RandomStringGenerator.generateRandomString(16);
 
             activeQueue.putIfAbsent(uuid, token, 300, TimeUnit.SECONDS);
         });
