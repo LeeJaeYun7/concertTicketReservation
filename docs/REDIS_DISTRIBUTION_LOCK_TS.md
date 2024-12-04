@@ -32,7 +32,6 @@
   이 때, 타겟 클래스에는 인터페이스가 따로 존재하지 않으므로, CGLIB 방식의 AOP가 적용됩니다.<br>
 
 [@Target, @Retention에 대하여](https://velog.io/@s2feeling/Target-Retention%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC) <br> 
-[JDK Dynamic Proxy AOP vs CGLIB AOP 비교](https://velog.io/@s2feeling/JDK-Dynamic-Proxy-vs-CGLib-Proxy-%EB%B9%84%EA%B5%90) <br> 
 
 ```
 package com.example.concert.lock;
