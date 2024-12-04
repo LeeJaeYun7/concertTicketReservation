@@ -15,6 +15,7 @@
 
 
 **1) Redis 분산 락 AOP 도입** <br>
+![image](https://github.com/user-attachments/assets/bba5abe8-9d67-4930-94fa-b2e30b8519d4)
 
 - **'콘서트 좌석 5분간 선점 예약'** 기능에 **Redis 분산 락**을 도입할 때 **AOP**를 도입했습니다. <br>
    AOP(Aspect-Oriented Programming)를 도입한 이유는 **코드의 재사용성**을 높이기 위해서입니다. <br> 
