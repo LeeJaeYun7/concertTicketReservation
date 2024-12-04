@@ -111,8 +111,6 @@ public class DistributedLockAop {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
 
-        System.out.println(signature.getParameterNames());
-
         DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
         String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key());
         RLock rLock = redissonClient.getLock(key);
