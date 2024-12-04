@@ -29,7 +29,10 @@
 
 (1) **DistributedLock 인터페이스 생성**
 - Redis 분산 락의 key, timeUnit, waitTime, leaseTime을 지정한 인터페이스를 생성했습니다.
-  
+  이 때, JDK Dynamic Proxy 방식의 AOP 도입을 결정했으므로,
+  인터페이스를 생성했습니다. <br>
+
+[JDK Dynamic Proxy AOP vs CGLIB AOP 비교](https://velog.io/@s2feeling/JDK-Dynamic-Proxy-vs-CGLib-Proxy-%EB%B9%84%EA%B5%90) 
 
 ```
 package com.example.concert.lock;
