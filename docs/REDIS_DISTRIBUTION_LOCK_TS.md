@@ -28,6 +28,7 @@
 
 
 <br> 
+<br> 
 
 
 
@@ -88,7 +89,18 @@ public SeatInfo getSeatInfoWithDistributedLock(String lockName, long concertSche
 
 <br> 
 
-(3) **타겟 메소드 호출 시 수행되는 AOP 클래스**
+(3) **타겟 메소드 호출 시 수행되는 AOP 클래스의 메소드**
+- 타겟 메소드 호출 시, AOP 클래스의 메소드가 실행됩니다. <br>
+  **ProceedingJoinPoint를 통해 실행되는 메소드의 정보**를 읽어옵니다. <br>
+
+- 그 다음, @DistributedLock에 정의한 Key와 <br>
+  CustomELParser를 통해 JoinPoint를 활용해 추출한 값을 조합하여 <br>
+  **Redis 분산 락에 활용할 Key를 생성**합니다.
+
+- 이후 해당 key로 RLock을 획득하고, **락 획득이 가능한지(tryLock) 확인**하는 작업을 거칩니다 <br>
+  만약 락 획득이 가능하다면, 락을 획득한 후에, <br>
+  aopForTransaction.proceed(joinPoint)를 통해 **트랜잭션을 생성**합니다. <br>
+
 
 ```
 package com.example.concert.aop;
