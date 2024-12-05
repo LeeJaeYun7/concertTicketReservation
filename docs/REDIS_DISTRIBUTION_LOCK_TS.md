@@ -165,6 +165,11 @@ public class DistributedLockAop {
 
 (4) **CustomSpringELParser 클래스 설정**
 
+- CustomSpringELParser 클래스는 **Spring Expression Language (SpEL)** 을 활용한 파서 클래스로, <br>
+  **메서드 파라미터의 값들을 동적으로 처리**하기 위해 사용됩니다. <br>
+  주어진 parameterNames와 args 배열을 바탕으로, key로 전달된 SpEL 표현식을 평가하고 그 결과를 반환하는 기능을 합니다. <br> 
+
+
 ```
 // CustomSpringELParser 클래스 
 
@@ -196,5 +201,18 @@ public class CustomSpringELParser {
 ```
   
 
+**(5) AOPForTransaction 클래스**
 
+- AOPForTranaction 클래스에서는 AOP 클래스에서 락 획득에 성공하면 <br>
+  **새로운 트랜잭션을 생성**하는 역할을 합니다. <br>
+   
+```
+@Component
+public class AopForTransaction {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Object proceed(final ProceedingJoinPoint joinPoint) throws Throwable {
+        return joinPoint.proceed();
+    }
+}
 ```
