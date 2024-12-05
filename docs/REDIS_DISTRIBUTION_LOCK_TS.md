@@ -222,3 +222,14 @@ public class AopForTransaction {
     }
 }
 ```
+
+<br> 
+
+
+**3) AOP 도입 시 발생한 문제점** <br>
+
+- 그런데 AOP 도입 시 문제점이 하나 발생했습니다. <br>
+  그것은 바로.. 
+
+
+
