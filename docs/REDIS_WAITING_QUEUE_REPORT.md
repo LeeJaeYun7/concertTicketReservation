@@ -175,7 +175,7 @@ public class WaitingQueueDao {
                                          .limit(333)
                                          .toList();
 
-        top250.forEach(entry -> {
+        top333.forEach(entry -> {
             String[] parts = entry.split(":");
             String uuid = parts[1];
             String token = RandomStringGenerator.generateRandomString(16);
@@ -183,7 +183,7 @@ public class WaitingQueueDao {
             activeQueue.putIfAbsent(uuid, token, 300, TimeUnit.SECONDS);
         });
 
-        top250.forEach(waitingQueue::remove);
+        top333.forEach(waitingQueue::remove);
     }
 }
 ```
