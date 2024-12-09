@@ -101,15 +101,6 @@ public class KafkaPaymentRequestIntegrationTest {
     static void overrideProperties(DynamicPropertyRegistry registry) {
         String kafkaBootstrapServer = kafkaContainer.getBootstrapServers(); // getBootstrapServers() 사용
 
-        System.out.println("kafkaBootstrapServer: " + kafkaBootstrapServer);
-
-        registry.add("spring.kafka.bootstrap-servers", () -> kafkaBootstrapServer);
-        registry.add("spring.kafka.consumer.group-id", () -> "test-group");
-        registry.add("spring.kafka.admin.auto-create-topics", () -> "true");
-        registry.add("spring.kafka.consumer.auto-offset-reset", () -> "earliest");
-        registry.add("spring.kafka.consumer.key-deserializer", () -> StringDeserializer.class.getName());
-        registry.add("spring.kafka.consumer.value-deserializer", () -> StringDeserializer.class.getName());
-
         // Producer 관련 설정 추가
         registry.add("spring.kafka.producer.bootstrap-servers", () -> kafkaBootstrapServer);
         registry.add("spring.kafka.producer.key-serializer", () -> StringSerializer.class.getName());
