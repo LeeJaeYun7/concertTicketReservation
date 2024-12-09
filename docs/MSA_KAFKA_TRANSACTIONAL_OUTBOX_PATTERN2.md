@@ -278,7 +278,7 @@ public void receivePaymentConfirmedEvent(String message) throws JsonProcessingEx
 
 
 
-**5) 참고 자료**
-[분산 시스템에서 메시지 안전하게 다루기](https://blog.gangnamunni.com/post/transactional-outbox/)
-[Transactional Outbox 패턴으로 메시지 발행 보장하기](https://ridicorp.com/story/transactional-outbox-pattern-ridi/)
+**5) 참고 자료** <br> 
+[분산 시스템에서 메시지 안전하게 다루기](https://blog.gangnamunni.com/post/transactional-outbox/) <br> 
+[Transactional Outbox 패턴으로 메시지 발행 보장하기](https://ridicorp.com/story/transactional-outbox-pattern-ridi/) <br> 
 
