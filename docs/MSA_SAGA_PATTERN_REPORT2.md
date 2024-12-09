@@ -83,15 +83,15 @@
 
 <br> 
 
-**(1-1) 투표 단계(Voting Phase)**
-<img src="https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3" alt="Image 1" width="800">
+**(1-1) 투표 단계(Voting Phase)** <br> 
+<img src="https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3" alt="Image 1" width="50%">
 
 - 코디네이터는 각 트랜잭션 참가자에게 **커밋 가능 여부**를 질의합니다. <br>
 - 각 참가자는 자신이 처리한 트랜잭션의 상태를 점검한 후, <br>
     커밋할 수 있으면 Yes를, 그렇지 않으면 No를 응답합니다. <br>
  
-**(1-1) 커밋 단계(Commit Phase)**
-<img src="https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df" alt="Image 2" width="800">
+**(1-1) 커밋 단계(Commit Phase)** <br> 
+<img src="https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df" alt="Image 2" width="50%">
 
 - 만약 모든 참가자가 **트랜잭션 커밋 가능**하다고 응답했을 경우에 <br>
   **코디네이터**는 커밋 요청을 보내, 트랜잭션을 **성공적으로 완료**합니다. <br>
