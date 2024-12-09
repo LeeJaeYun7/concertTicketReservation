@@ -11,7 +11,9 @@
 **5) 참고 자료** <br>
 
 
-**1) 상황(Situation)**
+<br> 
+
+**1) 상황(Situation)** <br> 
 ![image](https://github.com/user-attachments/assets/ec7f68d7-064a-47e6-9917-fbdacf61df03)
 
 - 콘서트 예약 서비스 프로젝트에서, 예약 서버에서 분리된 결제 서버로 메시지를 발송하였는데 <br> 
