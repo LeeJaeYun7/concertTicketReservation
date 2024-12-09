@@ -141,6 +141,18 @@
 - Saga 패턴은 크게 **코레오그래피 방식**과 **오케스트레이션 방식**이 존재합니다. <br>
   각각에 대해 살펴보고 **콘서트 예약 서비스를 기준으로 도식화**해보겠습니다. <br>
 
+#### (2-1) 코레오그래피(Choreography) 방식
+
+<br> 
+
+![hello drawio](https://github.com/user-attachments/assets/9c1fba82-7327-4423-adbf-1511ca2f5258)
+
+
+#### (2-2) 오케스트레이션(Orchestration) 방식
+
+<br>
+
+![hello drawio (1)](https://github.com/user-attachments/assets/45afa4db-4e1f-453b-967c-68eba7754f94)
 
 
 
