@@ -61,3 +61,19 @@
 
 
 **2) 작업(Task)** <br>
+
+- MSA 환경에서 분산 트랜잭션을 관리하는 대표적인 방법은 2가지가 있습니다. <br> 
+  그것은 2PC(Two-Phase Commit) 방식과 Saga 패턴입니다. <br>
+  각각의 장단점을 비교해봤습니다. <br>
+
+**(1) 2PC(Two-Phase Commit)**
+
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/9b559a3c-1bd5-4fbd-a7d5-d78be3e5c1b3" alt="Image 1" width="800"></td>
+    <td><img src="https://github.com/user-attachments/assets/9a14741f-fd6a-408d-aefd-11f7351da2df" alt="Image 2" width="800"></td>
+  </tr>
+</table>
+
+
+
