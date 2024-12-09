@@ -16,7 +16,7 @@
 
 
 **1) 상황(Situation)** <br>
-![image](https://github.com/user-attachments/assets/979d4bd2-da51-4054-bc44-68f4f9b6c869)
+![image](https://github.com/user-attachments/assets/10fa75db-cb39-49eb-9110-817121157fd8)
 
 
 - 기존 콘서트 예약 서비스는 **모놀리식 아키텍처**로 개발되어 있었습니다. <br>
