@@ -43,6 +43,8 @@
 - 하지만 **MSA 환경에서는 각 서비스가 독립된 DB**를 갖고 있습니다. <br>
   따라서 모놀리식 환경과 동일한 방식으로는 **트랜잭션의 ACID 보장이 어렵습니다**. <br>
 
+<br> 
+
 <img src="https://github.com/user-attachments/assets/c02770cb-93c7-42c6-9cf8-4bdc486e6c08" width="50%" />
 
 - 예를 들어, MSA 환경에서 **예약- 멤버 잔액 차감 - 결제**가 순차적으로 일어나야 하는 MSA 환경에서 <br>
