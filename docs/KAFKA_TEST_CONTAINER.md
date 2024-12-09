@@ -1,4 +1,4 @@
-# Kafka 통합 테스트 시, TestContainer 적용 보고서 
+# Kafka 통합 테스트 시, Testcontainer 적용 보고서 
 
 ## 개요
 
