@@ -19,7 +19,7 @@
 
 <br> 
 
-![image](https://github.com/user-attachments/assets/2e7b71e7-cbee-4306-ba58-84d144972884)
+<img src="https://github.com/user-attachments/assets/2e7b71e7-cbee-4306-ba58-84d144972884" width="50%" />
 
 
 - 기존 콘서트 예약 서비스는 **모놀리식 아키텍처**로 개발되어 있었습니다. <br>
