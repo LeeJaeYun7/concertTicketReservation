@@ -82,6 +82,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 - 이를 통해 시스템의 일관성을 유지하며, 메시지 발송 과정에서 발생할 수 있는 오류를 방지할 수 있습니다.
 
+<br> 
 
 **(2) Transactional Outbox Pattern의 수행 과정** 
 
