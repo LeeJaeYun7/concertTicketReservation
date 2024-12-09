@@ -41,7 +41,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 <br> 
 
-- 위의 코드는 **2가지 상황에서 문제**가 발생할 수 있습니다. 
+- 하지만 위의 코드는 **2가지 상황에서 문제**가 발생할 수 있습니다. 
 
 <br> 
 
@@ -67,4 +67,32 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 #### 2) 작업(Task)
 
-- 위의 문제를 해결하기 위해 **Transactional Outbox Pattern 도입**을 고려하게 되었습니다. <br> 
+- 위의 문제를 해결하기 위해 **Transactional Outbox Pattern 도입**을 고려하게 되었습니다. <br>
+
+
+**(1) Transactional Outbox Pattern 이란?** 
+
+![image](https://github.com/user-attachments/assets/dedc0f33-efcd-49fa-9f25-21c5f8e5604a)
+
+
+- **Transacitonal Outbox Pattern**은 트랜잭셔널 메시징(Transactional Message)의 대표적인 패턴입니다. <br> 
+  트랜잭셔널 메시징(Transactional Messaging)은 **결과적 일관성**(Eventual Consistency)을 목표로 하여, <br> 
+  비즈니스 로직 수행과 후속 이벤트 발행을 **원자적으로** 함께 처리하는 방식을 의미합니다. <br> 
+
+- 이를 통해 시스템의 일관성을 유지하며, 메시지 발송 과정에서 발생할 수 있는 오류를 방지할 수 있습니다.
+
+
+**(2) Transactional Outbox Pattern의 수행 과정** 
+
+- **도메인 로직이 성공적으로 수행되면**, 이벤트 메시지를 **Outbox 테이블**이라는 <br> 
+  별도의 테이블에 저장하여 **같이 Commit** 합니다. <br> 
+
+- 즉, 동일한 트랜잭션 내에서 **이벤트 발행을 위한 Outbox 데이터 적재**까지 진행해 <br>
+  **이벤트 발행에 대해 보장**합니다. 
+
+- 이렇게 하면, 이벤트 발행 상태 또한 **Outbox 데이터**에 존재하므로, <br>
+  배치 프로세스 등을 이용해 **미발행된 데이터에 대한 재처리**가 용이하다는 이점이 있습니다. <br>
+
+
+<br> 
+
