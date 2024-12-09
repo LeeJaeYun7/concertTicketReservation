@@ -117,3 +117,31 @@
 - 결론적으로, 2PC 방식은 **높은 일관성**을 제공하지만, 그 대가로 **낮은 가용성**과 **낮은 확장성**을 가진 방식입니다.
 
 
+<br> 
+
+
+#### (2) Saga 패턴 <br> 
+<br>
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/4215561b-5c6f-404d-afc2-08c9ee783af0" alt="Image 1" width="800"></td>
+    <td><img src="https://github.com/user-attachments/assets/c686d098-26b5-4ea2-a428-d2afc5d89634" alt="Image 2" width="800"></td>
+  </tr>
+</table>
+
+
+- Saga 패턴은 2PC와 달리 각 서비스가 **작은 로컬 트랜잭션**을 실행하면서 진행됩니다. <br> 
+  특정 단계에서 실패하면 이전에 커밋된 트랜잭션들에게 **보상 트랜잭션**을 보내 롤백합니다. <br> 
+
+- Saga 패턴의 특징은 '**최종 일관성**(Eventual Consistency)을 보장한다는 점입니다. <br> 
+  이는 2PC가 제공하는 '**강력한 일관성**(Strong Consistency)'과 차이를 보입니다. <br> 
+  최종 일관성은 시스템이 결과적으로 일관성을 맞추는 모델로, 즉시 일관성을 요구하지 않고, <br>
+  점진적으로 일관된 상태로 수렴하는 방식입니다. <br> 
+
+- Saga 패턴은 크게 **코레오그래피 방식**과 **오케스트레이션 방식**이 존재합니다. <br>
+  각각에 대해 살펴보고 **콘서트 예약 서비스를 기준으로 도식화**해보겠습니다. <br>
+
+
+
+
+
