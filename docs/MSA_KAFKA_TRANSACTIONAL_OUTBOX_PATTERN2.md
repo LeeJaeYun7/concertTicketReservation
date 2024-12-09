@@ -269,10 +269,10 @@ public void receivePaymentConfirmedEvent(String message) throws JsonProcessingEx
 
 
 **4) 결과(Result)** <br>
-- **Outbox 테이블와 스케줄러를 통해서 Kafka 메시지가 발송**되면서,
-  (1) 메시지 발송 실패로 인한 재처리
-  (2) 예약 트랜잭션 롤백 시, 메시지 발송 처리 취소 
-  라는 2가지 문제를 해결할 수 있었습니다. 
+- **Outbox 테이블와 스케줄러를 통해서 Kafka 메시지가 발송**되면서, <br>
+  (1) 메시지 발송 실패로 인한 재처리 <br> 
+  (2) 예약 트랜잭션 롤백 시, 메시지 발송 처리 취소 <br>  
+  라는 2가지 문제를 해결할 수 있었습니다. <br> 
 
 ![image](https://github.com/user-attachments/assets/a160f1bb-4540-4f5f-8115-e97441047142)
 
