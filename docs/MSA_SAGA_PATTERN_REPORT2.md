@@ -66,6 +66,8 @@
   그것은 2PC(Two-Phase Commit) 방식과 Saga 패턴입니다. <br>
   각각의 장단점을 비교해봤습니다. <br>
 
+<br> 
+
 **(1) 2PC(Two-Phase Commit)**
 
 <table>
