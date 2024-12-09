@@ -101,8 +101,9 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 #### 3) 행동(Action)
 
+<br> 
 
-- **예약 서버-결제 서버 메시지 통신** 시, Transactional Outbox Pattern을 코드로 구현했습니다.  
+- **예약 서버-결제 서버 메시지 통신** 시, **Transactional Outbox Pattern을 코드로 구현**했습니다.  
 
 
 <br> 
