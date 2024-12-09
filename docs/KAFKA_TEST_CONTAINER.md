@@ -162,5 +162,14 @@ public class KafkaPaymentRequestIntegrationTest {
 
 **4) 결과(Result)**
 
+- 격리된 TestContainer 환경에서 테스트가 성공적으로 수행되었습니다. 
+![image](https://github.com/user-attachments/assets/ff1a032c-7e64-4eaf-b770-7e0e79c799d7)
+
+
+
+**5) 참고 자료**
+- Testcontainers로 통합테스트 만들기(https://dev.gmarket.com/76)
+- Testcontainers(https://testcontainers.com/)
+
 
 
