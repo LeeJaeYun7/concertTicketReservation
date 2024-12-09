@@ -43,6 +43,8 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 - 위의 코드는 **2가지 상황에서 문제**가 발생할 수 있습니다. 
 
+<br> 
+
 **(1)** **Kafka 서버 문제로 인한 메시지 소실**  
 -위의 코드에서는, 좌석과 사용자 잔액에 대한 검증을 마친 후, <br>
  **Kafka를 통해 PaymentRequestEvent를 발행**합니다. <br>
