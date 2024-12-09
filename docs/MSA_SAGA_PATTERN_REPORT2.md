@@ -336,6 +336,8 @@ public void handleCompensationEvent(PaymentRequestEvent paymentRequestEvent) {
 }
 ```
 
+<br> 
+
 
 #### 4) 결과(Result) 
 
@@ -353,3 +355,4 @@ public void handleCompensationEvent(PaymentRequestEvent paymentRequestEvent) {
 
 
 #### 5) 참고자료 
+토스ㅣSLASH 24 - 보상 트랜잭션으로 분산 환경에서도 안전하게 환전하기(https://www.youtube.com/watch?v=xpwRTu47fqY&t=174s)
