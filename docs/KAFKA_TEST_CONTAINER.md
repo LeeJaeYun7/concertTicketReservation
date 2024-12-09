@@ -97,9 +97,10 @@ public class KafkaPaymentRequestIntegrationTest {
     static {
         kafkaContainer.start();
     }
+
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
-        String kafkaBootstrapServer = kafkaContainer.getBootstrapServers(); // getBootstrapServers() 사용
+        String kafkaBootstrapServer = kafkaContainer.getBootstrapServers(); 
 
         // Producer 관련 설정 추가
         registry.add("spring.kafka.producer.bootstrap-servers", () -> kafkaBootstrapServer);
