@@ -32,5 +32,5 @@
 ### 9. ['콘서트 좌석 5분 선점' Redis 분산 락 Trouble Shooting](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_DISTRIBUTION_LOCK_TS.md)
 ### 10. ['콘서트 좌석 5분 선점' 시, 사용자 이탈로 인한 Redis 분산 락 해제 방법](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/REDIS_DISTRIBUTION_LOCK_TS.md)
 ### 12. [MSA 기반 서비스 분리 시, Saga 패턴을 활용한 분산 트랜잭션 적용 보고서2](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/MSA_SAGA_PATTERN_REPORT2.md)
-
+[콘서트 예약 시스템: 데이터 규모](https://github.com/LeeJaeYun7/concertTicket/blob/master/docs/DATA_SCALE.md)
 -->
