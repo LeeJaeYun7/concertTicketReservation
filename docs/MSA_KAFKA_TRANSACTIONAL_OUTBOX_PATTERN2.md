@@ -52,6 +52,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 - 하지만 Kafka 서버에 문제가 발생해 결제 요청 메시지 발송이 실패할 경우, <br>
   **재처리 로직이 없기 때문에 메시지가 소실**될 수 있다는 문제가 발생합니다. <br> 
 
+<br> 
 
 **(2)** **발송 서버 문제로 인한 메시지 오발송**  
 - 위의 코드에서 **kafkaTemplate.send**를 통해 성공적으로 메시지가 발송된 다음, <br> 
