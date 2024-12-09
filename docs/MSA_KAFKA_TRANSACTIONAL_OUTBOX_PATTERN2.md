@@ -98,3 +98,169 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 <br> 
 
+
+#### 3) 행동(Action)
+
+
+- **예약 서버-결제 서버 메시지 통신** 시, Transactional Outbox Pattern을 코드로 구현했습니다.  
+
+
+<br> 
+
+
+(1) **Outbox 엔티티 생성**
+- Outbox 테이블을 생성하기 위해 **Outbox 엔티티를 정의**해서 생성했습니다. 
+
+```
+@NoArgsConstructor
+@Entity
+@Getter
+@Table(name = "outbox")
+public class Outbox extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "sender")
+    @Schema(description = "발신자, domain name을 의미한다.")
+    private String sender;
+
+    @Column(name = "recipient")
+    @Schema(description = "수신자, 메시지를 발송할 Kafka topic을 의미한다.")
+    private String recipient;
+
+    @Column(name = "subject")
+    @Schema(description = "제목, Event Type을 의미한다.")
+    private String subject;
+
+    @Column(name = "message")
+    @Schema(description = "메시지, 보낸 Event 내용을 의미한다.")
+    private String message;
+
+    @Column(name = "sent")
+    @Schema(description = "메시지 발송 여부를 의미한다.")
+    private boolean sent;
+
+    @Builder
+    public Outbox(String sender, String recipient, String subject, String message, boolean sent) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.subject = subject;
+        this.message = message;
+        this.sent = sent;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
+    }
+
+    public static Outbox of(String sender, String recipient, String subject, String message, boolean sent){
+        return Outbox.builder()
+                .sender(sender)
+                .recipient(recipient)
+                .subject(subject)
+                .message(message)
+                .sent(sent)
+                .build();
+    }
+
+    public void updateSent(boolean sent){
+        this.sent = sent;
+    }
+}
+
+
+```
+
+<br> 
+
+
+(2) **예약 서비스 수행 시, Outbox 테이블에 이벤트 메시지 저장**
+- 현재는 **예약 서버와 결제 서버가 분리**되어 있습니다. <br> 
+  따라서 예약 서비스 수행 시, **Outbox 테이블에 걸제 요청 이벤트를 저장**했습니다. <br>
+  해당 이벤트는 **별도의 스케줄러를 통해 결제 서버로 전달**될 것입니다. <br> 
+
+```
+@Transactional
+public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) throws JsonProcessingException {
+
+        SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
+        long price = seatInfo.getSeatGrade().getPrice();
+
+        validateSeatReservation(concertScheduleId, seatNumber);
+        checkBalanceOverPrice(uuid, price);
+
+        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+
+        PaymentRequestEvent event = PaymentRequestEvent.builder()
+                                                       .concertId(concertSchedule.getConcert().getId())
+                                                       .concertScheduleId(concertSchedule.getId())
+                                                       .uuid(uuid)
+                                                       .seatNumber(seatNumber)
+                                                       .price(price)
+                                                       .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        Outbox outbox = Outbox.of("reservation", "payment-request-topic", "PaymentRequest", eventJson, false);
+        outboxRepository.save(outbox);
+
+        return reservationFuture;
+}
+
+
+```
+
+
+<br> 
+
+
+
+(3) **별도의 스케줄러를 통한 결제 요청 이벤트 메시지 발송**
+- **별도의 스케줄러를 구현하여**, 10초마다 **발송되지 않은 결제 요청 이벤트 메시지**를<br>
+  **최대 10개씩 발송**하도록 처리하였습니다.
+
+```
+@Scheduled(fixedRate = 10000)
+public void publishPaymentRequestEvents() throws JsonProcessingException {
+        log.info("publishPaymentRequestEvent 실행");
+
+        List<Outbox> events = outboxRepository.findTop10UnsentEvents();
+
+        if(!events.isEmpty()) {
+
+            for(Outbox event: events) {
+                String eventJson = event.getMessage();
+                PaymentRequestEvent paymentRequestEvent = objectMapper.readValue(eventJson, PaymentRequestEvent.class);
+
+                kafkaMessageProducer.sendPaymentRequestEvent("payment-request-topic", paymentRequestEvent);
+                log.info("PaymentEvent Sent");
+            }
+        }
+}
+
+```
+
+(4) **결제 서버로부터 결제 확인 이벤트 수신 시, Outbox 발송 여부 업데이트 처리**
+- 결제 서버에서 **결제가 완료되면, 결제 확인 이벤트**를 발송합니다. <br>
+  이 때, **예약 서버는 Kafka Consumer 클래스**를 사용하여 결제 확인 이벤트를 **수신**합니다<br>
+  그 후, 예약 서버는 **Outbox 이벤트의 발송 여부**를 **최종적으로 업데이트 처리** 합니다. <br>
+
+
+```
+@KafkaListener(topics = "payment-confirmed-topic")
+public void receivePaymentConfirmedEvent(String message) throws JsonProcessingException {
+        PaymentConfirmedEvent event = objectMapper.readValue(message, PaymentConfirmedEvent.class);
+        reservationService.handlePaymentConfirmed(event);
+
+        Optional<Outbox> outboxEvent = outboxRepository.findByMessage(message);
+
+        if(outboxEvent.isPresent()){
+            Outbox outbox = outboxEvent.get();
+            outbox.updateSent(true);
+            outboxRepository.save(outbox);
+        }
+}
+```
+
+
