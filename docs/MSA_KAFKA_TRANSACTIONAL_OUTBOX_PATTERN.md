@@ -267,6 +267,7 @@ public void receivePaymentConfirmedEvent(String message) throws JsonProcessingEx
 }
 ```
 
+<br> 
 
 **4) 결과(Result)** <br>
 - **Outbox 테이블와 스케줄러를 통해서 Kafka 메시지가 발송**되면서, <br>
@@ -278,7 +279,7 @@ public void receivePaymentConfirmedEvent(String message) throws JsonProcessingEx
 
 ![image](https://github.com/user-attachments/assets/a160f1bb-4540-4f5f-8115-e97441047142)
 
-
+<br> 
 
 **5) 참고 자료** <br> 
 
