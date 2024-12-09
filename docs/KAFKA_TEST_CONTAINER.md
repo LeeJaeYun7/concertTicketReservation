@@ -159,3 +159,8 @@ public class KafkaPaymentRequestIntegrationTest {
 ```
 
 
+
+**4) 결과(Result)**
+
+
+
