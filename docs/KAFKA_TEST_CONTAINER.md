@@ -129,6 +129,8 @@ public class KafkaPaymentRequestIntegrationTest {
     }
 
     private String pollMessageFromKafka(String topic) {
+
+        // Consumer 관련 설정 추가 
         Map<String, Object> consumerProps = new HashMap<>();
         consumerProps.put("bootstrap.servers", kafkaContainer.getBootstrapServers());
         consumerProps.put("group.id", "test-group");
