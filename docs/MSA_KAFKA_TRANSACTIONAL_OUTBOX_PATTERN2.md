@@ -46,7 +46,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 <br> 
 
 **(1)** **Kafka 서버 문제로 인한 메시지 소실**  
--위의 코드에서는, 좌석과 사용자 잔액에 대한 검증을 마친 후, <br>
+- 위의 코드에서는, 좌석과 사용자 잔액에 대한 검증을 마친 후, <br>
  **Kafka를 통해 PaymentRequestEvent를 발행**합니다. <br>
 
 - 하지만 Kafka 서버에 문제가 발생해 결제 요청 메시지 발송이 실패할 경우, <br>
@@ -54,11 +54,12 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 
 **(2)** **발송 서버 문제로 인한 메시지 오발송**  
--위의 코드에서 **kafkaTemplate.send**를 통해 성공적으로 메시지가 발송된 다음, <br> 
- 발송 서버의 문제로 서버가 다운될 수 있습니다. <br>
- 이 경우, 트랜잭션이 롤백되면서 예약 정보는 취소되지만, <br>
- 이미 발송된 메시지는 **트랜잭션과 별개로 이미 전송되었기 때문에 롤백이 불가능**합니다. <br>
- 이로 인해 **예약과 결제 간에 불일치**가 발생할 수 있습니다. 
+- 위의 코드에서 **kafkaTemplate.send**를 통해 성공적으로 메시지가 발송된 다음, <br> 
+  발송 서버의 문제로 서버가 다운될 수 있습니다. <br>
+
+- 이 경우, 트랜잭션이 롤백되면서 예약 정보는 취소되지만, <br>
+  이미 발송된 메시지는 **트랜잭션과 별개로 이미 전송되었기 때문에 롤백이 불가능**합니다. <br>
+  이로 인해 **예약과 결제 간에 불일치**가 발생할 수 있습니다. 
   
 <br> 
 
