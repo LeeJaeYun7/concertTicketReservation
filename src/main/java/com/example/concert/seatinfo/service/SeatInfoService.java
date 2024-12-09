@@ -61,7 +61,6 @@ public class SeatInfoService {
         seatInfo.changeUpdatedAt(now);
     }
 
-
     public void updateSeatStatus(long concertHallId, long number, SeatStatus status) {
         SeatInfo seatInfo = getSeatInfoWithPessimisticLock(concertHallId, number);
         seatInfo.updateStatus(status);
@@ -81,7 +80,7 @@ public class SeatInfoService {
         return seatInfoRepository.findSeatInfoWithOptimisticLock(concertScheduleId, number)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
     }
-    @DistributedLock(key = "#concertHallId + '_' + #number", waitTime = 60, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
+    @DistributedLock(key = "#lockName", waitTime = 60, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
     public SeatInfo getSeatInfoWithDistributedLock(String lockName, long concertScheduleId, long number) {
         return seatInfoRepository.findSeatInfoWithDistributedLock(concertScheduleId, number)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));

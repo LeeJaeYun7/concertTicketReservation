@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,12 @@ public class KafkaPaymentRequestIntegrationTest {
     }
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
-        String kafkaBootstrapServer = "localhost:" + kafkaContainer.getMappedPort(9093);
-        registry.add("spring.kafka.bootstrap-servers", () -> kafkaBootstrapServer);
-        registry.add("spring.kafka.consumer.group-id", () -> "test-group");
-        registry.add("spring.kafka.consumer.auto-offset-reset", () -> "earliest");
-        registry.add("spring.kafka.consumer.key-deserializer", () -> StringDeserializer.class.getName());
-        registry.add("spring.kafka.consumer.value-deserializer", () -> StringDeserializer.class.getName());
+        String kafkaBootstrapServer = kafkaContainer.getBootstrapServers(); // getBootstrapServers() 사용
+
+        // Producer 관련 설정 추가
+        registry.add("spring.kafka.producer.bootstrap-servers", () -> kafkaBootstrapServer);
+        registry.add("spring.kafka.producer.key-serializer", () -> StringSerializer.class.getName());
+        registry.add("spring.kafka.producer.value-serializer", () -> StringSerializer.class.getName());
     }
 
     @Autowired

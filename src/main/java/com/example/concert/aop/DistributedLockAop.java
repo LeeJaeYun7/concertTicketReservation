@@ -29,14 +29,12 @@ public class DistributedLockAop {
     @Around("@annotation(com.example.concert.lock.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
-        Object[] args = joinPoint.getArgs();
-        String key = REDISSON_LOCK_PREFIX + (String) args[0];
-
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
 
         DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
 
+        String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key());
         RLock rLock = redissonClient.getLock(key);
 
         log.info("WaitTime: {}", distributedLock.waitTime());
@@ -55,15 +53,5 @@ public class DistributedLockAop {
         } catch (InterruptedException e) {
             throw new InterruptedException();
         }
-//        } finally {
-//            try {
-//                rLock.unlock();   // (4)
-//            } catch (IllegalMonitorStateException e) {
-//                log.info("Redisson Lock already unlocked for service: {}, key: {}",
-//                        method.getName(),
-//                        key
-//                );
-//            }
-//        }
     }
 }
