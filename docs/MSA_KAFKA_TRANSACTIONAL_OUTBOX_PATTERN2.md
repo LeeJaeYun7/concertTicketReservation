@@ -69,6 +69,7 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 
 - 위의 문제를 해결하기 위해 **Transactional Outbox Pattern 도입**을 고려하게 되었습니다. <br>
 
+<br> 
 
 **(1) Transactional Outbox Pattern 이란?** 
 
