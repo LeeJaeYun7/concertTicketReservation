@@ -221,6 +221,9 @@ public CompletableFuture<ReservationVO> createReservation(String uuid, long conc
 - **별도의 스케줄러를 구현하여**, 10초마다 **발송되지 않은 결제 요청 이벤트 메시지**를<br>
   **최대 10개씩 발송**하도록 처리하였습니다.
 
+- 만약, **이전에 발송에 실패**한 결제 요청 이벤트 메시지가 있다면, <br>
+  sent 필드가 업데이트되지 않았으므로, 저절로 **재처리가 가능**해집니다. <br>
+
 ```
 @Scheduled(fixedRate = 10000)
 public void publishPaymentRequestEvents() throws JsonProcessingException {
@@ -264,4 +267,18 @@ public void receivePaymentConfirmedEvent(String message) throws JsonProcessingEx
 }
 ```
 
+
+**4) 결과(Result)** <br>
+- **Outbox 테이블와 스케줄러를 통해서 Kafka 메시지가 발송**되면서,
+  (1) 메시지 발송 실패로 인한 재처리
+  (2) 예약 트랜잭션 롤백 시, 메시지 발송 처리 취소 
+  라는 2가지 문제를 해결할 수 있었습니다. 
+
+![image](https://github.com/user-attachments/assets/a160f1bb-4540-4f5f-8115-e97441047142)
+
+
+
+**5) 참고 자료**
+[분산 시스템에서 메시지 안전하게 다루기](https://blog.gangnamunni.com/post/transactional-outbox/)
+[Transactional Outbox 패턴으로 메시지 발행 보장하기](https://ridicorp.com/story/transactional-outbox-pattern-ridi/)
 
