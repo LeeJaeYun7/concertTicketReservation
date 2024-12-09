@@ -176,4 +176,163 @@
   추후에 **다른 트랜잭션 참여자들**이 추가될 수 있다는 점을 고려하여 **Saga 패턴**을 채택하였습니다. <br> 
 
 
+<br> 
+
+#### 3) 행동(Action)
+
+
+(1) **새로운 예약 기능**
+- 새로운 예약 기능은 사용자 **좌석 예약**과 **잔액 조회** 후, <br>
+  결제 서버로 **결제 요청 이벤트**를 전송하는 방식으로 작동합니다. <br>
+  결제 요청 이벤트는 메시지 큐인 **Kafka**를 사용하여 전달됩니다. <br> 
+
+```
+@Transactional
+public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) throws JsonProcessingException {
+        SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
+        long price = seatInfo.getSeatGrade().getPrice();
+
+        validateSeatReservation(concertScheduleId, seatNumber);
+        checkBalanceOverPrice(uuid, price);
+
+        ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+
+        PaymentRequestEvent event = PaymentRequestEvent.builder()
+                                                       .concertId(concertSchedule.getConcert().getId())
+                                                       .concertScheduleId(concertSchedule.getId())
+                                                       .uuid(uuid)
+                                                       .seatNumber(seatNumber)
+                                                       .price(price)
+                                                       .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String eventJson = objectMapper.writeValueAsString(event);
+
+        Outbox outbox = Outbox.of("reservation", "payment-request-topic", "PaymentRequest", eventJson, false);
+        outboxRepository.save(outbox);
+
+        return reservationFuture;
+    }
+}
+```
+
+
+<br> 
+
+
+(2) **MSA로 분리된 결제 기능** 
+- 결제 기능은 **Kafka**를 통해 전달된 이벤트를 **리스닝**한 후 결제 작업을 처리합니다. <br>
+  결제가 성공하면 **예약 서버**로 **성공 이벤트**를 Kafka를 통해 예약 서버로 전달하고, <br>
+  실패하면 **실패 이벤트**를 전송합니다. <br> 
+
+- 이 과정에서는 외부 결제 시스템이 연동된다고 가정합니다. <br> 
+
+```
+@Transactional
+public void createPayment(PaymentRequestEvent paymentRequestEvent){
+
+        long concertId = paymentRequestEvent.getConcertId();
+        long concertScheduleId = paymentRequestEvent.getConcertScheduleId();
+        String uuid = paymentRequestEvent.getUuid();
+        long seatNumber = paymentRequestEvent.getSeatNumber();
+        long price = paymentRequestEvent.getPrice();
+
+        try {
+            boolean paymentSuccess = externalPaymentSystemCall(uuid, price);
+
+            if (!paymentSuccess) {
+                kafkaMessageProducer.sendPaymentFailedEvent("payment-failed-topic", new PaymentFailedEvent(
+                        concertId, concertScheduleId, uuid, seatNumber, price, "Payment system error"
+                ));
+                return;
+            }
+
+            Payment payment = Payment.of(concertId, concertScheduleId, uuid, price);
+            paymentRepository.save(payment);
+
+            kafkaMessageProducer.sendPaymentConfirmedEvent("payment-confirmed-topic", new PaymentConfirmedEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price));
+
+        } catch (Exception e) {
+            kafkaMessageProducer.sendPaymentFailedEvent("payment-failed-topic", new PaymentFailedEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price, "System error"
+            ));
+        }
+    }
+```
+
+<br> 
+
+
+(3) **결제 완료 시 추가적으로 실행되는 예약 기능**
+- 결제 완료 후, 해당 **이벤트**는 **Kafka**를 통해 전달되어 추가적인 예약 작업이 실행됩니다. <br>
+  이 과정에서 예약 중 **예외**가 발생하면, **이전 결제 트랜잭션**을 취소해야 하므로, <br>
+  **결제 서버**에 **보상 트랜잭션**을 실행할 이벤트를 전달합니다.
+  
+```
+@Transactional
+public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
+
+        long concertScheduleId = event.getConcertScheduleId();
+        String uuid = event.getUuid();
+        long seatNumber = event.getSeatNumber();
+        long price = event.getPrice();
+
+        try {
+            ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+            SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
+
+            memberService.decreaseBalance(uuid, price);
+            updateStatus(concertScheduleId, seatNumber);
+
+            createReservation(concertSchedule.getConcert(), concertSchedule, uuid, seatInfo, price);
+
+            String name = getMember(uuid).getName();
+            String concertName = getConcert(concertScheduleId).getName();
+            LocalDateTime dateTime = getConcertSchedule(concertScheduleId).getDateTime();
+
+            ReservationVO reservationVO = ReservationVO.of(name, concertName, dateTime, price);
+
+            reservationFacade.getReservationFuture().complete(reservationVO);
+        } catch (Exception ex) {
+            kafkaMessageProducer.sendPaymentConfirmedEvent("payment-compensation-topic", event);
+            throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);
+        }
+    }
+```
+
+<br> 
+
+(4) **예약 실패 시, 결제 서버에서 발생하는 보상 트랜잭션**
+
+- **결제 서버**는 **보상 트랜잭션 요청 이벤트**를 전달 받으면, <br>
+  해당 요청 따라 **보상 트랜잭션**을 실시합니다. <br>
+  이를 통해 이전에 **성공한 결제 트랜잭션은 취소**가 됩니다. <br> 
+
+```
+@Transactional
+public void handleCompensationEvent(PaymentRequestEvent paymentRequestEvent) {
+        long concertId = paymentRequestEvent.getConcertId();
+        long concertScheduleId = paymentRequestEvent.getConcertScheduleId();
+        String uuid = paymentRequestEvent.getUuid();
+        long seatNumber = paymentRequestEvent.getSeatNumber();
+        long price = paymentRequestEvent.getPrice();
+
+        try {
+            Payment payment = paymentRepository.findByConcertIdAndConcertScheduleIdAndUuid(concertId, concertScheduleId, uuid)
+                    .orElseThrow(() -> new CustomException(ErrorCode.PAYMENT_NOT_FOUND, Loggable.ALWAYS));
+
+            paymentRepository.delete(payment);
+
+            kafkaMessageProducer.sendPaymentCompensationSuccessEvent("payment-compensation-success-topic", new PaymentCompensationSuccessEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price, "Payment canceled successfully"
+            ));
+        } catch (Exception e) {
+            kafkaMessageProducer.sendPaymentCompensationFailedEvent("payment-compensation-failed-topic", new PaymentCompensationFailedEvent(
+                    concertId, concertScheduleId, uuid, seatNumber, price, "Compensation failed"
+            ));
+        }
+}
+
+
 
