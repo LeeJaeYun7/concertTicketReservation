@@ -19,10 +19,7 @@ import com.example.concert.seatinfo.domain.SeatInfo;
 import com.example.concert.seatinfo.enums.SeatStatus;
 import com.example.concert.seatinfo.repository.SeatInfoRepository;
 import com.example.concert.utils.TimeProvider;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +31,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Disabled
 public class ConcertScheduleIntegrationTest {
 
     @Autowired

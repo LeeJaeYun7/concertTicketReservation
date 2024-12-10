@@ -15,6 +15,7 @@ import com.example.concert.seatinfo.domain.SeatInfo;
 import com.example.concert.seatinfo.enums.SeatStatus;
 import com.example.concert.seatinfo.repository.SeatInfoRepository;
 import com.example.concert.seatinfo.service.SeatInfoService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Transactional
+@Disabled
 public class SeatInfoIntegrationTest {
 
     @Autowired

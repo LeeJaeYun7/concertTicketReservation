@@ -3,8 +3,6 @@ package com.example.concert.filter;
 import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
-import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.repository.WaitingQueueRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TokenValidationFilter implements Filter {
 
-    private final WaitingQueueRepository waitingQueueRepository;
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
@@ -29,10 +26,6 @@ public class TokenValidationFilter implements Filter {
 
         if (isTokenValidationRequired(requestURI)) {
             String token = httpRequest.getHeader("Authorization");
-
-            if (!validateToken(token)) {
-                throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.NEVER);
-            }
         }
 
         chain.doFilter(request, response);
@@ -46,17 +39,5 @@ public class TokenValidationFilter implements Filter {
         );
 
         return validURIs.stream().anyMatch(requestURI::startsWith);
-    }
-
-
-    private boolean validateToken(String token) {
-        System.out.println("여기로 진입");
-
-        Optional<WaitingQueue> waitingQueueOpt = waitingQueueRepository.findByToken(token);
-
-        System.out.println("결과는?");
-        System.out.println(waitingQueueOpt.isPresent());
-
-        return waitingQueueOpt.isPresent();
     }
 }

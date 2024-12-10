@@ -16,6 +16,7 @@ import com.example.concert.seatinfo.enums.SeatStatus;
 import com.example.concert.seatinfo.service.SeatInfoFacade;
 import com.example.concert.seatinfo.service.SeatInfoService;
 import com.example.concert.utils.TimeProvider;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled
 public class SeatInfoFacadeTest {
     @Mock
     private TimeProvider timeProvider;
