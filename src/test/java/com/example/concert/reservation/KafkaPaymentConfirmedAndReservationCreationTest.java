@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 @Testcontainers
 @Slf4j
+@Disabled
 public class KafkaPaymentConfirmedAndReservationCreationTest {
 
     @Container

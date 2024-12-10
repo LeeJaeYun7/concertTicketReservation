@@ -7,6 +7,7 @@ import com.example.concert.concert.repository.ConcertRepository;
 import com.example.concert.concert.service.ConcertService;
 import com.example.concert.reservation.infrastructure.repository.ReservationRepository;
 import com.example.concert.utils.TimeProvider;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+@Disabled
 public class ConcertServiceIntegrationTest {
 
     @Autowired

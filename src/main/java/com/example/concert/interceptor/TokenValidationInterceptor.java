@@ -4,9 +4,6 @@ import com.example.concert.common.CustomException;
 import com.example.concert.common.ErrorCode;
 import com.example.concert.common.Loggable;
 import com.example.concert.utils.TimeProvider;
-import com.example.concert.waitingQueue.domain.WaitingQueue;
-import com.example.concert.waitingQueue.domain.WaitingQueueStatus;
-import com.example.concert.waitingQueue.repository.WaitingQueueRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +22,12 @@ public class TokenValidationInterceptor implements HandlerInterceptor {
     @Autowired
     private TimeProvider timeProvider;
 
-    @Autowired
-    private WaitingQueueRepository waitingQueueRepository;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
 
         if(isTokenValidationRequired(request.getRequestURI())) {
-            if (token == null || !validateToken(token)) {
+            if (token == null) {
                 throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.ALWAYS);
             }
         }
@@ -50,13 +44,6 @@ public class TokenValidationInterceptor implements HandlerInterceptor {
         );
 
         return validURIs.stream().anyMatch(requestURI::startsWith);
-    }
-
-    private boolean validateToken(String token) {
-        Optional<WaitingQueue> waitingQueueOpt = waitingQueueRepository.findByToken(token);
-
-        return waitingQueueOpt.get().getStatus().equals(WaitingQueueStatus.ACTIVE)
-                && !isTenMinutesPassed(waitingQueueOpt.get().getUpdatedAt());
     }
 
     private boolean isTenMinutesPassed(LocalDateTime updatedAt) {

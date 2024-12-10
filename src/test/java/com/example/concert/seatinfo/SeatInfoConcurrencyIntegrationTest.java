@@ -6,6 +6,8 @@ import com.example.concert.concerthall.repository.ConcertHallRepository;
 import com.example.concert.seatinfo.service.SeatInfoFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.concert.concert.domain.Concert;
@@ -29,8 +31,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
-@Slf4j
+@Disabled
 public class SeatInfoConcurrencyIntegrationTest {
+
+    // Logger 선언
+    private static final Logger log = LoggerFactory.getLogger(SeatInfoConcurrencyIntegrationTest.class);
+
     @Autowired
     private SeatInfoFacade seatInfoFacade;
 

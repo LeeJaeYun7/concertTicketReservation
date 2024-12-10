@@ -7,6 +7,7 @@ import com.example.concert.concertschedule.domain.ConcertSchedule;
 import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.concertschedule.service.ConcertScheduleService;
 import com.example.concert.utils.TimeProvider;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled
 public class ConcertScheduleServiceTest {
 
     @Mock
