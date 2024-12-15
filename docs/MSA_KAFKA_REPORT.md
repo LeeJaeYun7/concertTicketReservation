@@ -237,6 +237,6 @@ spring:
 #### 5) 참고 자료
 -카프카 핵심 가이드(https://product.kyobobook.co.kr/detail/S000201464167) <br> 
 -라이브 채팅 플랫폼 구현기 1탄(https://kakaoentertainment-tech.tistory.com/109) <br> 
-
+-Kafka와 RabbitMQ의 차이점은 무엇인가요?(https://aws.amazon.com/ko/compare/the-difference-between-rabbitmq-and-kafka/)
 
 
