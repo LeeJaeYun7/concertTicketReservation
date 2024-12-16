@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/c7ee69f8-abe0-43f3-8d54-e1809671fc0a)
 ## 콘서트 예약 시스템: 데이터 규모 <br>
 
 
@@ -13,7 +12,7 @@
 | **회원**             | 총 20만 명                                    | 200,000명                       | 200,000명      |
 
 
-1) 콘서트 홀
+1) 콘서트 홀 <br> 
 ![image](https://github.com/user-attachments/assets/18e18c62-1638-47d7-a4db-6dc257291812)
 
 
