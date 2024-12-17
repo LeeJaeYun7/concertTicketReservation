@@ -85,6 +85,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @Testcontainers
 @Slf4j
@@ -113,6 +114,7 @@ public class KafkaPaymentRequestIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
     @Test
     @DisplayName("PaymentRequestEvent를 Kafka에 발행 후 구독한다")
     void PaymentRequestEvent를_Kafka에_발행_후_구독한다() throws JsonProcessingException {
