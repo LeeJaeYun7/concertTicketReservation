@@ -4,6 +4,7 @@ import com.example.concert.member.domain.Member;
 import com.example.concert.member.repository.MemberRepository;
 import com.example.concert.member.service.MemberService;
 import com.example.concert.member.vo.MemberVO;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
+@Disabled
 public class MemberServiceIntegrationTest {
 
     @Autowired

@@ -1,24 +1,23 @@
 package com.example.concert.seatinfo;
 
-import com.example.concert.concert.enums.ConcertAgeRestriction;
-import com.example.concert.concerthall.domain.ConcertHall;
-import com.example.concert.concerthall.repository.ConcertHallRepository;
-import com.example.concert.seatinfo.service.SeatInfoFacade;
-import lombok.extern.slf4j.Slf4j;
+import concert.domain.Concert;
+import concert.domain.ConcertRepository;
+import concert.domain.enums.ConcertAgeRestriction;
+import concerthall.domain.ConcertHall;
+import concerthall.domain.ConcertHallRepository;
+import concertschedule.domain.ConcertSchedule;
+import concertschedule.domain.ConcertScheduleRepository;
+import member.application.MemberService;
+import member.domain.Member;
+import member.domain.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.example.concert.concert.domain.Concert;
-import com.example.concert.concert.repository.ConcertRepository;
-import com.example.concert.concertschedule.domain.ConcertSchedule;
-import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
-import com.example.concert.member.domain.Member;
-import com.example.concert.member.repository.MemberRepository;
-import com.example.concert.member.service.MemberService;
-import com.example.concert.seat.domain.Seat;
-import com.example.concert.seat.repository.SeatRepository;
+import seat.domain.Seat;
+import seat.domain.SeatRepository;
+import seatinfo.application.facade.SeatInfoFacade;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

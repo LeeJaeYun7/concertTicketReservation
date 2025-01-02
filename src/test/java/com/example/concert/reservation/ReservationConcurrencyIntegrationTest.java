@@ -10,8 +10,6 @@ import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.repository.MemberRepository;
 import com.example.concert.member.service.MemberService;
-import com.example.concert.reservation.infrastructure.repository.ReservationRepository;
-import com.example.concert.reservation.service.ReservationFacade;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.seatgrade.domain.SeatGrade;
@@ -21,17 +19,6 @@ import com.example.concert.seatinfo.domain.SeatInfo;
 import com.example.concert.seatinfo.enums.SeatStatus;
 import com.example.concert.seatinfo.repository.SeatInfoRepository;
 import com.example.concert.utils.RandomStringGenerator;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

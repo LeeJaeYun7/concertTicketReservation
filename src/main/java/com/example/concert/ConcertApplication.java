@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages="global-utils")
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ConcertApplication {
