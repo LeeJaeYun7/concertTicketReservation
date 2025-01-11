@@ -47,7 +47,6 @@ dependencies {
 
     implementation project(path: ':module-domain')
     implementation project(path: ':commons')
-
 }
 
 task wrapper(type: Wrapper) {
