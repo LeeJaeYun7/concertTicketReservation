@@ -46,8 +46,7 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.28'
 
     implementation project(path: ':module-domain')
-    implementation project(path: ':global-utils')
-
+    implementation project(path: ':commons')
 }
 
 task wrapper(type: Wrapper) {

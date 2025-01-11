@@ -73,9 +73,9 @@ dependencies {
 	testImplementation 'org.testcontainers:mysql:1.18.3'
 	testImplementation 'org.awaitility:awaitility'
 
-	implementation project(':global-utils')
-	implementation project(':module-domain')
-	implementation project(':module-application')
+    implementation project(':commons')
+	implementation project(':concert-reservation-domain')
+	implementation project(':concert-reservation-application')
 }
 
 tasks.named('test') {
