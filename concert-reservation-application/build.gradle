@@ -17,7 +17,7 @@ repositories {
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.28'
 
-    api("org.springframework.book:spring-boot-starter-data-jpa")
+    api("org.springframework.boot:spring-boot-starter-data-jpa")
 
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '3.3.4'
 
@@ -45,7 +45,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
     implementation 'org.projectlombok:lombok:1.18.28'
 
-    implementation project(path: ':module-domain')
+    implementation project(path: ':concert-reservation-domain')
     implementation project(path: ':commons')
 }
 
