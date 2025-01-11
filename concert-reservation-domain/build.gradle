@@ -2,22 +2,26 @@ plugins {
     id 'java-library'  // 기존 'java' 플러그인에서 'java-library'로 변경
 }
 
-group = 'module-domain'
-version = '0.0.1-SNAPSHOT'
+//group = 'concert-reservation-domain'
+//version = '0.0.1-SNAPSHOT'
 
 // jar로 생성 (기본적으로 라이브러리 모듈에서 jar는 활성화 상태)
 jar {
     enabled = true
 }
 
-repositories {
-    mavenCentral()
+bootJar {
+    enabled = false
 }
+
+//repositories {
+//    mavenCentral()
+//}
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.28'
 
-    api("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '3.3.4'
 
@@ -38,13 +42,13 @@ dependencies {
     // Resilience4j 의존성 추가
     implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.0'
 
-    implementation project(path: ':commons')
+    api project(':commons')
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '8.10.2' // 루트 프로젝트의 Gradle 버전에 맞춰 설정
-}
+//task wrapper(type: Wrapper) {
+//    gradleVersion = '8.10.2' // 루트 프로젝트의 Gradle 버전에 맞춰 설정
+//}
 
-task prepareKotlinBuildScriptModel {
-
-}
+//task prepareKotlinBuildScriptModel {
+//
+//}

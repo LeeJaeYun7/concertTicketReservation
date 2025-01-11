@@ -2,11 +2,15 @@ plugins {
     id 'java-library'  // 기존 'java' 플러그인에서 'java-library'로 변경
 }
 
-group = 'module-application'
+group = 'concert-reservation-application'
 version = '0.0.1-SNAPSHOT'
 
 // jar로 생성 (기본적으로 라이브러리 모듈에서 jar는 활성화 상태)
 jar {
+    enabled = true
+}
+
+bootJar {
     enabled = true
 }
 
@@ -17,7 +21,7 @@ repositories {
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.28'
 
-    api("org.springframework.book:spring-boot-starter-data-jpa")
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '3.3.4'
 
@@ -45,8 +49,8 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
     implementation 'org.projectlombok:lombok:1.18.28'
 
-    implementation project(path: ':module-domain')
-    implementation project(path: ':commons')
+    api project(':concert-reservation-domain')
+    api project(':commons')
 }
 
 task wrapper(type: Wrapper) {
