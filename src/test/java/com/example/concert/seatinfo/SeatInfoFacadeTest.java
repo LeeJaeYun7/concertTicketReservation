@@ -1,6 +1,5 @@
 package com.example.concert.seatinfo;
 
-import com.example.concert.common.CustomException;
 import com.example.concert.concert.domain.Concert;
 import com.example.concert.concert.enums.ConcertAgeRestriction;
 import com.example.concert.concerthall.domain.ConcertHall;

@@ -1,20 +1,18 @@
 package com.example.concert.seatinfo;
 
 import com.example.concert.concert.domain.Concert;
-import com.example.concert.concert.enums.ConcertAgeRestriction;
-import com.example.concert.concert.repository.ConcertRepository;
-import com.example.concert.concerthall.domain.ConcertHall;
-import com.example.concert.concerthall.repository.ConcertHallRepository;
-import com.example.concert.concertschedule.domain.ConcertSchedule;
-import com.example.concert.concertschedule.repository.ConcertScheduleRepository;
 import com.example.concert.seat.domain.Seat;
 import com.example.concert.seat.repository.SeatRepository;
 import com.example.concert.seatgrade.domain.SeatGrade;
 import com.example.concert.seatgrade.enums.Grade;
-import com.example.concert.seatinfo.domain.SeatInfo;
 import com.example.concert.seatinfo.enums.SeatStatus;
 import com.example.concert.seatinfo.repository.SeatInfoRepository;
 import com.example.concert.seatinfo.service.SeatInfoService;
+import concert.domain.ConcertRepository;
+import concerthall.domain.ConcertHall;
+import concerthall.domain.ConcertHallRepository;
+import concertschedule.domain.ConcertSchedule;
+import concertschedule.domain.ConcertScheduleRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import seatinfo.domain.SeatInfo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,6 +1,5 @@
 package com.example.concert.member;
 
-import com.example.concert.common.CustomException;
 import com.example.concert.member.domain.Member;
 import com.example.concert.member.repository.MemberRepository;
 import com.example.concert.member.service.MemberService;

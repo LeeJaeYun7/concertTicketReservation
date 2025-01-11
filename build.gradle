@@ -30,6 +30,7 @@ dependencies {
 
 	// Spring Boot 관련 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '3.3.4'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// Lombok 의존성
@@ -53,10 +54,6 @@ dependencies {
 	// Redisson 라이브러리 추가
 	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
 
-	// AOP 관련 의존성
-	implementation 'org.aspectj:aspectjweaver:1.9.7'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-
 	// Resilience4j 의존성 추가
 	implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.0'
 
@@ -75,6 +72,10 @@ dependencies {
 	testImplementation 'org.testcontainers:kafka:1.18.3'
 	testImplementation 'org.testcontainers:mysql:1.18.3'
 	testImplementation 'org.awaitility:awaitility'
+
+	implementation project(':global-utils')
+	implementation project(':module-domain')
+	implementation project(':module-application')
 }
 
 tasks.named('test') {

@@ -1,1 +1,5 @@
 rootProject.name = 'concert'
+
+include 'global-utils'
+include 'module-application'
+include 'module-domain'
