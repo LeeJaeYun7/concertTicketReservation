@@ -38,8 +38,7 @@ dependencies {
     // Resilience4j 의존성 추가
     implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.0'
 
-    implementation project(path: ':global-utils')
-
+    implementation project(path: ':commons')
 }
 
 task wrapper(type: Wrapper) {
