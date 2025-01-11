@@ -15,9 +15,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect # MySQL 전용 Dialect 설정
         format_sql: true
-  redis:
-    host: localhost
-    port: 6379
 
   kafka:
     producer:
@@ -32,6 +29,11 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+
+redis:
+  host: 127.0.0.1
+  port: 6379
 
 logging.level:
   org.hibernate.SQL: debug

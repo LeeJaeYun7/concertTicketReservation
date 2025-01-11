@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class RedissonConfig {
 
-    @Value("${spring.redis.host}")
+    @Value("${redis.host}")
     private String redisHost;
 
-    @Value("${spring.redis.port}")
+    @Value("${redis.port}")
     private int redisPort;
 
     private RedissonClient redisson;
