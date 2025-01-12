@@ -3,9 +3,11 @@ package concert.domain.charge.domain;
 import concert.domain.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "charge")
 public class Charge extends BaseTimeEntity {

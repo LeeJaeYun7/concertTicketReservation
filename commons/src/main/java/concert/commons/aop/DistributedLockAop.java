@@ -26,7 +26,7 @@ public class DistributedLockAop {
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
 
-    @Around("@annotation(com.example.concert.lock.DistributedLock)")
+    @Around("@annotation(concert.commons.lock.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 
         Object[] args = joinPoint.getArgs();
