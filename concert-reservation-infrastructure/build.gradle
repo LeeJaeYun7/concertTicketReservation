@@ -44,8 +44,6 @@ dependencies {
     implementation 'org.aspectj:aspectjweaver:1.9.7'
 
     // 프로젝트 내부 의존성
-    api project(':concert-reservation-application')
-    api project(':concert-reservation-domain')
     api project(':commons')
 }
 

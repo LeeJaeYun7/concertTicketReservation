@@ -6,6 +6,6 @@ import concert.domain.concert.domain.Concert;
 import java.util.List;
 
 public interface ConcertCache {
-    void saveTop30Concerts(List<Concert> concerts) throws JsonProcessingException, JsonProcessingException;
+    void saveTop30Concerts(List<Concert> concerts) throws JsonProcessingException;
     List<Concert> findTop30Concerts() throws JsonProcessingException;
 }
