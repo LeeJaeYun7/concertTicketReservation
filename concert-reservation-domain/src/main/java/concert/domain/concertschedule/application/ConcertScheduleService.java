@@ -7,7 +7,7 @@ import concert.commons.utils.TimeProvider;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.concertschedule.domain.ConcertScheduleRepository;
-import concert.domain.seatinfo.application.SeatInfoService;
+import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 public class ConcertScheduleService {
 
   private final TimeProvider timeProvider;
-  private final SeatInfoService seatInfoService;
+  private final ConcertScheduleSeatService concertScheduleSeatService;
   private final ConcertScheduleRepository concertScheduleRepository;
 
   public void createConcertSchedule(Concert concert, LocalDateTime dateTime) {
-    ConcertSchedule concertSchedule = ConcertSchedule.of(concert, dateTime);
+    ConcertSchedule concertSchedule = ConcertSchedule.of(concert.getId(), dateTime);
     concertScheduleRepository.save(concertSchedule);
   }
 
@@ -34,10 +34,17 @@ public class ConcertScheduleService {
     LocalDateTime now = timeProvider.now();
     List<ConcertSchedule> allConcertSchedules = concertScheduleRepository.findAllAfterNowByConcertId(concertId, now);
 
+    for(ConcertSchedule concertSchedule: allConcertSchedules){
+      System.out.println(concertSchedule.getDateTime());
+    }
+
     return allConcertSchedules.stream()
             .filter(concertSchedule -> {
               long concertScheduleId = concertSchedule.getId();
-              return !seatInfoService.getAllAvailableSeats(concertScheduleId).isEmpty();
+              System.out.println("concertScheduleId는?");
+              System.out.println(concertScheduleId);
+              System.out.println(concertScheduleSeatService.getAllAvailableConcertScheduleSeats(concertScheduleId).isEmpty());
+              return !concertScheduleSeatService.getAllAvailableConcertScheduleSeats(concertScheduleId).isEmpty();
             })
             .map(ConcertSchedule::getDateTime)
             .collect(Collectors.toList());

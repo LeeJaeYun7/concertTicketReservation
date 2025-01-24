@@ -11,11 +11,11 @@ public class ReservationRequest {
 
     private String uuid;
     private long concertScheduleId;
-    private long seatNumber;
+    private long concertHallSeatId;
 
-    public ReservationRequest(String uuid, long concertScheduleId, long seatNumber){
+    public ReservationRequest(String uuid, long concertScheduleId, long concertHallSeatId){
         this.uuid = uuid;
         this.concertScheduleId = concertScheduleId;
-        this.seatNumber = seatNumber;
+        this.concertHallSeatId = concertHallSeatId;
     }
 }

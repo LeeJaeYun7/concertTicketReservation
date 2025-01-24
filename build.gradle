@@ -48,6 +48,8 @@ subprojects{
 
 	dependencies {
 
+		implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '3.3.4'
+
 		// Spring Boot 로깅 (자동 포함됨)
 		implementation 'org.springframework.boot:spring-boot-starter-logging'
 
@@ -95,9 +97,7 @@ subprojects{
 		testImplementation 'org.testcontainers:kafka:1.18.3'
 		testImplementation 'org.testcontainers:mysql:1.18.3'
 		testImplementation 'org.awaitility:awaitility'
-
 	}
-
 }
 
 

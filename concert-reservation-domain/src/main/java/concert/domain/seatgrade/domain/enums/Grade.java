@@ -1,10 +1,11 @@
 package concert.domain.seatgrade.domain.enums;
 
 public enum Grade {
+    ALL,
+    RESERVED,
 
-    VIP,
-    R,
-    S,
-    A,
-    ALL
+    STANDING,
+    RESERVED_P,
+    RESERVED_R,
+
 }

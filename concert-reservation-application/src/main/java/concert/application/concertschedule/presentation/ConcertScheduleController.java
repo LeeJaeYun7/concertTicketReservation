@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import concert.application.concertschedule.application.dto.request.ConcertScheduleCreateRequest;
 import concert.application.concertschedule.application.dto.response.AvailableDateTimesResponse;
 import concert.application.concertschedule.application.facade.ConcertScheduleFacade;
-import concert.application.seatinfo.application.dto.response.SeatNumbersResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +33,5 @@ public class ConcertScheduleController {
     AvailableDateTimesResponse availableDateTimesResponse = AvailableDateTimesResponse.of(availableDateTimes);
 
     return ResponseEntity.status(HttpStatus.OK).body(availableDateTimesResponse);
-  }
-
-  @GetMapping("/api/v1/concertSchedule/seats")
-  public ResponseEntity<SeatNumbersResponse> retrieveAvailableSeats(@RequestParam(value = "concertScheduleId") long concertScheduleId) {
-    List<Long> availableSeatNumbers = concertScheduleFacade.getAvailableSeatNumbers(concertScheduleId);
-    SeatNumbersResponse seatsResponse = SeatNumbersResponse.of(availableSeatNumbers);
-
-    return ResponseEntity.status(HttpStatus.OK).body(seatsResponse);
   }
 }

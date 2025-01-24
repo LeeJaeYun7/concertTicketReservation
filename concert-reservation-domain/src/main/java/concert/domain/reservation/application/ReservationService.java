@@ -4,15 +4,15 @@ import concert.domain.concert.application.ConcertService;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concertschedule.application.ConcertScheduleService;
 import concert.domain.concertschedule.domain.ConcertSchedule;
+import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
 import concert.domain.member.application.MemberService;
 import concert.domain.member.domain.Member;
 import concert.domain.reservation.domain.Reservation;
 import concert.domain.reservation.domain.ReservationRepository;
 import concert.domain.reservation.domain.vo.PaymentConfirmedVO;
 import concert.domain.reservation.domain.vo.ReservationVO;
-import concert.domain.seatinfo.application.SeatInfoService;
-import concert.domain.seatinfo.domain.SeatInfo;
-import concert.domain.seatinfo.domain.enums.SeatStatus;
+import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
+import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,13 +27,13 @@ public class ReservationService {
 
   private final MemberService memberService;
   private final ConcertService concertService;
-  private final SeatInfoService seatInfoService;
+  private final ConcertScheduleSeatService concertScheduleSeatService;
   private final ConcertScheduleService concertScheduleService;
   private final ReservationRepository reservationRepository;
 
-  public Reservation createReservation(ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price) {
-    reservationRepository.findReservation(concertSchedule.getId(), seatInfo.getId());
-    Reservation reservation = Reservation.of(concertSchedule, uuid, seatInfo, price);
+  public Reservation createReservation(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
+    reservationRepository.findReservation(concertScheduleId, concertScheduleSeatId);
+    Reservation reservation = Reservation.of(concertId, concertScheduleId, uuid, concertScheduleSeatId, price);
     return reservationRepository.save(reservation);
   }
 
@@ -46,12 +46,14 @@ public class ReservationService {
     long price = vo.getPrice();
 
     ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-    SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
+    long concertId = concertSchedule.getConcertId();
+
+    ConcertScheduleSeat concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, seatNumber);
 
     memberService.decreaseBalance(uuid, price);
     updateStatus(concertScheduleId, seatNumber);
 
-    createReservation(concertSchedule, uuid, seatInfo, price);
+    createReservation(concertId, concertScheduleId, uuid, concertScheduleSeat.getId(), price);
 
     String name = getMember(uuid).getName();
     String concertName = getConcert(concertScheduleId).getName();
@@ -62,9 +64,8 @@ public class ReservationService {
 
   private Concert getConcert(long concertScheduleId) {
     ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-    return concertService.getConcertById(concertSchedule.getConcert().getId());
+    return concertService.getConcertById(concertSchedule.getConcertId());
   }
-
 
   private Member getMember(String uuid) {
     return memberService.getMemberByUuid(uuid);
@@ -76,6 +77,6 @@ public class ReservationService {
   }
 
   private void updateStatus(long concertScheduleId, long seatNumber) {
-    seatInfoService.updateSeatStatus(concertScheduleId, seatNumber, SeatStatus.RESERVED);
+    concertScheduleSeatService.updateSeatStatus(concertScheduleId, seatNumber, SeatStatus.RESERVED);
   }
 }

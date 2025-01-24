@@ -58,7 +58,7 @@ public class KafkaPaymentRequestIntegrationTest {
   @Test
   @DisplayName("PaymentRequestEvent를 Kafka에 발행 후 구독한다")
   void PaymentRequestEvent를_Kafka에_발행_후_구독한다() throws JsonProcessingException {
-    PaymentRequestEvent event = new PaymentRequestEvent(11L, 11L, "abcd", 10, 50000);
+    PaymentRequestEvent event = new PaymentRequestEvent(11L, 11L, "abcd", 50000);
 
     String eventJson = objectMapper.writeValueAsString(event);
     kafkaTemplate.send("payment-request-event", eventJson);

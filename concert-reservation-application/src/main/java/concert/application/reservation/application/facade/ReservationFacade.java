@@ -13,6 +13,7 @@ import concert.domain.concert.application.ConcertService;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concertschedule.application.ConcertScheduleService;
 import concert.domain.concertschedule.domain.ConcertSchedule;
+import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
 import concert.domain.member.application.MemberService;
 import concert.domain.member.domain.Member;
 import concert.domain.reservation.application.ReservationService;
@@ -20,8 +21,8 @@ import concert.domain.reservation.domain.Outbox;
 import concert.domain.reservation.domain.OutboxRepository;
 import concert.domain.reservation.domain.vo.PaymentConfirmedVO;
 import concert.domain.reservation.domain.vo.ReservationVO;
-import concert.domain.seatinfo.application.SeatInfoService;
-import concert.domain.seatinfo.domain.SeatInfo;
+import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
+import concert.domain.seatgrade.domain.application.SeatGradeService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,9 @@ public class ReservationFacade {
   private final TimeProvider timeProvider;
   private final ReservationService reservationService;
   private final MemberService memberService;
-  private final SeatInfoService seatInfoService;
+  private final ConcertScheduleSeatService concertScheduleSeatService;
+  private final SeatGradeService seatGradeService;
+
   private final ConcertService concertService;
   private final ConcertScheduleService concertScheduleService;
   private final OutboxRepository outboxRepository;
@@ -50,22 +53,23 @@ public class ReservationFacade {
   private final CompletableFuture<ReservationVO> reservationFuture = new CompletableFuture<>();
 
   @Transactional
-  public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long seatNumber) throws JsonProcessingException {
-    SeatInfo seatInfo = seatInfoService.getSeatInfoWithPessimisticLock(concertScheduleId, seatNumber);
-    long price = seatInfo.getSeatGrade().getPrice();
+  public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long concertHallSeatId) throws JsonProcessingException {
+    ConcertScheduleSeat concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, concertHallSeatId);
 
-    validateSeatReservation(concertScheduleId, seatNumber);
+    long seatGradeId = concertScheduleSeat.getSeatGradeId();
+    long price = seatGradeService.getSeatGradePrice(seatGradeId);
+
+    validateSeatReservation(concertScheduleId, concertHallSeatId);
     checkBalanceOverPrice(uuid, price);
 
     ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
 
     PaymentRequestEvent event = PaymentRequestEvent.builder()
-            .concertId(concertSchedule.getConcert().getId())
-            .concertScheduleId(concertSchedule.getId())
-            .uuid(uuid)
-            .seatNumber(seatNumber)
-            .price(price)
-            .build();
+                                                   .concertId(concertSchedule.getConcertId())
+                                                   .concertScheduleId(concertSchedule.getId())
+                                                   .uuid(uuid)
+                                                   .price(price)
+                                                   .build();
 
     ObjectMapper objectMapper = new ObjectMapper();
     String eventJson = objectMapper.writeValueAsString(event);
@@ -76,10 +80,10 @@ public class ReservationFacade {
     return reservationFuture;
   }
 
-  private void validateSeatReservation(long concertScheduleId, long seatNumber) {
-    SeatInfo seatInfo = seatInfoService.getSeatInfo(concertScheduleId, seatNumber);
+  private void validateSeatReservation(long concertScheduleId, long concertHallSeatId) {
+    ConcertScheduleSeat concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeat(concertScheduleId, concertHallSeatId);
 
-    if (isFiveMinutesPassed(seatInfo.getUpdatedAt())) {
+    if (isFiveMinutesPassed(concertScheduleSeat.getUpdatedAt())) {
       throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED, Loggable.ALWAYS);
     }
   }
@@ -113,7 +117,7 @@ public class ReservationFacade {
 
   private Concert getConcert(long concertScheduleId) {
     ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
-    return concertService.getConcertById(concertSchedule.getConcert().getId());
+    return concertService.getConcertById(concertSchedule.getConcertId());
   }
 
   private ConcertSchedule getConcertSchedule(long concertScheduleId) {

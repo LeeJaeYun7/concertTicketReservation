@@ -33,11 +33,11 @@ public class ConcertVO {
         this.endAt = endAt;
     }
 
-    public static ConcertVO of(Concert concert){
+    public static ConcertVO of(Concert concert, String concertHallName){
         return ConcertVO.builder()
                 .id(concert.getId())
                 .name(concert.getName())
-                .location(concert.getConcertHall().getName())
+                .location(concertHallName)
                 .genre(concert.getGenre())
                 .performanceTime(concert.getPerformanceTime())
                 .ageRestriction(concert.getAgeRestriction())
