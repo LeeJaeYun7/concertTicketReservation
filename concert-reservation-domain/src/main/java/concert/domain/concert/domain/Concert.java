@@ -1,7 +1,6 @@
 package concert.domain.concert.domain;
 
 import concert.domain.concert.domain.enums.ConcertAgeRestriction;
-import concert.domain.concerthall.domain.ConcertHall;
 import concert.domain.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;

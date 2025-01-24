@@ -3,8 +3,6 @@ package concert.application.reservation.application.dto.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor
 public class ReservationRequest {

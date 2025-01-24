@@ -1,6 +1,5 @@
 package concert.domain.seatgrade.domain;
 
-import concert.domain.concert.domain.Concert;
 import concert.domain.global.entity.BaseTimeEntity;
 import concert.domain.seatgrade.domain.enums.Grade;
 import jakarta.persistence.*;
