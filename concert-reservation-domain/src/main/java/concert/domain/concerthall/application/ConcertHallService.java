@@ -18,10 +18,6 @@ public class ConcertHallService {
 
   private final ConcertHallRepository concertHallRepository;
 
-  public ConcertHall getConcertHallById(long concertHallId) {
-    return concertHallRepository.findById(concertHallId).orElseThrow(() -> new CustomException(ErrorCode.CONCERT_HALL_NOT_FOUND, Loggable.ALWAYS));
-  }
-
   public Map<Long, String> getConcertHallNamesByIds(List<Long> concertHallIds) {
     List<ConcertHall> concertHalls = concertHallRepository.findAllById(concertHallIds);
 
