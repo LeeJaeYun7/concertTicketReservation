@@ -1,18 +1,10 @@
 plugins {
     id 'java'
 }
-
-//group = 'commons'
-//version = '0.0.1-SNAPSHOT'
-
 // jar로 생성 (기본적으로 라이브러리 모듈에서 jar는 활성화 상태)
 jar {
     enabled = true
 }
-//
-//repositories {
-//    mavenCentral()
-//}
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.28'
@@ -35,15 +27,5 @@ dependencies {
     // Redisson 라이브러리 추가
     implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
 
-    // OpenAPI 관련 의존성
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
 }
-
-//task wrapper(type: Wrapper) {
-//    gradleVersion = '8.10.2' // 루트 프로젝트의 Gradle 버전에 맞춰 설정
-//}
-
-//task prepareKotlinBuildScriptModel {
-
-//}

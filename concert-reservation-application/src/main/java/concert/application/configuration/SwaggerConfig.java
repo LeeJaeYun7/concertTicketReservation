@@ -1,4 +1,4 @@
-package concert.commons.config;
+package concert.application.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

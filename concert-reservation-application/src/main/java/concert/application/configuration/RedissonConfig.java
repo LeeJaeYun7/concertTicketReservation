@@ -1,4 +1,4 @@
-package concert.commons.redis;
+package concert.application.configuration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

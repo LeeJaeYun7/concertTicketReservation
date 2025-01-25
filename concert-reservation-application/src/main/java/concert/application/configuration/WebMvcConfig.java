@@ -1,4 +1,4 @@
-package concert.commons.config;
+package concert.application.configuration;
 
 import concert.commons.interceptor.TokenValidationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
