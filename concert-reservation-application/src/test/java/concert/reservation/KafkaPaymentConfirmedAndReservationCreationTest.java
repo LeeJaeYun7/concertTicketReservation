@@ -2,14 +2,14 @@ package concert.reservation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.application.reservation.application.event.PaymentConfirmedEvent;
+import concert.domain.reservation.event.PaymentConfirmedEvent;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concerthall.domain.ConcertHall;
 import concert.domain.concerthallseat.domain.ConcertHallSeat;
 import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
 import concert.domain.member.entity.Member;
-import concert.domain.reservation.application.ReservationService;
+import concert.domain.reservation.txservice.ReservationTxService;
 import concert.domain.reservation.domain.Reservation;
 import concert.domain.reservation.domain.ReservationRepository;
 import concert.domain.seatgrade.domain.SeatGrade;
@@ -62,7 +62,7 @@ public class KafkaPaymentConfirmedAndReservationCreationTest {
   }
 
   @Autowired
-  ReservationService sut;
+  ReservationTxService sut;
   @Autowired
   private TestDataFactory testDataFactory;
 

@@ -2,8 +2,8 @@ package concert.application.reservation.business;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.application.reservation.application.event.PaymentConfirmedEvent;
-import concert.application.reservation.application.event.PaymentRequestEvent;
+import concert.domain.reservation.event.PaymentConfirmedEvent;
+import concert.domain.reservation.event.PaymentRequestEvent;
 import concert.application.reservation.application.kafka.ReservationEventProducer;
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
@@ -16,7 +16,7 @@ import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
 import concert.domain.member.service.MemberService;
 import concert.domain.member.entity.Member;
-import concert.domain.reservation.application.ReservationService;
+import concert.domain.reservation.txservice.ReservationTxService;
 import concert.domain.reservation.domain.Outbox;
 import concert.domain.reservation.domain.OutboxRepository;
 import concert.domain.reservation.domain.vo.PaymentConfirmedVO;
@@ -39,7 +39,7 @@ import java.util.concurrent.CompletableFuture;
 public class ReservationFacade {
 
   private final TimeProvider timeProvider;
-  private final ReservationService reservationService;
+  private final ReservationTxService reservationTxService;
   private final MemberService memberService;
   private final ConcertScheduleSeatService concertScheduleSeatService;
   private final SeatGradeService seatGradeService;
@@ -107,7 +107,7 @@ public class ReservationFacade {
     PaymentConfirmedVO vo = PaymentConfirmedVO.of(concertId, concertScheduleId, uuid, seatNumber, price);
 
     try {
-      reservationService.handlePaymentConfirmed(vo);
+      reservationTxService.handlePaymentConfirmed(vo);
     } catch (Exception e) {
       reservationEventProducer.sendPaymentConfirmedEvent("payment-compensation-topic", event);
       throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);

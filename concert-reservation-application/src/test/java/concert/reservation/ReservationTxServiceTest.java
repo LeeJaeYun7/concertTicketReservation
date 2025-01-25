@@ -6,7 +6,7 @@ import concert.domain.concerthall.domain.ConcertHall;
 import concert.domain.concerthallseat.domain.ConcertHallSeat;
 import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.reservation.application.ReservationService;
+import concert.domain.reservation.txservice.ReservationTxService;
 import concert.domain.reservation.domain.Reservation;
 import concert.domain.reservation.domain.ReservationRepository;
 import concert.domain.seatgrade.domain.SeatGrade;
@@ -30,13 +30,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ReservationServiceTest {
+public class ReservationTxServiceTest {
 
   @Mock
   private ReservationRepository reservationRepository;
 
   @InjectMocks
-  private ReservationService sut;
+  private ReservationTxService sut;
 
   @Nested
   @DisplayName("예약을 생성할 때")

@@ -2,11 +2,11 @@ package concert.application.reservation.consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.application.reservation.application.event.PaymentConfirmedEvent;
+import concert.domain.reservation.event.PaymentConfirmedEvent;
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
 import concert.commons.common.Loggable;
-import concert.domain.reservation.application.ReservationService;
+import concert.domain.reservation.txservice.ReservationTxService;
 import concert.domain.reservation.domain.Outbox;
 import concert.domain.reservation.domain.OutboxRepository;
 import concert.domain.reservation.domain.vo.PaymentConfirmedVO;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @Slf4j
 public class KafkaMessageConsumer {
 
-  private final ReservationService reservationService;
+  private final ReservationTxService reservationTxService;
   private final OutboxRepository outboxRepository;
   private final ObjectMapper objectMapper;
 
@@ -38,7 +38,7 @@ public class KafkaMessageConsumer {
 
     PaymentConfirmedVO vo = PaymentConfirmedVO.of(concertId, concertScheduleId, uuid, seatNumber, price);
 
-    reservationService.handlePaymentConfirmed(vo);
+    reservationTxService.handlePaymentConfirmed(vo);
 
     Optional<Outbox> outboxEvent = outboxRepository.findByMessage(message);
 

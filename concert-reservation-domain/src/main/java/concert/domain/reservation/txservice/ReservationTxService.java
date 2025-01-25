@@ -1,4 +1,4 @@
-package concert.domain.reservation.application;
+package concert.domain.reservation.txservice;
 
 import concert.domain.concert.application.ConcertService;
 import concert.domain.concert.domain.Concert;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ReservationService {
+public class ReservationTxService {
 
   private final MemberService memberService;
   private final ConcertService concertService;

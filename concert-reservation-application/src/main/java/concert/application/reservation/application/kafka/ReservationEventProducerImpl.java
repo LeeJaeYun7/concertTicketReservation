@@ -2,8 +2,8 @@ package concert.application.reservation.application.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.application.reservation.application.event.PaymentConfirmedEvent;
-import concert.application.reservation.application.event.PaymentRequestEvent;
+import concert.domain.reservation.event.PaymentConfirmedEvent;
+import concert.domain.reservation.event.PaymentRequestEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
