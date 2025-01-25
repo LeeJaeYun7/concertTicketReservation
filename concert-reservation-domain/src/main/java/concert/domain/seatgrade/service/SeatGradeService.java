@@ -1,4 +1,4 @@
-package concert.domain.seatgrade.domain.application;
+package concert.domain.seatgrade.service;
 
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;

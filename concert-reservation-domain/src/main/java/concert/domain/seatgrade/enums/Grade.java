@@ -1,4 +1,4 @@
-package concert.domain.seatgrade.domain.enums;
+package concert.domain.seatgrade.enums;
 
 public enum Grade {
     ALL,

@@ -9,8 +9,8 @@ import concert.domain.member.service.MemberService;
 import concert.domain.member.entity.Member;
 import concert.domain.reservation.domain.Reservation;
 import concert.domain.reservation.domain.ReservationRepository;
-import concert.domain.reservation.domain.vo.PaymentConfirmedVO;
-import concert.domain.reservation.domain.vo.ReservationVO;
+import concert.domain.reservation.command.PaymentConfirmedCommand;
+import concert.domain.reservation.vo.ReservationVO;
 import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
 import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class ReservationTxService {
   private final ConcertScheduleService concertScheduleService;
   private final ReservationRepository reservationRepository;
 
+  @Transactional
   public Reservation createReservation(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
     reservationRepository.findReservation(concertScheduleId, concertScheduleSeatId);
     Reservation reservation = Reservation.of(concertId, concertScheduleId, uuid, concertScheduleSeatId, price);
@@ -38,7 +39,7 @@ public class ReservationTxService {
   }
 
   @Transactional
-  public ReservationVO handlePaymentConfirmed(PaymentConfirmedVO vo) {
+  public ReservationVO handlePaymentConfirmed(PaymentConfirmedCommand vo) {
 
     long concertScheduleId = vo.getConcertScheduleId();
     String uuid = vo.getUuid();

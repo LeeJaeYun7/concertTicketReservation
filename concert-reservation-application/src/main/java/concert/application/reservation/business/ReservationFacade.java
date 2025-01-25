@@ -19,10 +19,10 @@ import concert.domain.member.entity.Member;
 import concert.domain.reservation.txservice.ReservationTxService;
 import concert.domain.reservation.domain.Outbox;
 import concert.domain.reservation.domain.OutboxRepository;
-import concert.domain.reservation.domain.vo.PaymentConfirmedVO;
-import concert.domain.reservation.domain.vo.ReservationVO;
+import concert.domain.reservation.command.PaymentConfirmedCommand;
+import concert.domain.reservation.vo.ReservationVO;
 import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
-import concert.domain.seatgrade.domain.application.SeatGradeService;
+import concert.domain.seatgrade.service.SeatGradeService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -104,10 +104,10 @@ public class ReservationFacade {
     long seatNumber = event.getSeatNumber();
     long price = event.getPrice();
 
-    PaymentConfirmedVO vo = PaymentConfirmedVO.of(concertId, concertScheduleId, uuid, seatNumber, price);
+    PaymentConfirmedCommand command = PaymentConfirmedCommand.of(concertId, concertScheduleId, uuid, seatNumber, price);
 
     try {
-      reservationTxService.handlePaymentConfirmed(vo);
+      reservationTxService.handlePaymentConfirmed(command);
     } catch (Exception e) {
       reservationEventProducer.sendPaymentConfirmedEvent("payment-compensation-topic", event);
       throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);

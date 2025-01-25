@@ -1,4 +1,4 @@
-package concert.domain.reservation.domain.vo;
+package concert.domain.reservation.command;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PaymentConfirmedVO {
+public class PaymentConfirmedCommand {
 
     private long concertId;
     private long concertScheduleId;
@@ -15,7 +15,7 @@ public class PaymentConfirmedVO {
     private long price;
 
     @Builder
-    public PaymentConfirmedVO(long concertId, long concertScheduleId, String uuid, long seatNumber, long price){
+    public PaymentConfirmedCommand(long concertId, long concertScheduleId, String uuid, long seatNumber, long price){
         this.concertId = concertId;
         this.concertScheduleId = concertScheduleId;
         this.uuid = uuid;
@@ -23,8 +23,8 @@ public class PaymentConfirmedVO {
         this.price = price;
     }
 
-    public static PaymentConfirmedVO of(long concertId, long concertScheduleId, String uuid, long seatNumber, long price){
-        return PaymentConfirmedVO.builder()
+    public static PaymentConfirmedCommand of(long concertId, long concertScheduleId, String uuid, long seatNumber, long price){
+        return PaymentConfirmedCommand.builder()
                 .concertId(concertId)
                 .concertScheduleId(concertScheduleId)
                 .uuid(uuid)

@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class EventPublishing {
+public class ReservationEventPublishing {
 
   private final OutboxRepository outboxRepository;
   private final ReservationEventProducer reservationEventProducer;
