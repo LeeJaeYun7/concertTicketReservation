@@ -1,11 +1,11 @@
-package concert.domain.member.application;
+package concert.domain.member.service;
 
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
 import concert.commons.common.Loggable;
-import concert.domain.member.domain.Member;
-import concert.domain.member.domain.MemberRepository;
-import concert.domain.member.domain.vo.MemberVO;
+import concert.domain.member.entity.Member;
+import concert.domain.member.entity.dao.MemberRepository;
+import concert.domain.member.vo.MemberVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

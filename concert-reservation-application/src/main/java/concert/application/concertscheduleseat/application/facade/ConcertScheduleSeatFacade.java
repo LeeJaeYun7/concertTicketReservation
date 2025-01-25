@@ -9,7 +9,7 @@ import concert.domain.concerthallseat.application.ConcertHallSeatService;
 import concert.domain.concerthallseat.domain.ConcertHallSeat;
 import concert.domain.concertschedule.application.ConcertScheduleService;
 import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.member.application.MemberService;
+import concert.domain.member.service.MemberService;
 import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
 import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
 import lombok.RequiredArgsConstructor;

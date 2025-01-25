@@ -1,5 +1,6 @@
 package concert.application.hello;
 
+import concert.commons.common.CommonResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,8 +12,10 @@ public class HelloController {
 
 
   @GetMapping("/hello")
-  public String hello() {
-    return "Hello " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+  public CommonResponse hello() {
+
+    return CommonResponse.success("Hello " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+
   }
 
 }

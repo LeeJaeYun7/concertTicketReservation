@@ -8,7 +8,7 @@ import concert.domain.concerthall.domain.ConcertHall;
 import concert.domain.concerthallseat.domain.ConcertHallSeat;
 import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.member.domain.Member;
+import concert.domain.member.entity.Member;
 import concert.domain.reservation.application.ReservationService;
 import concert.domain.reservation.domain.Reservation;
 import concert.domain.reservation.domain.ReservationRepository;

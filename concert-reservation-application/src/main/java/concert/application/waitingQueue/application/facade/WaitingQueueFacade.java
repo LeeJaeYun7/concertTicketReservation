@@ -1,7 +1,7 @@
 package concert.application.waitingQueue.application.facade;
 
 import concert.application.waitingQueue.application.dto.TokenResponse;
-import concert.domain.member.application.MemberService;
+import concert.domain.member.service.MemberService;
 import concert.domain.waitingQueue.application.WaitingQueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

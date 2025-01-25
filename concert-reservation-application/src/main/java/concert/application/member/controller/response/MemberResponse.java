@@ -1,12 +1,8 @@
-package concert.application.member.application.dto.response;
+package concert.application.member.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collector;
 
 @Getter
 @NoArgsConstructor

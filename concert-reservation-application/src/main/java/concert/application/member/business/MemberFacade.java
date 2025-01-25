@@ -1,8 +1,8 @@
-package concert.application.member.application;
+package concert.application.member.business;
 
-import concert.application.member.application.dto.response.MemberResponse;
-import concert.domain.member.application.MemberService;
-import concert.domain.member.domain.vo.MemberVO;
+import concert.application.member.controller.response.MemberResponse;
+import concert.domain.member.service.MemberService;
+import concert.domain.member.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,5 +20,13 @@ public class MemberFacade {
     return members.stream()
             .map(memberVO -> new MemberResponse(memberVO.getUuid(), memberVO.getName()))
             .toList();
+  }
+
+  public MemberVO createMember(String name) {
+    return memberService.createMember(name);
+  }
+
+  public long getMemberBalance(String uuid) {
+    return memberService.getMemberBalance(uuid);
   }
 }

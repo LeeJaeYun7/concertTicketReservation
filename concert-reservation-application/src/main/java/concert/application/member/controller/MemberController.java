@@ -1,11 +1,10 @@
-package concert.application.member.presentation;
+package concert.application.member.controller;
 
-import concert.application.member.application.MemberFacade;
-import concert.application.member.application.dto.request.MemberRequest;
-import concert.application.member.application.dto.response.MemberBalanceResponse;
-import concert.application.member.application.dto.response.MemberResponse;
-import concert.domain.member.application.MemberService;
-import concert.domain.member.domain.vo.MemberVO;
+import concert.application.member.business.MemberFacade;
+import concert.application.member.controller.request.MemberRequest;
+import concert.application.member.controller.response.MemberBalanceResponse;
+import concert.application.member.controller.response.MemberResponse;
+import concert.domain.member.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +17,12 @@ import java.util.List;
 public class MemberController {
 
   private final MemberFacade memberFacade;
-  private final MemberService memberService;
+
 
   @PostMapping("/api/v1/member")
   public ResponseEntity<MemberResponse> createMember(@RequestBody MemberRequest memberRequest) {
     String name = memberRequest.getName();
-    MemberVO memberVO = memberService.createMember(name);
+    MemberVO memberVO = memberFacade.createMember(name);
     MemberResponse memberResponse = MemberResponse.of(memberVO.getUuid(), memberVO.getName());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
@@ -31,7 +30,7 @@ public class MemberController {
 
   @GetMapping("/api/v1/member/balance")
   public ResponseEntity<MemberBalanceResponse> getMemberBalance(@RequestParam(value = "uuid") String uuid) {
-    long balance = memberService.getMemberBalance(uuid);
+    long balance = memberFacade.getMemberBalance(uuid);
     MemberBalanceResponse memberBalanceResponse = MemberBalanceResponse.of(balance);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(memberBalanceResponse);

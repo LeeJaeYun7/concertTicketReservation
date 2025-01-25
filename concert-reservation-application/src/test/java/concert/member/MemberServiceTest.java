@@ -1,10 +1,10 @@
 package concert.member;
 
 import concert.commons.common.CustomException;
-import concert.domain.member.application.MemberService;
-import concert.domain.member.domain.Member;
-import concert.domain.member.domain.MemberRepository;
-import concert.domain.member.domain.vo.MemberVO;
+import concert.domain.member.service.MemberService;
+import concert.domain.member.entity.Member;
+import concert.domain.member.entity.dao.MemberRepository;
+import concert.domain.member.vo.MemberVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

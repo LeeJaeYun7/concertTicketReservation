@@ -1,4 +1,4 @@
-package concert.domain.member.domain;
+package concert.domain.member.entity;
 
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
