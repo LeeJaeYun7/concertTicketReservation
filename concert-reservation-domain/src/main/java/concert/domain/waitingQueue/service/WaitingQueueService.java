@@ -1,10 +1,13 @@
 package concert.domain.waitingQueue.service;
 
-import concert.domain.waitingQueue.vo.WaitingRankVo;
+import concert.domain.waitingQueue.domain.WaitingDTO;
 import concert.domain.waitingQueue.domain.WaitingQueueDao;
+import concert.domain.waitingQueue.vo.WaitingRankVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 @Slf4j
@@ -14,16 +17,48 @@ public class WaitingQueueService {
   private final WaitingQueueDao waitingQueueDao;
 
   public String retrieveToken(long concertId, String uuid) {
-    return waitingQueueDao.addToWaitingQueue(concertId, uuid);
+    WaitingDTO waitingDTO = WaitingDTO.of(uuid);
+
+    return waitingQueueDao.addToWaitingQueue(concertId, waitingDTO);
   }
 
   public WaitingRankVo retrieveWaitingRank(long concertId, String uuid) {
-    long rank = waitingQueueDao.getWaitingRank(concertId, uuid);
+    Collection<WaitingDTO> tokenList = waitingQueueDao.getAllWaitingTokens(concertId);
+
+    long rank = 1L;
+
+    // rank 계산
+    for (WaitingDTO token : tokenList) {
+      if (token.isUuidEquals(uuid)) {
+        break;
+      }
+      rank += 1;
+    }
+
+    // uuid가 대기열에 없음 -> -1을 반환
+    if (rank > tokenList.size()) {
+      rank = -1;
+    }
 
     if (rank == -1) {
       return WaitingRankVo.of(rank, "active");
     }
 
     return WaitingRankVo.of(rank, "waiting");
+  }
+
+  public void migrateFromWaitingToActiveQueue(long concertId) {
+    // waitingQueue 에서 최근 333개 목록 가져옴.
+    Collection<WaitingDTO> tokenList = waitingQueueDao.getAllWaitingTokens(concertId, 333);
+    if (tokenList.isEmpty()) {
+      return;
+    }
+
+    // activeQueue 로 push 함.
+    waitingQueueDao.putActiveQueueToken(concertId, tokenList);
+
+    // waitingQueue 에서 삭제처리
+    waitingQueueDao.deleteWaitQueueTokens(concertId, tokenList);
+
   }
 }

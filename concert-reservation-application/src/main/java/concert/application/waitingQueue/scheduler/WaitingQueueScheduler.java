@@ -1,8 +1,8 @@
 package concert.application.waitingQueue.scheduler;
 
+import concert.application.waitingQueue.business.WaitingQueueCleaningFacade;
 import concert.commons.common.CustomException;
 import concert.domain.concert.application.ConcertService;
-import concert.domain.waitingQueue.domain.WaitingQueueDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +16,8 @@ import java.util.List;
 public class WaitingQueueScheduler {
 
   private final ConcertService concertService;
-  private final WaitingQueueDao waitingQueueDao;
+
+  private final WaitingQueueCleaningFacade waitingQueueCleaningFacade;
 
   @Scheduled(fixedRate = 100000)
   public void processWaitingQueue() {
@@ -24,7 +25,7 @@ public class WaitingQueueScheduler {
 
     for (long concertId : concertIds) {
       try {
-        waitingQueueDao.removeTop333FromWaitingQueue(concertId);
+        waitingQueueCleaningFacade.migrateFromWaitingToActiveQueue(concertId);
       } catch (CustomException e) {
         log.error("대기열을 처리하는 중 에러 발생: " + e.getMessage());
       }
