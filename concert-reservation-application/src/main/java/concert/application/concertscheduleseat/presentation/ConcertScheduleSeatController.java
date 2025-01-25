@@ -1,7 +1,7 @@
 package concert.application.concertscheduleseat.presentation;
 
-import concert.application.concertscheduleseat.application.dto.response.SeatNumbersResponse;
-import concert.application.concertscheduleseat.application.facade.ConcertScheduleSeatFacade;
+import concert.application.concertscheduleseat.presentation.response.SeatNumbersResponse;
+import concert.application.concertscheduleseat.business.ConcertScheduleSeatFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

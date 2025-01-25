@@ -1,9 +1,9 @@
 package concert.application.reservation.presentation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.application.reservation.application.dto.request.ReservationRequest;
-import concert.application.reservation.application.dto.response.ReservationResponse;
-import concert.application.reservation.application.facade.ReservationFacade;
+import concert.application.reservation.presentation.request.ReservationRequest;
+import concert.application.reservation.presentation.response.ReservationResponse;
+import concert.application.reservation.business.ReservationFacade;
 import concert.domain.reservation.domain.vo.ReservationVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

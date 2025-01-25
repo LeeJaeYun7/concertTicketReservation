@@ -1,6 +1,6 @@
 package concert.concertscheduleseat;
 
-import concert.application.concertscheduleseat.application.facade.ConcertScheduleSeatFacade;
+import concert.application.concertscheduleseat.business.ConcertScheduleSeatFacade;
 import concert.commons.common.CustomException;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.domain.Concert;

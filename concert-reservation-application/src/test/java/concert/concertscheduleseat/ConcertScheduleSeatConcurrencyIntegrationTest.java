@@ -1,6 +1,6 @@
 package concert.concertscheduleseat;
 
-import concert.application.concertscheduleseat.application.facade.ConcertScheduleSeatFacade;
+import concert.application.concertscheduleseat.business.ConcertScheduleSeatFacade;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concert.domain.ConcertRepository;
 import concert.domain.concert.domain.enums.ConcertAgeRestriction;
