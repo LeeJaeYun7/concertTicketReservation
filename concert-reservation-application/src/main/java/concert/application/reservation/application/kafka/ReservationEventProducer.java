@@ -1,9 +1,9 @@
 package concert.application.reservation.application.kafka;
 
-import concert.domain.reservation.event.PaymentConfirmedEvent;
-import concert.domain.reservation.event.PaymentRequestEvent;
+import concert.application.reservation.event.PaymentConfirmedEvent;
+import concert.application.reservation.event.PaymentRequestEvent;
 
 public interface ReservationEventProducer {
-    void sendPaymentRequestEvent(String topic, PaymentRequestEvent event);
-    void sendPaymentConfirmedEvent(String topic, PaymentConfirmedEvent event);
+    void sendPaymentRequestEvent(PaymentRequestEvent event);
+    void sendPaymentConfirmedEvent(PaymentConfirmedEvent event);
 }

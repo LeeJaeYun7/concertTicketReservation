@@ -2,7 +2,7 @@ package concert.reservation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.domain.reservation.event.PaymentConfirmedEvent;
+import concert.application.reservation.event.PaymentConfirmedEvent;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concerthall.domain.ConcertHall;
 import concert.domain.concerthallseat.domain.ConcertHallSeat;

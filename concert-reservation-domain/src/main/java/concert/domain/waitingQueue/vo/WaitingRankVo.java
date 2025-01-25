@@ -1,22 +1,22 @@
-package concert.application.waitingQueue.application.dto;
+package concert.domain.waitingQueue.vo;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class WaitingRankResponse {
+public class WaitingRankVo {
 
     private final long waitingRank;
     private final String status;
 
     @Builder
-    public WaitingRankResponse(long waitingRank, String status){
+    public WaitingRankVo(long waitingRank, String status){
         this.waitingRank = waitingRank;
         this.status = status;
     }
 
-    public static WaitingRankResponse of(long waitingRank, String status){
-        return WaitingRankResponse.builder()
+    public static WaitingRankVo of(long waitingRank, String status){
+        return WaitingRankVo.builder()
                 .waitingRank(waitingRank)
                 .status(status)
                 .build();

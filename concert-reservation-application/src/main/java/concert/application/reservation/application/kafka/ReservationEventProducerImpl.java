@@ -2,8 +2,9 @@ package concert.application.reservation.application.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.domain.reservation.event.PaymentConfirmedEvent;
-import concert.domain.reservation.event.PaymentRequestEvent;
+import concert.application.reservation.ReservationConst;
+import concert.application.reservation.event.PaymentConfirmedEvent;
+import concert.application.reservation.event.PaymentRequestEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -12,24 +13,24 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ReservationEventProducerImpl implements ReservationEventProducer {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final ObjectMapper objectMapper;
+  private final KafkaTemplate<String, String> kafkaTemplate;
+  private final ObjectMapper objectMapper;
 
-    public void sendPaymentRequestEvent(String topic, PaymentRequestEvent event) {
-        try {
-            String eventJson = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send(topic, eventJson);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize event to JSON", e);
-        }
+  public void sendPaymentRequestEvent(PaymentRequestEvent event) {
+    try {
+      String eventJson = objectMapper.writeValueAsString(event);
+      kafkaTemplate.send(ReservationConst.PAYMENT_REQUEST_TOPIC, eventJson);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Failed to serialize event to JSON", e);
     }
+  }
 
-    public void sendPaymentConfirmedEvent(String topic, PaymentConfirmedEvent event) {
-        try {
-            String eventJson = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send(topic, eventJson);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize event to JSON", e);
-        }
+  public void sendPaymentConfirmedEvent(PaymentConfirmedEvent event) {
+    try {
+      String eventJson = objectMapper.writeValueAsString(event);
+      kafkaTemplate.send(ReservationConst.PAYMENT_COMPENSATION_TOPIC, eventJson);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Failed to serialize event to JSON", e);
     }
+  }
 }

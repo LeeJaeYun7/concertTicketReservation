@@ -1,4 +1,4 @@
-package concert.application.member.controller.request;
+package concert.application.member.presentation.request;
 
 import lombok.Builder;
 import lombok.Getter;

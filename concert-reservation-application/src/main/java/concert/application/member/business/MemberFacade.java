@@ -1,6 +1,6 @@
 package concert.application.member.business;
 
-import concert.application.member.controller.response.MemberResponse;
+import concert.application.member.presentation.response.MemberResponse;
 import concert.domain.member.service.MemberService;
 import concert.domain.member.vo.MemberVO;
 import lombok.RequiredArgsConstructor;

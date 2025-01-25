@@ -1,4 +1,4 @@
-package concert.application.waitingQueue.application.dto;
+package concert.domain.waitingQueue.vo;
 
 import lombok.Builder;
 import lombok.Getter;

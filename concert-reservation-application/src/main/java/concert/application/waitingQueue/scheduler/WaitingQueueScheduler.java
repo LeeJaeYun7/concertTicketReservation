@@ -1,4 +1,4 @@
-package concert.application.waitingQueue.application.scheduler;
+package concert.application.waitingQueue.scheduler;
 
 import concert.commons.common.CustomException;
 import concert.domain.concert.application.ConcertService;

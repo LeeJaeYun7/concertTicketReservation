@@ -3,7 +3,7 @@ package concert.application.reservation.consumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import concert.application.reservation.ReservationConst;
-import concert.domain.reservation.event.PaymentConfirmedEvent;
+import concert.application.reservation.event.PaymentConfirmedEvent;
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
 import concert.commons.common.Loggable;

@@ -1,4 +1,4 @@
-package concert.commons.aop;
+package concert.infrastructure.distributionlock;
 
 import concert.commons.lock.DistributedLock;
 import lombok.RequiredArgsConstructor;

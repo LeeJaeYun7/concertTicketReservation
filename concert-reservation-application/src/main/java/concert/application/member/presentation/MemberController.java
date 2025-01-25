@@ -1,9 +1,9 @@
-package concert.application.member.controller;
+package concert.application.member.presentation;
 
 import concert.application.member.business.MemberFacade;
-import concert.application.member.controller.request.MemberRequest;
-import concert.application.member.controller.response.MemberBalanceResponse;
-import concert.application.member.controller.response.MemberResponse;
+import concert.application.member.presentation.request.MemberRequest;
+import concert.application.member.presentation.response.MemberBalanceResponse;
+import concert.application.member.presentation.response.MemberResponse;
 import concert.domain.member.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

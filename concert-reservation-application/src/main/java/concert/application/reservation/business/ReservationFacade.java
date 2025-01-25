@@ -2,9 +2,10 @@ package concert.application.reservation.business;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.domain.reservation.event.PaymentConfirmedEvent;
-import concert.domain.reservation.event.PaymentRequestEvent;
+import concert.application.reservation.ReservationConst;
 import concert.application.reservation.application.kafka.ReservationEventProducer;
+import concert.application.reservation.event.PaymentConfirmedEvent;
+import concert.application.reservation.event.PaymentRequestEvent;
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
 import concert.commons.common.Loggable;
@@ -13,15 +14,15 @@ import concert.domain.concert.application.ConcertService;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concertschedule.application.ConcertScheduleService;
 import concert.domain.concertschedule.domain.ConcertSchedule;
+import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
 import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.member.service.MemberService;
 import concert.domain.member.entity.Member;
-import concert.domain.reservation.txservice.ReservationTxService;
+import concert.domain.member.service.MemberService;
+import concert.domain.reservation.command.PaymentConfirmedCommand;
 import concert.domain.reservation.domain.Outbox;
 import concert.domain.reservation.domain.OutboxRepository;
-import concert.domain.reservation.command.PaymentConfirmedCommand;
+import concert.domain.reservation.txservice.ReservationTxService;
 import concert.domain.reservation.vo.ReservationVO;
-import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
 import concert.domain.seatgrade.service.SeatGradeService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -65,16 +66,16 @@ public class ReservationFacade {
     ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
 
     PaymentRequestEvent event = PaymentRequestEvent.builder()
-                                                   .concertId(concertSchedule.getConcertId())
-                                                   .concertScheduleId(concertSchedule.getId())
-                                                   .uuid(uuid)
-                                                   .price(price)
-                                                   .build();
+            .concertId(concertSchedule.getConcertId())
+            .concertScheduleId(concertSchedule.getId())
+            .uuid(uuid)
+            .price(price)
+            .build();
 
     ObjectMapper objectMapper = new ObjectMapper();
     String eventJson = objectMapper.writeValueAsString(event);
 
-    Outbox outbox = Outbox.of("reservation", "payment-request-topic", "PaymentRequest", eventJson, false);
+    Outbox outbox = Outbox.of("reservation", ReservationConst.PAYMENT_REQUEST_TOPIC, "PaymentRequest", eventJson, false);
     outboxRepository.save(outbox);
 
     return reservationFuture;
@@ -109,7 +110,7 @@ public class ReservationFacade {
     try {
       reservationTxService.handlePaymentConfirmed(command);
     } catch (Exception e) {
-      reservationEventProducer.sendPaymentConfirmedEvent("payment-compensation-topic", event);
+      reservationEventProducer.sendPaymentConfirmedEvent(event);
       throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);
     }
   }

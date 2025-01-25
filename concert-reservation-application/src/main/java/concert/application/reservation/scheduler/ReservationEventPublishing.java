@@ -2,8 +2,8 @@ package concert.application.reservation.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.domain.reservation.event.PaymentRequestEvent;
 import concert.application.reservation.application.kafka.ReservationEventProducer;
+import concert.application.reservation.event.PaymentRequestEvent;
 import concert.domain.reservation.domain.Outbox;
 import concert.domain.reservation.domain.OutboxRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +28,16 @@ public class ReservationEventPublishing {
 
     List<Outbox> events = outboxRepository.findTop10UnsentEvents();
 
-    if (!events.isEmpty()) {
+    if (events.isEmpty()) {
+      return;
+    }
 
-      for (Outbox event : events) {
-        String eventJson = event.getMessage();
-        PaymentRequestEvent paymentRequestEvent = objectMapper.readValue(eventJson, PaymentRequestEvent.class);
+    for (Outbox event : events) {
+      String eventJson = event.getMessage();
+      PaymentRequestEvent paymentRequestEvent = objectMapper.readValue(eventJson, PaymentRequestEvent.class);
 
-        reservationEventProducer.sendPaymentRequestEvent("payment-request-topic", paymentRequestEvent);
-        log.info("PaymentEvent Sent");
-      }
+      reservationEventProducer.sendPaymentRequestEvent(paymentRequestEvent);
+      log.info("PaymentEvent Sent");
     }
   }
 }

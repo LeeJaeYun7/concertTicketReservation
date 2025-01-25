@@ -1,6 +1,6 @@
-package concert.domain.waitingQueue.application;
+package concert.domain.waitingQueue.service;
 
-import concert.domain.waitingQueue.application.dto.WaitingRankResponse;
+import concert.domain.waitingQueue.vo.WaitingRankVo;
 import concert.domain.waitingQueue.domain.WaitingQueueDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,13 @@ public class WaitingQueueService {
     return waitingQueueDao.addToWaitingQueue(concertId, uuid);
   }
 
-  public WaitingRankResponse retrieveWaitingRank(long concertId, String uuid) {
+  public WaitingRankVo retrieveWaitingRank(long concertId, String uuid) {
     long rank = waitingQueueDao.getWaitingRank(concertId, uuid);
 
     if (rank == -1) {
-      return WaitingRankResponse.of(rank, "active");
+      return WaitingRankVo.of(rank, "active");
     }
 
-    return WaitingRankResponse.of(rank, "waiting");
+    return WaitingRankVo.of(rank, "waiting");
   }
 }

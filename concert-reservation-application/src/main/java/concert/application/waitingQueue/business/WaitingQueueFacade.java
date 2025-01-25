@@ -1,8 +1,9 @@
-package concert.application.waitingQueue.application.facade;
+package concert.application.waitingQueue.business;
 
-import concert.application.waitingQueue.application.dto.TokenResponse;
+import concert.application.waitingQueue.presentation.response.TokenResponse;
 import concert.domain.member.service.MemberService;
-import concert.domain.waitingQueue.application.WaitingQueueService;
+import concert.domain.waitingQueue.service.WaitingQueueService;
+import concert.domain.waitingQueue.vo.WaitingRankVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,5 +19,9 @@ public class WaitingQueueFacade {
 
     String token = waitingQueueService.retrieveToken(concertId, uuid);
     return TokenResponse.of(token);
+  }
+
+  public WaitingRankVo retrieveWaitingRank(long concertId, String uuid) {
+    return waitingQueueService.retrieveWaitingRank(concertId, uuid);
   }
 }

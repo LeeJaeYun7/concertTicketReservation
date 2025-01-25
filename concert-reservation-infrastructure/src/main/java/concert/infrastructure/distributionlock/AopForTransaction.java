@@ -1,4 +1,4 @@
-package concert.commons.aop;
+package concert.infrastructure.distributionlock;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
