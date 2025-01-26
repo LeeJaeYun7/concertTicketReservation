@@ -1,7 +1,6 @@
 package concert.domain.concert.domain;
 
 import concert.domain.concert.domain.enums.ConcertAgeRestriction;
-import concert.domain.concerthall.domain.ConcertHall;
 import concert.domain.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -25,9 +24,8 @@ public class Concert extends BaseTimeEntity implements Serializable {
   @Column(name = "name")
   private String name;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "concert_hall_id")
-  private ConcertHall concertHall;
+  @Column(name = "concert_hall_id")
+  private long concertHallId;
 
   @Column(name = "genre")
   private String genre;
@@ -45,9 +43,9 @@ public class Concert extends BaseTimeEntity implements Serializable {
   private LocalDate endAt;
 
   @Builder
-  public Concert(String name, ConcertHall concertHall, String genre, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt) {
+  public Concert(String name, long concertHallId, String genre, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt) {
     this.name = name;
-    this.concertHall = concertHall;
+    this.concertHallId = concertHallId;
     this.genre = genre;
     this.performanceTime = performanceTime;
     this.ageRestriction = ageRestriction;
@@ -57,10 +55,10 @@ public class Concert extends BaseTimeEntity implements Serializable {
     this.setUpdatedAt(LocalDateTime.now());
   }
 
-  public static Concert of(String name, ConcertHall concertHall, String genre, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt) {
+  public static Concert of(String name, long concertHallId, String genre, long performanceTime, ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt) {
     return Concert.builder()
             .name(name)
-            .concertHall(concertHall)
+            .concertHallId(concertHallId)
             .genre(genre)
             .performanceTime(performanceTime)
             .ageRestriction(ageRestriction)

@@ -1,8 +1,7 @@
 package concert.domain.seatgrade.domain;
 
-import concert.domain.concert.domain.Concert;
 import concert.domain.global.entity.BaseTimeEntity;
-import concert.domain.seatgrade.domain.enums.Grade;
+import concert.domain.seatgrade.enums.Grade;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,9 +19,8 @@ public class SeatGrade extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "concert_id")
-  private Concert concert;
+  @Column(name = "concert_id")
+  private long concertId;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "grade")
@@ -31,17 +29,17 @@ public class SeatGrade extends BaseTimeEntity {
   private long price;
 
   @Builder
-  public SeatGrade(Concert concert, Grade grade, long price) {
-    this.concert = concert;
+  public SeatGrade(long concertId, Grade grade, long price) {
+    this.concertId = concertId;
     this.grade = grade;
     this.price = price;
     this.setCreatedAt(LocalDateTime.now());
     this.setUpdatedAt(LocalDateTime.now());
   }
 
-  public static SeatGrade of(Concert concert, Grade grade, long price) {
+  public static SeatGrade of(long concertId, Grade grade, long price) {
     return SeatGrade.builder()
-            .concert(concert)
+            .concertId(concertId)
             .grade(grade)
             .price(price)
             .build();

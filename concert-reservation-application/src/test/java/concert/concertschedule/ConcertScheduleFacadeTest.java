@@ -1,18 +1,17 @@
 package concert.concertschedule;
 
-import concert.application.concertschedule.application.facade.ConcertScheduleFacade;
+import concert.application.concertschedule.business.ConcertScheduleFacade;
 import concert.domain.concert.application.ConcertService;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concert.domain.enums.ConcertAgeRestriction;
 import concert.domain.concerthall.domain.ConcertHall;
+import concert.domain.concerthallseat.domain.ConcertHallSeat;
 import concert.domain.concertschedule.application.ConcertScheduleService;
 import concert.domain.concertschedule.domain.ConcertSchedule;
-import concert.domain.seat.domain.Seat;
+import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
 import concert.domain.seatgrade.domain.SeatGrade;
 import concert.domain.seatgrade.domain.enums.Grade;
-import concert.domain.seatinfo.application.SeatInfoService;
-import concert.domain.seatinfo.domain.SeatInfo;
-import concert.domain.seatinfo.domain.enums.SeatStatus;
+import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,9 +37,6 @@ public class ConcertScheduleFacadeTest {
   @Mock
   private ConcertScheduleService concertScheduleService;
 
-  @Mock
-  private SeatInfoService seatInfoService;
-
   @InjectMocks
   private ConcertScheduleFacade sut;
 
@@ -48,39 +44,41 @@ public class ConcertScheduleFacadeTest {
   private Concert concert;
   private ConcertHall concertHall;
 
-  private Seat seatNumber1;
+  private ConcertHallSeat seatNumber1;
 
-  private Seat seatNumber100;
+  private ConcertHallSeat seatNumber100;
   private ConcertSchedule firstSchedule;
   private ConcertSchedule secondSchedule;
-  private SeatInfo firstVIPSeatInfo;
-  private SeatInfo firstRSeatInfo;
-  private SeatInfo secondVIPSeatInfo;
-  private SeatInfo secondRSeatInfo;
+  private ConcertScheduleSeat firstALLConcertScheduleSeat;
+  private ConcertScheduleSeat firstSTANDINGConcertScheduleSeat;
+  private ConcertScheduleSeat secondALLConcertScheduleSeat;
+  private ConcertScheduleSeat secondSTANDINGConcertScheduleSeat;
 
   @BeforeEach
   void setUp() {
     concertId = 1L;
     LocalDate startAt = LocalDate.of(2024, 10, 16);
     LocalDate endAt = LocalDate.of(2024, 10, 18);
-    concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
-    concert = Concert.of("박효신 콘서트", concertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+    concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
+    concert = Concert.of("박효신 콘서트", concertHall.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
-    seatNumber1 = Seat.of(concertHall, 1L);
-    seatNumber100 = Seat.of(concertHall, 100L);
+    seatNumber1 = ConcertHallSeat.of(concertHall.getId(), 1L);
+    seatNumber100 = ConcertHallSeat.of(concertHall.getId(), 100L);
 
-    SeatGrade vipGrade = SeatGrade.of(concert, Grade.VIP, 100000);
-    SeatGrade rGrade = SeatGrade.of(concert, Grade.R, 80000);
+    SeatGrade allGrade = SeatGrade.of(concert.getId(), Grade.ALL, 100000);
+    SeatGrade standingGrade = SeatGrade.of(concert.getId(), Grade.STANDING, 80000);
 
     LocalDateTime firstDateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-    firstSchedule = ConcertSchedule.of(concert, firstDateTime);
-    firstVIPSeatInfo = SeatInfo.of(seatNumber1, firstSchedule, vipGrade, SeatStatus.AVAILABLE);
-    firstRSeatInfo = SeatInfo.of(seatNumber100, firstSchedule, rGrade, SeatStatus.AVAILABLE);
+    firstSchedule = ConcertSchedule.of(concert.getId(), firstDateTime);
+
+    firstALLConcertScheduleSeat = ConcertScheduleSeat.of(seatNumber1.getId(), firstSchedule.getId(), allGrade.getId(), SeatStatus.AVAILABLE);
+    firstSTANDINGConcertScheduleSeat = ConcertScheduleSeat.of(seatNumber100.getId(), firstSchedule.getId(), standingGrade.getId(), SeatStatus.AVAILABLE);
 
     LocalDateTime secondDateTime = LocalDateTime.of(2024, 10, 18, 22, 30);
-    secondSchedule = ConcertSchedule.of(concert, secondDateTime);
-    secondVIPSeatInfo = SeatInfo.of(seatNumber1, secondSchedule, vipGrade, SeatStatus.AVAILABLE);
-    secondRSeatInfo = SeatInfo.of(seatNumber100, secondSchedule, rGrade, SeatStatus.AVAILABLE);
+    secondSchedule = ConcertSchedule.of(concert.getId(), secondDateTime);
+
+    secondALLConcertScheduleSeat = ConcertScheduleSeat.of(seatNumber1.getId(), secondSchedule.getId(), allGrade.getId(), SeatStatus.AVAILABLE);
+    secondSTANDINGConcertScheduleSeat = ConcertScheduleSeat.of(seatNumber100.getId(), secondSchedule.getId(), allGrade.getId(), SeatStatus.AVAILABLE);
   }
 
   @Nested

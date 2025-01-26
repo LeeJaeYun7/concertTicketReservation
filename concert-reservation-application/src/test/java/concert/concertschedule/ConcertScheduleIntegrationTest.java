@@ -7,18 +7,18 @@ import concert.domain.concert.domain.ConcertRepository;
 import concert.domain.concert.domain.enums.ConcertAgeRestriction;
 import concert.domain.concerthall.domain.ConcertHall;
 import concert.domain.concerthall.domain.ConcertHallRepository;
+import concert.domain.concerthallseat.domain.ConcertHallSeat;
+import concert.domain.concerthallseat.domain.ConcertHallSeatRepository;
 import concert.domain.concertschedule.application.ConcertScheduleService;
 import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.concertschedule.domain.ConcertScheduleRepository;
+import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
 import concert.domain.reservation.domain.ReservationRepository;
-import concert.domain.seat.domain.Seat;
-import concert.domain.seat.domain.SeatRepository;
 import concert.domain.seatgrade.domain.SeatGrade;
 import concert.domain.seatgrade.domain.SeatGradeRepository;
 import concert.domain.seatgrade.domain.enums.Grade;
-import concert.domain.seatinfo.domain.SeatInfo;
-import concert.domain.seatinfo.domain.SeatInfoRepository;
-import concert.domain.seatinfo.domain.enums.SeatStatus;
+import concert.domain.concertscheduleseat.domain.ConcertScheduleSeatRepository;
+import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,7 +56,7 @@ public class ConcertScheduleIntegrationTest {
   @Autowired
   private ConcertScheduleService sut;
   @Autowired
-  private SeatRepository seatRepository;
+  private ConcertHallSeatRepository concertHallSeatRepository;
   @Autowired
   private ReservationRepository reservationRepository;
   @Autowired
@@ -66,7 +66,7 @@ public class ConcertScheduleIntegrationTest {
   @Autowired
   private ConcertScheduleRepository concertScheduleRepository;
   @Autowired
-  private SeatInfoRepository seatInfoRepository;
+  private ConcertScheduleSeatRepository concertScheduleSeatRepository;
   @Autowired
   private SeatGradeRepository seatGradeRepository;
 
@@ -77,79 +77,79 @@ public class ConcertScheduleIntegrationTest {
 
     startAt = LocalDate.of(2024, 12, 1);
     endAt = LocalDate.of(2024, 12, 31);
-    concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114");
+    concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
     savedConcertHall = concertHallRepository.save(concertHall);
 
-    firstConcert = Concert.of("김연우 콘서트", savedConcertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
-    secondConcert = Concert.of("박효신 콘서트", savedConcertHall, "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+    firstConcert = Concert.of("김연우 콘서트", savedConcertHall.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+    secondConcert = Concert.of("박효신 콘서트", savedConcertHall.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
     firstDateTime = LocalDateTime.of(2024, 12, 11, 22, 30);
     secondDateTime = LocalDateTime.of(2024, 12, 12, 22, 30);
 
     savedFirstConcert = concertRepository.save(firstConcert);
-    firstConcertSchedule = ConcertSchedule.of(savedFirstConcert, firstDateTime);
-    secondConcertSchedule = ConcertSchedule.of(savedFirstConcert, secondDateTime);
+    firstConcertSchedule = ConcertSchedule.of(savedFirstConcert.getId(), firstDateTime);
+    secondConcertSchedule = ConcertSchedule.of(savedFirstConcert.getId(), secondDateTime);
 
     savedFirstConcertSchedule = concertScheduleRepository.save(firstConcertSchedule);
     savedSecondConcertSchedule = concertScheduleRepository.save(secondConcertSchedule);
 
-    Seat seat11 = Seat.of(savedConcertHall, 11); // 예시로 Seat 객체를 생성
-    Seat seat12 = Seat.of(savedConcertHall, 12);
-    Seat savedSeat11 = seatRepository.save(seat11);
-    Seat savedSeat12 = seatRepository.save(seat12);
+    ConcertHallSeat seat11 = ConcertHallSeat.of(savedConcertHall.getId(), 11); // 예시로 Seat 객체를 생성
+    ConcertHallSeat seat12 = ConcertHallSeat.of(savedConcertHall.getId(), 12);
+    ConcertHallSeat savedSeat11 = concertHallSeatRepository.save(seat11);
+    ConcertHallSeat savedSeat12 = concertHallSeatRepository.save(seat12);
 
-    SeatGrade vipSeatGrade = SeatGrade.of(savedFirstConcert, Grade.VIP, 100000); // 예시로 SeatGrade 생성
-    SeatGrade savedVIPSeatGrade = seatGradeRepository.save(vipSeatGrade);
+    SeatGrade allSeatGrade = SeatGrade.of(savedFirstConcert.getId(), Grade.ALL, 100000); // 예시로 SeatGrade 생성
+    SeatGrade savedALLSeatGrade = seatGradeRepository.save(allSeatGrade);
 
     LocalDateTime now = timeProvider.now();
     LocalDateTime threshold = now.minusMinutes(10);
 
-    SeatInfo firstScheduleSeatInfo1 = SeatInfo.of(savedSeat11, savedFirstConcertSchedule, savedVIPSeatGrade, SeatStatus.AVAILABLE);
-    SeatInfo firstScheduleSeatInfo2 = SeatInfo.of(savedSeat12, savedFirstConcertSchedule, savedVIPSeatGrade, SeatStatus.AVAILABLE);
-    firstScheduleSeatInfo1.changeUpdatedAt(threshold);
-    firstScheduleSeatInfo2.changeUpdatedAt(threshold);
+    ConcertScheduleSeat firstScheduleConcertScheduleSeat1 = ConcertScheduleSeat.of(savedSeat11.getId(), savedFirstConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
+    ConcertScheduleSeat firstScheduleConcertScheduleSeat2 = ConcertScheduleSeat.of(savedSeat12.getId(), savedFirstConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
+    firstScheduleConcertScheduleSeat1.changeUpdatedAt(threshold);
+    firstScheduleConcertScheduleSeat2.changeUpdatedAt(threshold);
 
-    SeatInfo secondScheduleSeatInfo1 = SeatInfo.of(savedSeat11, savedSecondConcertSchedule, savedVIPSeatGrade, SeatStatus.AVAILABLE);
-    SeatInfo secondScheduleSeatInfo2 = SeatInfo.of(savedSeat12, savedSecondConcertSchedule, savedVIPSeatGrade, SeatStatus.AVAILABLE);
+    ConcertScheduleSeat secondScheduleSeatInfo1 = ConcertScheduleSeat.of(savedSeat11.getId(), savedSecondConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
+    ConcertScheduleSeat secondScheduleSeatInfo2 = ConcertScheduleSeat.of(savedSeat12.getId(), savedSecondConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
     secondScheduleSeatInfo1.changeUpdatedAt(threshold);
     secondScheduleSeatInfo2.changeUpdatedAt(threshold);
 
-    seatInfoRepository.save(firstScheduleSeatInfo1);
-    seatInfoRepository.save(firstScheduleSeatInfo2);
-    seatInfoRepository.save(secondScheduleSeatInfo1);
-    seatInfoRepository.save(secondScheduleSeatInfo2);
+    concertScheduleSeatRepository.save(firstScheduleConcertScheduleSeat1);
+    concertScheduleSeatRepository.save(firstScheduleConcertScheduleSeat2);
+    concertScheduleSeatRepository.save(secondScheduleSeatInfo1);
+    concertScheduleSeatRepository.save(secondScheduleSeatInfo2);
 
     // 두번째 테스트
 
     savedSecondConcert = concertRepository.save(secondConcert);
-    thirdConcertSchedule = ConcertSchedule.of(savedSecondConcert, firstDateTime);
-    fourthConcertSchedule = ConcertSchedule.of(savedSecondConcert, secondDateTime);
+    thirdConcertSchedule = ConcertSchedule.of(savedSecondConcert.getId(), firstDateTime);
+    fourthConcertSchedule = ConcertSchedule.of(savedSecondConcert.getId(), secondDateTime);
 
     ConcertSchedule savedThirdConcertSchedule = concertScheduleRepository.save(thirdConcertSchedule);
     ConcertSchedule savedFourthConcertSchedule = concertScheduleRepository.save(fourthConcertSchedule);
 
-    Seat seat21 = Seat.of(savedConcertHall, 21); // 예시로 Seat 객체를 생성
-    Seat seat22 = Seat.of(savedConcertHall, 22);
-    Seat savedSeat21 = seatRepository.save(seat21);
-    Seat savedSeat22 = seatRepository.save(seat22);
+    ConcertHallSeat seat21 = ConcertHallSeat.of(savedConcertHall.getId(), 21); // 예시로 Seat 객체를 생성
+    ConcertHallSeat seat22 = ConcertHallSeat.of(savedConcertHall.getId(), 22);
+    ConcertHallSeat savedSeat21 = concertHallSeatRepository.save(seat21);
+    ConcertHallSeat savedSeat22 = concertHallSeatRepository.save(seat22);
 
-    SeatGrade RSeatGrade = SeatGrade.of(savedSecondConcert, Grade.R, 100000); // 예시로 SeatGrade 생성
+    SeatGrade RSeatGrade = SeatGrade.of(savedSecondConcert.getId(), Grade.ALL, 100000); // 예시로 SeatGrade 생성
     SeatGrade savedRSeatGrade = seatGradeRepository.save(RSeatGrade);
 
-    SeatInfo thirdScheduleSeatInfo1 = SeatInfo.of(savedSeat21, savedThirdConcertSchedule, savedRSeatGrade, SeatStatus.RESERVED);
-    SeatInfo thirdScheduleSeatInfo2 = SeatInfo.of(savedSeat22, savedThirdConcertSchedule, savedRSeatGrade, SeatStatus.RESERVED);
-    thirdScheduleSeatInfo1.changeUpdatedAt(threshold);
-    thirdScheduleSeatInfo2.changeUpdatedAt(threshold);
+    ConcertScheduleSeat thirdConcertScheduleSeat1 = ConcertScheduleSeat.of(savedSeat21.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.RESERVED);
+    ConcertScheduleSeat thirdConcertScheduleSeat2 = ConcertScheduleSeat.of(savedSeat22.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.RESERVED);
+    thirdConcertScheduleSeat1.changeUpdatedAt(threshold);
+    thirdConcertScheduleSeat2.changeUpdatedAt(threshold);
 
-    SeatInfo fourthScheduleSeatInfo1 = SeatInfo.of(savedSeat21, savedFourthConcertSchedule, savedRSeatGrade, SeatStatus.AVAILABLE);
-    SeatInfo fourthScheduleSeatInfo2 = SeatInfo.of(savedSeat22, savedFourthConcertSchedule, savedRSeatGrade, SeatStatus.AVAILABLE);
-    fourthScheduleSeatInfo1.changeUpdatedAt(threshold);
-    fourthScheduleSeatInfo2.changeUpdatedAt(threshold);
+    ConcertScheduleSeat fourthConcertScheduleSeat1 = ConcertScheduleSeat.of(savedSeat21.getId(), savedFourthConcertSchedule.getId(), savedRSeatGrade.getId(), SeatStatus.AVAILABLE);
+    ConcertScheduleSeat fourthConcertScheduleSeat2 = ConcertScheduleSeat.of(savedSeat22.getId(), savedFourthConcertSchedule.getId(), savedRSeatGrade.getId(), SeatStatus.AVAILABLE);
+    fourthConcertScheduleSeat1.changeUpdatedAt(threshold);
+    fourthConcertScheduleSeat2.changeUpdatedAt(threshold);
 
-    seatInfoRepository.save(thirdScheduleSeatInfo1);
-    seatInfoRepository.save(thirdScheduleSeatInfo2);
-    seatInfoRepository.save(fourthScheduleSeatInfo1);
-    seatInfoRepository.save(fourthScheduleSeatInfo2);
+    concertScheduleSeatRepository.save(thirdConcertScheduleSeat1);
+    concertScheduleSeatRepository.save(thirdConcertScheduleSeat2);
+    concertScheduleSeatRepository.save(fourthConcertScheduleSeat1);
+    concertScheduleSeatRepository.save(fourthConcertScheduleSeat2);
   }
 
 

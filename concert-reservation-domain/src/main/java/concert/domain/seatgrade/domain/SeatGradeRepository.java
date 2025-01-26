@@ -1,4 +1,6 @@
 package concert.domain.seatgrade.domain;
 
-public interface SeatGradeRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SeatGradeRepository extends JpaRepository<SeatGrade, Long> {
 }

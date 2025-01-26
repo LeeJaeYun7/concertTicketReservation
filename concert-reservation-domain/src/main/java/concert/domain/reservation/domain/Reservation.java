@@ -1,9 +1,6 @@
 package concert.domain.reservation.domain;
 
-import concert.domain.concert.domain.Concert;
-import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.global.entity.BaseTimeEntity;
-import concert.domain.seatinfo.domain.SeatInfo;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,38 +18,36 @@ public class Reservation extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "concert_id")
-  private Concert concert;
+  @Column(name = "concert_id")
+  private long concertId;
 
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "concert_schedule_id")
-  private ConcertSchedule concertSchedule;
+  @Column(name = "concert_schedule_id")
+  private long concertScheduleId;
 
   private String uuid;
 
-  @OneToOne
-  @JoinColumn(name = "seat_info_id")
-  private SeatInfo seatInfo;
+  @Column(name = "concert_schedule_seat_id")
+  private long concertScheduleSeatId;
 
   private long price;
 
   @Builder
-  public Reservation(ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price) {
-    this.concertSchedule = concertSchedule;
+  public Reservation(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
+    this.concertId = concertId;
+    this.concertScheduleId = concertScheduleId;
     this.uuid = uuid;
-    this.seatInfo = seatInfo;
+    this.concertScheduleSeatId = concertScheduleSeatId;
     this.price = price;
     this.setCreatedAt(LocalDateTime.now());
     this.setUpdatedAt(LocalDateTime.now());
   }
 
-  public static Reservation of(ConcertSchedule concertSchedule, String uuid, SeatInfo seatInfo, long price) {
+  public static Reservation of(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
     return Reservation.builder()
-            .concertSchedule(concertSchedule)
+            .concertId(concertId)
+            .concertScheduleId(concertScheduleId)
             .uuid(uuid)
-            .seatInfo(seatInfo)
+            .concertScheduleSeatId(concertScheduleSeatId)
             .price(price)
             .build();
   }

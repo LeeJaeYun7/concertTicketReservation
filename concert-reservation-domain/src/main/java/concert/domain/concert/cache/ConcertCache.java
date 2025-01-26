@@ -1,6 +1,5 @@
 package concert.domain.concert.cache;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import concert.domain.concert.domain.Concert;
 
