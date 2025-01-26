@@ -42,10 +42,10 @@ public class Member extends BaseTimeEntity {
     String uuid = SnowFlakeGenerator.createSnowFlake();
 
     return Member.builder()
-            .uuid(uuid)
-            .name(name)
-            .balance(0)
-            .build();
+                 .uuid(uuid)
+                 .name(name)
+                 .balance(0)
+                 .build();
   }
 
   public void updateBalance(long balance) {
