@@ -1,6 +1,6 @@
 package concert.concertscheduleseat;
 
-import concert.application.concertscheduleseat.application.facade.ConcertScheduleSeatFacade;
+import concert.application.concertscheduleseat.business.ConcertScheduleSeatFacade;
 import concert.domain.concert.domain.Concert;
 import concert.domain.concert.domain.ConcertRepository;
 import concert.domain.concert.domain.enums.ConcertAgeRestriction;
@@ -10,9 +10,9 @@ import concert.domain.concerthallseat.domain.ConcertHallSeat;
 import concert.domain.concerthallseat.domain.ConcertHallSeatRepository;
 import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.concertschedule.domain.ConcertScheduleRepository;
-import concert.domain.member.application.MemberService;
-import concert.domain.member.domain.Member;
-import concert.domain.member.domain.MemberRepository;
+import concert.domain.member.service.MemberService;
+import concert.domain.member.entity.Member;
+import concert.domain.member.entity.dao.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

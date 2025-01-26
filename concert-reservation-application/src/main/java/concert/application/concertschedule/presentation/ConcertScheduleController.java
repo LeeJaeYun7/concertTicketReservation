@@ -1,9 +1,9 @@
 package concert.application.concertschedule.presentation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.application.concertschedule.application.dto.request.ConcertScheduleCreateRequest;
-import concert.application.concertschedule.application.dto.response.AvailableDateTimesResponse;
-import concert.application.concertschedule.application.facade.ConcertScheduleFacade;
+import concert.application.concertschedule.presentation.request.ConcertScheduleCreateRequest;
+import concert.application.concertschedule.presentation.response.AvailableDateTimesResponse;
+import concert.application.concertschedule.business.ConcertScheduleFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
