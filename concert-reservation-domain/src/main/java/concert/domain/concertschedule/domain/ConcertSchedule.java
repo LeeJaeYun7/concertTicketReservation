@@ -1,6 +1,5 @@
 package concert.domain.concertschedule.domain;
 
-import concert.domain.concert.domain.Concert;
 import concert.domain.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -19,24 +18,23 @@ public class ConcertSchedule extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "concert_id")
-  private Concert concert;
+  @Column(name = "concert_id")
+  private long concertId;
 
   private LocalDateTime dateTime;
 
   @Builder
-  public ConcertSchedule(Concert concert, LocalDateTime dateTime) {
-    this.concert = concert;
+  public ConcertSchedule(long concertId, LocalDateTime dateTime) {
+    this.concertId = concertId;
     this.dateTime = dateTime;
     this.setCreatedAt(LocalDateTime.now());
     this.setUpdatedAt(LocalDateTime.now());
   }
 
-  public static ConcertSchedule of(Concert concert, LocalDateTime dateTime) {
+  public static ConcertSchedule of(long concertId, LocalDateTime dateTime) {
     return ConcertSchedule.builder()
-            .concert(concert)
-            .dateTime(dateTime)
-            .build();
+                          .concertId(concertId)
+                          .dateTime(dateTime)
+                          .build();
   }
 }

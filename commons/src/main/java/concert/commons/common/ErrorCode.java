@@ -26,6 +26,8 @@ public enum ErrorCode {
 
     CONCERT_HALL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 콘서트 홀을 찾을 수 없습니다."),
     SEAT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 좌석을 찾을 수 없습니다."),
+
+    SEAT_GRADE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 좌석 등급을 찾을 수 없습니다."),
     SEAT_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 좌석 정보를 찾을 수 없습니다."),
 
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다."),

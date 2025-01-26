@@ -2,20 +2,13 @@ plugins {
     id 'java-library'  // 기존 'java' 플러그인에서 'java-library'로 변경
 }
 
-group = 'concert-reservation-infrastructure'
-version = '0.0.1-SNAPSHOT'
-
 // jar로 생성 (기본적으로 라이브러리 모듈에서 jar는 활성화 상태)
 jar {
     enabled = true
 }
 
 bootJar {
-    enabled = true
-}
-
-repositories {
-    mavenCentral()
+    enabled = false
 }
 
 dependencies {
@@ -45,12 +38,4 @@ dependencies {
 
     // 프로젝트 내부 의존성
     api project(':commons')
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '8.10.2' // 루트 프로젝트의 Gradle 버전에 맞춰 설정
-}
-
-task prepareKotlinBuildScriptModel {
-
 }

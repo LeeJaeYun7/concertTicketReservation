@@ -1,9 +1,3 @@
-plugins {
-    id 'java-library'  // 기존 'java' 플러그인에서 'java-library'로 변경
-}
-
-group = 'concert-reservation-application'
-version = '0.0.1-SNAPSHOT'
 
 // jar로 생성 (기본적으로 라이브러리 모듈에서 jar는 활성화 상태)
 jar {
@@ -12,10 +6,6 @@ jar {
 
 bootJar {
     enabled = true
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {

@@ -1,8 +1,8 @@
 package concert.application.concert.presentation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.application.concert.application.dto.ConcertResponse;
-import concert.application.concert.application.facade.ConcertFacade;
+import concert.application.concert.presentation.response.ConcertResponse;
+import concert.application.concert.business.ConcertFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

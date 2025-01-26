@@ -34,7 +34,7 @@ public class ConcertService {
 
   public Concert getConcertByName(String concertName) {
     return concertRepository.findByName(concertName)
-            .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND, Loggable.ALWAYS));
+                            .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND, Loggable.ALWAYS));
   }
 
   public List<Long> getAllConcertIds() {
