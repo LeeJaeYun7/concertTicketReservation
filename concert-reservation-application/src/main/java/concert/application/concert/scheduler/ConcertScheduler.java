@@ -3,8 +3,8 @@ package concert.application.concert.scheduler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.cache.ConcertCache;
-import concert.domain.concert.domain.Concert;
-import concert.domain.reservation.domain.ReservationRepository;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.reservation.entities.dao.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,7 +28,7 @@ public class ConcertScheduler {
     LocalDateTime now = timeProvider.now();
     LocalDateTime threeDaysAgo = now.minus(Duration.ofHours(72));
 
-    List<Concert> top30Concerts = reservationRepository.findTop30Concerts(threeDaysAgo);
+    List<ConcertEntity> top30Concerts = reservationRepository.findTop30Concerts(threeDaysAgo);
     concertCache.saveTop30Concerts(top30Concerts);
   }
 }

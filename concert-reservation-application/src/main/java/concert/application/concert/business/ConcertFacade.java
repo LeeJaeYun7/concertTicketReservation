@@ -2,10 +2,10 @@ package concert.application.concert.business;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import concert.application.concert.presentation.response.ConcertResponse;
-import concert.domain.concert.application.ConcertService;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concert.domain.vo.ConcertVO;
-import concert.domain.concerthall.application.ConcertHallService;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.services.ConcertService;
+import concert.domain.concert.entities.vo.ConcertVO;
+import concert.domain.concerthall.services.ConcertHallService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class ConcertFacade {
   private final ConcertHallService concertHallService;
 
   public List<ConcertResponse> getTop30ConcertsFromDB() {
-    List<Concert> concerts = concertService.getTop30ConcertsFromDB();
+    List<ConcertEntity> concerts = concertService.getTop30ConcertsFromDB();
     return getTop30ConcertResponses(concerts);
   }
 
@@ -30,13 +30,13 @@ public class ConcertFacade {
   }
 
   public List<ConcertResponse> getTop30Concerts() throws JsonProcessingException {
-    List<Concert> concerts = concertService.getTop30Concerts();
+    List<ConcertEntity> concerts = concertService.getTop30Concerts();
     return getTop30ConcertResponses(concerts);
   }
 
-  public List<ConcertResponse> getTop30ConcertResponses(List<Concert> concerts){
+  public List<ConcertResponse> getTop30ConcertResponses(List<ConcertEntity> concerts){
     List<Long> concertHallIds = concerts.stream()
-                                        .map(Concert::getConcertHallId)
+                                        .map(ConcertEntity::getConcertHallId)
                                         .distinct()
                                         .collect(Collectors.toList());
 

@@ -1,12 +1,12 @@
 package concert.concert;
 
 import concert.commons.utils.TimeProvider;
-import concert.concert.fixtures.ConcertFixtureFactory;
-import concert.domain.concert.application.ConcertService;
+import concert.concert.fixtures.ConcertEntityFixtureFactory;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.services.ConcertService;
 import concert.domain.concert.cache.ConcertCache;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concert.domain.ConcertRepository;
-import concert.domain.reservation.domain.ReservationRepository;
+import concert.domain.concert.entities.dao.ConcertEntityDAO;
+import concert.domain.reservation.entities.dao.ReservationRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,15 +31,15 @@ public class ConcertServiceIntegrationTest {
   private ConcertService sut;
 
   @Autowired
-  private ConcertRepository concertRepository;
+  private ConcertEntityDAO concertEntityDAO;
 
   @Test
   @DisplayName("콘서트를 저장하고 가져온다")
   void 콘서트를_저장하고_가져온다() {
-    Concert concert = ConcertFixtureFactory.createConcertWithParameters(1L, "박효신 콘서트", 120);
-    concertRepository.save(concert);
+    ConcertEntity concert = ConcertEntityFixtureFactory.createConcertWithParameters(1L, "박효신 콘서트", 120);
+    concertEntityDAO.save(concert);
 
-    Concert foundConcert = sut.getConcertById(1L);
+    ConcertEntity foundConcert = sut.getConcertById(1L);
 
     assertThat(foundConcert).isNotNull();
     assertThat(foundConcert.getId()).isEqualTo(1L);

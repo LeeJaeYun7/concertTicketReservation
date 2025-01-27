@@ -36,4 +36,5 @@ dependencies {
     implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.0'
 
     api project(':commons')
+    api project(':concert-reservation-infrastructure')
 }

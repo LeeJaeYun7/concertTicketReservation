@@ -1,7 +1,7 @@
 package concert.application.concert.presentation.response;
 
-import concert.domain.concert.domain.enums.ConcertAgeRestriction;
-import concert.domain.concert.domain.vo.ConcertVO;
+import concert.domain.concert.entities.enums.ConcertAgeRestriction;
+import concert.domain.concert.entities.vo.ConcertVO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

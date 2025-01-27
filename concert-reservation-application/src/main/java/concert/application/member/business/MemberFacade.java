@@ -1,8 +1,8 @@
 package concert.application.member.business;
 
 import concert.application.member.presentation.response.MemberResponse;
-import concert.domain.member.service.MemberService;
-import concert.domain.member.vo.MemberVO;
+import concert.domain.member.services.MemberService;
+import concert.domain.member.entities.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

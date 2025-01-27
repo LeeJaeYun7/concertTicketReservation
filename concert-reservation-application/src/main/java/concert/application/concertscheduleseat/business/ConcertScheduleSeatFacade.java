@@ -4,14 +4,14 @@ import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
 import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
-import concert.domain.concert.application.ConcertService;
-import concert.domain.concerthallseat.application.ConcertHallSeatService;
-import concert.domain.concerthallseat.domain.ConcertHallSeat;
-import concert.domain.concertschedule.application.ConcertScheduleService;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.member.service.MemberService;
-import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
-import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
+import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
+import concert.domain.concert.services.ConcertScheduleService;
+import concert.domain.concert.services.ConcertService;
+import concert.domain.concerthall.services.ConcertHallSeatService;
+import concert.domain.concerthall.entities.ConcertHallSeatEntity;
+import concert.domain.member.services.MemberService;
+import concert.domain.concert.services.ConcertScheduleSeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +37,9 @@ public class ConcertScheduleSeatFacade {
 
     long concertId = concertScheduleService.getConcertScheduleById(concertScheduleId).getConcertId();
     long concertHallId = concertService.getConcertById(concertId).getConcertHallId();
-    List<ConcertHallSeat> concertHallSeats = concertHallSeatService.getConcertHallSeatsByConcertHallId(concertHallId);
+    List<ConcertHallSeatEntity> concertHallSeatEntities = concertHallSeatService.getConcertHallSeatsByConcertHallId(concertHallId);
 
-    return concertScheduleSeatService.getAllAvailableConcertScheduleSeatNumbers(concertScheduleId, concertHallSeats);
+    return concertScheduleSeatService.getAllAvailableConcertScheduleSeatNumbers(concertScheduleId, concertHallSeatEntities);
   }
 
   @Transactional
@@ -68,8 +68,8 @@ public class ConcertScheduleSeatFacade {
   private boolean validateSeatWithDistributedLock(long concertScheduleId, long concertHallSeatNumber) {
     String lockName = "SEAT_RESERVATION:" + concertScheduleId + ":" + concertHallSeatNumber;
 
-    ConcertScheduleSeat concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, concertHallSeatNumber);
-    return concertScheduleSeat.getStatus().equals(SeatStatus.AVAILABLE) && isFiveMinutesPassed(concertScheduleSeat.getUpdatedAt());
+    ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, concertHallSeatNumber);
+    return concertScheduleSeat.getStatus().equals(ConcertScheduleSeatStatus.AVAILABLE) && isFiveMinutesPassed(concertScheduleSeat.getUpdatedAt());
   }
 
   private boolean isFiveMinutesPassed(LocalDateTime updatedAt) {

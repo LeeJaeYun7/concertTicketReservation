@@ -1,8 +1,8 @@
 package concert.application.concertschedule.business;
 
-import concert.domain.concert.application.ConcertService;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concertschedule.application.ConcertScheduleService;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.services.ConcertScheduleService;
+import concert.domain.concert.services.ConcertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class ConcertScheduleFacade {
   private final ConcertScheduleService concertScheduleService;
 
   public void createConcertSchedule(String concertName, LocalDateTime dateTime) {
-    Concert concert = concertService.getConcertByName(concertName);
+    ConcertEntity concert = concertService.getConcertByName(concertName);
     concertScheduleService.createConcertSchedule(concert, dateTime);
   }
 

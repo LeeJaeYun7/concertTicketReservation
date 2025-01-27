@@ -1,9 +1,9 @@
 package concert.member;
 
-import concert.domain.member.service.MemberService;
-import concert.domain.member.entity.Member;
-import concert.domain.member.entity.dao.MemberRepository;
-import concert.domain.member.vo.MemberVO;
+import concert.domain.member.services.MemberService;
+import concert.domain.member.entities.Member;
+import concert.domain.member.entities.dao.MemberRepository;
+import concert.domain.member.entities.vo.MemberVO;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

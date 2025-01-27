@@ -3,16 +3,16 @@ package concert.reservation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import concert.application.reservation.event.PaymentConfirmedEvent;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concerthall.domain.ConcertHall;
-import concert.domain.concerthallseat.domain.ConcertHallSeat;
-import concert.domain.concertschedule.domain.ConcertSchedule;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.member.entity.Member;
-import concert.domain.reservation.txservice.ReservationTxService;
-import concert.domain.reservation.domain.Reservation;
-import concert.domain.reservation.domain.ReservationRepository;
-import concert.domain.seatgrade.domain.SeatGrade;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.entities.ConcertScheduleEntity;
+import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concerthall.entities.ConcertHallEntity;
+import concert.domain.concerthall.entities.ConcertHallSeatEntity;
+import concert.domain.member.entities.Member;
+import concert.domain.reservation.txservices.ReservationTxService;
+import concert.domain.reservation.entities.Reservation;
+import concert.domain.reservation.entities.dao.ReservationRepository;
 import concert.factory.TestDataFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -76,12 +76,12 @@ public class KafkaPaymentConfirmedAndReservationCreationTest {
   private String memberUuid;
 
   private Member member;
-  private Concert concert;
-  private ConcertHall concertHall;
-  private ConcertSchedule concertSchedule;
-  private ConcertHallSeat seat;
-  private SeatGrade seatGrade;
-  private ConcertScheduleSeat concertScheduleSeat;
+  private ConcertEntity concert;
+  private ConcertHallEntity concertHallEntity;
+  private ConcertScheduleEntity concertSchedule;
+  private ConcertHallSeatEntity seat;
+  private SeatGradeEntity seatGrade;
+  private ConcertScheduleSeatEntity concertScheduleSeat;
 
   @DynamicPropertySource
   static void overrideProperties(DynamicPropertyRegistry registry) {
@@ -98,11 +98,11 @@ public class KafkaPaymentConfirmedAndReservationCreationTest {
     member = testDataFactory.createMember();
     memberUuid = member.getUuid();
 
-    concertHall = testDataFactory.createConcertHall();
-    concert = testDataFactory.createConcert(concertHall);
+    concertHallEntity = testDataFactory.createConcertHall();
+    concert = testDataFactory.createConcert(concertHallEntity);
     concertSchedule = testDataFactory.createConcertSchedule(concert);
 
-    seat = testDataFactory.createSeat(concertHall);
+    seat = testDataFactory.createSeat(concertHallEntity);
     seatGrade = testDataFactory.createSeatGrade(concert);
     concertScheduleSeat = testDataFactory.createConcertScheduleSeat(seat, concertSchedule, seatGrade);
   }

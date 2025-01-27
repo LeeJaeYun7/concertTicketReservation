@@ -10,20 +10,20 @@ import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
 import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
-import concert.domain.concert.application.ConcertService;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concertschedule.application.ConcertScheduleService;
-import concert.domain.concertschedule.domain.ConcertSchedule;
-import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.member.entity.Member;
-import concert.domain.member.service.MemberService;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.entities.ConcertScheduleEntity;
+import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.services.ConcertScheduleService;
+import concert.domain.concert.services.ConcertService;
+import concert.domain.concert.services.ConcertScheduleSeatService;
+import concert.domain.concert.services.SeatGradeService;
+import concert.domain.member.entities.Member;
+import concert.domain.member.services.MemberService;
 import concert.domain.reservation.command.PaymentConfirmedCommand;
-import concert.domain.reservation.domain.Outbox;
-import concert.domain.reservation.domain.OutboxRepository;
-import concert.domain.reservation.txservice.ReservationTxService;
+import concert.domain.reservation.entities.Outbox;
+import concert.domain.reservation.entities.dao.OutboxRepository;
+import concert.domain.reservation.txservices.ReservationTxService;
 import concert.domain.reservation.vo.ReservationVO;
-import concert.domain.seatgrade.service.SeatGradeService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class ReservationFacade {
 
   @Transactional
   public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long concertHallSeatId) throws JsonProcessingException {
-    ConcertScheduleSeat concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, concertHallSeatId);
+    ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, concertHallSeatId);
 
     long seatGradeId = concertScheduleSeat.getSeatGradeId();
     long price = seatGradeService.getSeatGradePrice(seatGradeId);
@@ -63,7 +63,7 @@ public class ReservationFacade {
     validateSeatReservation(concertScheduleId, concertHallSeatId);
     checkBalanceOverPrice(uuid, price);
 
-    ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+    ConcertScheduleEntity concertSchedule = getConcertSchedule(concertScheduleId);
 
     PaymentRequestEvent event = PaymentRequestEvent.builder()
             .concertId(concertSchedule.getConcertId())
@@ -82,7 +82,7 @@ public class ReservationFacade {
   }
 
   private void validateSeatReservation(long concertScheduleId, long concertHallSeatId) {
-    ConcertScheduleSeat concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeat(concertScheduleId, concertHallSeatId);
+    ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeat(concertScheduleId, concertHallSeatId);
 
     if (isFiveMinutesPassed(concertScheduleSeat.getUpdatedAt())) {
       throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED, Loggable.ALWAYS);
@@ -116,12 +116,12 @@ public class ReservationFacade {
   }
 
 
-  private Concert getConcert(long concertScheduleId) {
-    ConcertSchedule concertSchedule = getConcertSchedule(concertScheduleId);
+  private ConcertEntity getConcert(long concertScheduleId) {
+    ConcertScheduleEntity concertSchedule = getConcertSchedule(concertScheduleId);
     return concertService.getConcertById(concertSchedule.getConcertId());
   }
 
-  private ConcertSchedule getConcertSchedule(long concertScheduleId) {
+  private ConcertScheduleEntity getConcertSchedule(long concertScheduleId) {
     return concertScheduleService.getConcertScheduleById(concertScheduleId);
   }
 

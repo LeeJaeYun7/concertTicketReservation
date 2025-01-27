@@ -4,7 +4,7 @@ import concert.application.member.business.MemberFacade;
 import concert.application.member.presentation.request.MemberRequest;
 import concert.application.member.presentation.response.MemberBalanceResponse;
 import concert.application.member.presentation.response.MemberResponse;
-import concert.domain.member.vo.MemberVO;
+import concert.domain.member.entities.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
