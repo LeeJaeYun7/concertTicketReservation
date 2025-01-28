@@ -6,17 +6,13 @@ import concert.application.reservation.ReservationConst;
 import concert.application.reservation.application.kafka.ReservationEventProducer;
 import concert.application.reservation.event.PaymentConfirmedEvent;
 import concert.application.reservation.event.PaymentRequestEvent;
-import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.exceptions.ConcertException;
 import concert.domain.concert.exceptions.ConcertExceptionType;
 import concert.domain.concert.services.ConcertScheduleService;
-import concert.domain.concert.services.ConcertService;
 import concert.domain.concert.services.ConcertScheduleSeatService;
-import concert.domain.concert.services.SeatGradeService;
-import concert.domain.member.entities.Member;
-import concert.domain.member.services.MemberService;
+import concert.domain.concert.services.ConcertSeatGradeService;
 import concert.domain.reservation.command.PaymentConfirmedCommand;
 import concert.domain.reservation.entities.Outbox;
 import concert.domain.reservation.entities.dao.OutboxRepository;
@@ -42,11 +38,9 @@ public class ReservationApplicationService {
 
   private final TimeProvider timeProvider;
   private final ReservationTxService reservationTxService;
-  private final MemberService memberService;
   private final ConcertScheduleSeatService concertScheduleSeatService;
-  private final SeatGradeService seatGradeService;
+  private final ConcertSeatGradeService concertSeatGradeService;
 
-  private final ConcertService concertService;
   private final ConcertScheduleService concertScheduleService;
   private final OutboxRepository outboxRepository;
   private final ReservationEventProducer reservationEventProducer;
@@ -58,19 +52,19 @@ public class ReservationApplicationService {
   public CompletableFuture<ReservationVO> createReservation(String uuid, long concertScheduleId, long concertHallSeatId) throws JsonProcessingException {
     ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, concertHallSeatId);
 
-    long seatGradeId = concertScheduleSeat.getSeatGradeId();
-    long price = seatGradeService.getSeatGradePrice(seatGradeId);
+    long concertSeatGradeId = concertScheduleSeat.getSeatGradeId();
+    long price = concertSeatGradeService.getConcertSeatGradePrice(concertSeatGradeId);
 
     validateConcertScheduleSeatReservation(concertScheduleId, concertHallSeatId);
 
     ConcertScheduleEntity concertSchedule = getConcertSchedule(concertScheduleId);
 
     PaymentRequestEvent event = PaymentRequestEvent.builder()
-            .concertId(concertSchedule.getConcertId())
-            .concertScheduleId(concertSchedule.getId())
-            .uuid(uuid)
-            .price(price)
-            .build();
+                                                   .concertId(concertSchedule.getConcertId())
+                                                   .concertScheduleId(concertSchedule.getId())
+                                                   .uuid(uuid)
+                                                   .price(price)
+                                                   .build();
 
     ObjectMapper objectMapper = new ObjectMapper();
     String eventJson = objectMapper.writeValueAsString(event);
@@ -108,19 +102,9 @@ public class ReservationApplicationService {
   }
 
 
-  private ConcertEntity getConcert(long concertScheduleId) {
-    ConcertScheduleEntity concertSchedule = getConcertSchedule(concertScheduleId);
-    return concertService.getConcertById(concertSchedule.getConcertId());
-  }
-
   private ConcertScheduleEntity getConcertSchedule(long concertScheduleId) {
     return concertScheduleService.getConcertScheduleById(concertScheduleId);
   }
-
-  private Member getMember(String uuid) {
-    return memberService.getMemberByUuid(uuid);
-  }
-
 
   private boolean isFiveMinutesPassed(LocalDateTime updatedAt) {
     LocalDateTime now = timeProvider.now();

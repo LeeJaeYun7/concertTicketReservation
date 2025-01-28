@@ -7,7 +7,7 @@ import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.dao.ConcertEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
-import concert.domain.concert.entities.dao.SeatGradeEntityDAO;
+import concert.domain.concert.entities.dao.ConcertSeatGradeEntityDAO;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
 import concert.domain.concert.entities.enums.SeatGrade;
@@ -15,7 +15,7 @@ import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.dao.ConcertHallEntityDAO;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.concerthall.entities.dao.ConcertHallSeatEntityDAO;
-import concert.domain.member.entities.Member;
+import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.entities.dao.MemberRepository;
 import concert.domain.reservation.entities.dao.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class TestDataFactory {
   private ConcertHallSeatEntityDAO concertHallSeatEntityDAO;
 
   @Autowired
-  private SeatGradeEntityDAO seatGradeEntityDAO;
+  private ConcertSeatGradeEntityDAO concertSeatGradeEntityDAO;
 
   @Autowired
   private ConcertScheduleSeatEntityDAO concertScheduleSeatEntityDAO;
@@ -52,8 +52,8 @@ public class TestDataFactory {
   private ReservationRepository reservationRepository;
 
 
-  public Member createMember() {
-    Member member = Member.of("Tom Cruise");
+  public MemberEntity createMember() {
+    MemberEntity member = MemberEntity.of("Tom Cruise");
     return memberRepository.save(member);
   }
 
@@ -81,7 +81,7 @@ public class TestDataFactory {
 
   public ConcertSeatGradeEntity createSeatGrade(ConcertEntity concert) {
     ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
-    return seatGradeEntityDAO.save(allSeatGrade);
+    return concertSeatGradeEntityDAO.save(allSeatGrade);
   }
 
   public ConcertScheduleSeatEntity createConcertScheduleSeat(ConcertHallSeatEntity seat, ConcertScheduleEntity concertSchedule, ConcertSeatGradeEntity seatGrade) {

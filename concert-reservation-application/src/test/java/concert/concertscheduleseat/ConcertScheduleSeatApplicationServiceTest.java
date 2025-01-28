@@ -11,6 +11,7 @@ import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
+import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.services.MemberService;
 import concert.domain.member.entities.Member;
 import concert.domain.concert.services.ConcertScheduleSeatService;
@@ -53,7 +54,7 @@ public class ConcertScheduleSeatApplicationServiceTest {
     @Disabled
     void 모든_유효성_검사를_통과하고_좌석_예약이_6분전에_일어났으면_좌석_예약이_가능하다() {
 
-      Member member = Member.of("Tom Cruise");
+      MemberEntity member = MemberEntity.of("Tom Cruise");
       String uuid = member.getUuid().toString();
 
       long concertScheduleId = 1L;
@@ -84,7 +85,7 @@ public class ConcertScheduleSeatApplicationServiceTest {
     @DisplayName("좌석_예약이_4분전에_일어났으면_좌석_예약이_불가능하다")
     void 좌석_예약이_4분전에_일어났으면_좌석_예약이_불가능하다() {
 
-      Member member = Member.of("Tom Cruise");
+      MemberEntity member = MemberEntity.of("Tom Cruise");
       String uuid = member.getUuid().toString();
 
       long concertScheduleId = 1L;

@@ -7,7 +7,7 @@ import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.dao.ConcertEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
-import concert.domain.concert.entities.dao.SeatGradeEntityDAO;
+import concert.domain.concert.entities.dao.ConcertSeatGradeEntityDAO;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
 import concert.domain.concert.entities.enums.SeatGrade;
@@ -67,7 +67,7 @@ public class ConcertScheduleIntegrationTest {
   @Autowired
   private ConcertScheduleSeatEntityDAO concertScheduleSeatEntityDAO;
   @Autowired
-  private SeatGradeEntityDAO seatGradeEntityDAO;
+  private ConcertSeatGradeEntityDAO concertSeatGradeEntityDAO;
 
   @BeforeEach
   void setUp() {
@@ -98,7 +98,7 @@ public class ConcertScheduleIntegrationTest {
     ConcertHallSeatEntity savedSeat12 = concertHallSeatEntityDAO.save(seat12);
 
     ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(savedFirstConcert.getId(), SeatGrade.ALL, 100000); // 예시로 SeatGrade 생성
-    ConcertSeatGradeEntity savedALLSeatGrade = seatGradeEntityDAO.save(allSeatGrade);
+    ConcertSeatGradeEntity savedALLSeatGrade = concertSeatGradeEntityDAO.save(allSeatGrade);
 
     LocalDateTime now = timeProvider.now();
     LocalDateTime threshold = now.minusMinutes(10);
@@ -133,7 +133,7 @@ public class ConcertScheduleIntegrationTest {
     ConcertHallSeatEntity savedSeat22 = concertHallSeatEntityDAO.save(seat22);
 
     ConcertSeatGradeEntity RSeatGrade = ConcertSeatGradeEntity.of(savedSecondConcert.getId(), SeatGrade.ALL, 100000); // 예시로 SeatGrade 생성
-    ConcertSeatGradeEntity savedRSeatGrade = seatGradeEntityDAO.save(RSeatGrade);
+    ConcertSeatGradeEntity savedRSeatGrade = concertSeatGradeEntityDAO.save(RSeatGrade);
 
     ConcertScheduleSeatEntity thirdConcertScheduleSeat1 = ConcertScheduleSeatEntity.of(savedSeat21.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.RESERVED);
     ConcertScheduleSeatEntity thirdConcertScheduleSeat2 = ConcertScheduleSeatEntity.of(savedSeat22.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.RESERVED);

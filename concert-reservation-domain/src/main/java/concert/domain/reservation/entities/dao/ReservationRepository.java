@@ -1,7 +1,7 @@
 package concert.domain.reservation.entities.dao;
 
 import concert.domain.concert.entities.ConcertEntity;
-import concert.domain.reservation.entities.Reservation;
+import concert.domain.reservation.entities.ReservationEntity;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -14,17 +14,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("SELECT r FROM Reservation r WHERE r.concertScheduleId = :concertScheduleId AND r.concertScheduleSeatId = :concertScheduleSeatId")
-  Optional<Reservation> findReservation(@Param(value = "concertScheduleId") long concertScheduleId, @Param(value = "concertScheduleSeatId") long concertScheduleSeatId);
+  @Query("SELECT r FROM ReservationEntity r WHERE r.concertScheduleId = :concertScheduleId AND r.concertScheduleSeatId = :concertScheduleSeatId")
+  Optional<ReservationEntity> findReservation(@Param(value = "concertScheduleId") long concertScheduleId, @Param(value = "concertScheduleSeatId") long concertScheduleSeatId);
 
   // 최근 3일 간 콘서트 티켓 예약량 기준으로 Top30을 반환
   @Query("SELECT c, r.salesCount " +
           "FROM ConcertEntity c " +
           "JOIN (SELECT r.concertId AS concertId, COUNT(*) AS salesCount " +
-          "FROM Reservation r " +
+          "FROM ReservationEntity r " +
           "WHERE r.createdAt >= :threeDaysAgo " +
           "GROUP BY r.concertId) r " +
           "ON c.id = r.concertId " +

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name = "reservation", indexes = {@Index(name = "idx_created_at_concert_id", columnList = "created_at, concert_id")})
-public class Reservation extends BaseTimeEntity {
+public class ReservationEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Reservation extends BaseTimeEntity {
   private long price;
 
   @Builder
-  public Reservation(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
+  public ReservationEntity(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
     this.concertId = concertId;
     this.concertScheduleId = concertScheduleId;
     this.uuid = uuid;
@@ -42,13 +42,13 @@ public class Reservation extends BaseTimeEntity {
     this.setUpdatedAt(LocalDateTime.now());
   }
 
-  public static Reservation of(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
-    return Reservation.builder()
-            .concertId(concertId)
-            .concertScheduleId(concertScheduleId)
-            .uuid(uuid)
-            .concertScheduleSeatId(concertScheduleSeatId)
-            .price(price)
-            .build();
+  public static ReservationEntity of(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
+    return ReservationEntity.builder()
+                            .concertId(concertId)
+                            .concertScheduleId(concertScheduleId)
+                            .uuid(uuid)
+                            .concertScheduleSeatId(concertScheduleSeatId)
+                            .price(price)
+                            .build();
   }
 }

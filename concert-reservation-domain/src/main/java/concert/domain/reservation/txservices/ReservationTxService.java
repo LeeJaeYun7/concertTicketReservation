@@ -6,9 +6,9 @@ import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concert.services.ConcertService;
+import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.services.MemberService;
-import concert.domain.member.entities.Member;
-import concert.domain.reservation.entities.Reservation;
+import concert.domain.reservation.entities.ReservationEntity;
 import concert.domain.reservation.entities.dao.ReservationRepository;
 import concert.domain.reservation.command.PaymentConfirmedCommand;
 import concert.domain.reservation.vo.ReservationVO;
@@ -32,9 +32,9 @@ public class ReservationTxService {
   private final ReservationRepository reservationRepository;
 
   @Transactional
-  public Reservation createReservation(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
+  public ReservationEntity createReservation(long concertId, long concertScheduleId, String uuid, long concertScheduleSeatId, long price) {
     reservationRepository.findReservation(concertScheduleId, concertScheduleSeatId);
-    Reservation reservation = Reservation.of(concertId, concertScheduleId, uuid, concertScheduleSeatId, price);
+    ReservationEntity reservation = ReservationEntity.of(concertId, concertScheduleId, uuid, concertScheduleSeatId, price);
     return reservationRepository.save(reservation);
   }
 
@@ -67,7 +67,7 @@ public class ReservationTxService {
     return concertService.getConcertById(concertSchedule.getConcertId());
   }
 
-  private Member getMember(String uuid) {
+  private MemberEntity getMember(String uuid) {
     return memberService.getMemberByUuid(uuid);
   }
 

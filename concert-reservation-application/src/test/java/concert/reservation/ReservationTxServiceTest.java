@@ -9,8 +9,8 @@ import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
 import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
+import concert.domain.reservation.entities.ReservationEntity;
 import concert.domain.reservation.txservices.ReservationTxService;
-import concert.domain.reservation.entities.Reservation;
 import concert.domain.reservation.entities.dao.ReservationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -59,13 +59,13 @@ public class ReservationTxServiceTest {
       ConcertSeatGradeEntity seatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
       ConcertScheduleSeatEntity concertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
-      Reservation reservation = Reservation.of(concertSchedule.getConcertId(), concertSchedule.getId(), uuid, concertScheduleSeat.getId(), 50000);
+      ReservationEntity reservation = ReservationEntity.of(concertSchedule.getConcertId(), concertSchedule.getId(), uuid, concertScheduleSeat.getId(), 50000);
 
-      given(reservationRepository.save(any(Reservation.class))).willReturn(reservation);
+      given(reservationRepository.save(any(ReservationEntity.class))).willReturn(reservation);
 
       sut.createReservation(concertSchedule.getConcertId(), concertSchedule.getId(), uuid, concertScheduleSeat.getId(), 50000);
 
-      verify(reservationRepository, times(1)).save(any(Reservation.class));
+      verify(reservationRepository, times(1)).save(any(ReservationEntity.class));
     }
   }
 }

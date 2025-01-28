@@ -9,9 +9,9 @@ import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
-import concert.domain.member.entities.Member;
+import concert.domain.member.entities.MemberEntity;
+import concert.domain.reservation.entities.ReservationEntity;
 import concert.domain.reservation.txservices.ReservationTxService;
-import concert.domain.reservation.entities.Reservation;
 import concert.domain.reservation.entities.dao.ReservationRepository;
 import concert.factory.TestDataFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +75,7 @@ public class KafkaPaymentConfirmedAndReservationCreationTest {
 
   private String memberUuid;
 
-  private Member member;
+  private MemberEntity member;
   private ConcertEntity concert;
   private ConcertHallEntity concertHallEntity;
   private ConcertScheduleEntity concertSchedule;
@@ -120,7 +120,7 @@ public class KafkaPaymentConfirmedAndReservationCreationTest {
 
     // sut.handlePaymentConfirmed(consumedEvent);
 
-    Reservation reservation = reservationRepository.findAll().get(0);
+    ReservationEntity reservation = reservationRepository.findAll().get(0);
     assertNotNull(reservation);
     assertEquals(memberUuid, reservation.getUuid());
     assertEquals(50000L, reservation.getPrice());

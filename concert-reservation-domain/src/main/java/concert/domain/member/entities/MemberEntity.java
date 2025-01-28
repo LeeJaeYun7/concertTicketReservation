@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "member")
 @NoArgsConstructor
-public class Member extends BaseTimeEntity {
+public class MemberEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class Member extends BaseTimeEntity {
   private long balance;
 
   @Builder
-  public Member(String uuid, String name, long balance) {
+  public MemberEntity(String uuid, String name, long balance) {
     this.uuid = uuid;
     this.name = name;
     this.balance = balance;
@@ -35,14 +35,14 @@ public class Member extends BaseTimeEntity {
     this.setUpdatedAt(LocalDateTime.now());
   }
 
-  public static Member of(String name) {
+  public static MemberEntity of(String name) {
     String uuid = SnowFlakeGenerator.createSnowFlake();
 
-    return Member.builder()
-            .uuid(uuid)
-            .name(name)
-            .balance(0)
-            .build();
+    return MemberEntity.builder()
+                        .uuid(uuid)
+                        .name(name)
+                        .balance(0)
+                        .build();
   }
 }
 

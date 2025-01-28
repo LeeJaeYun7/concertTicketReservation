@@ -1,6 +1,6 @@
 package concert.domain.member.services;
 
-import concert.domain.member.entities.Member;
+import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.entities.dao.MemberRepository;
 import concert.domain.member.entities.vo.MemberVO;
 import concert.domain.member.exceptions.MemberException;
@@ -21,20 +21,20 @@ public class MemberService {
 
   @Transactional
   public MemberVO createMember(String name) {
-    Member member = Member.of(name);
-    Member savedMember = memberRepository.save(member);
+    MemberEntity member = MemberEntity.of(name);
+    MemberEntity savedMember = memberRepository.save(member);
 
     return MemberVO.of(savedMember.getUuid(), savedMember.getName());
   }
 
-  public Member getMemberByUuid(String uuid) {
+  public MemberEntity getMemberByUuid(String uuid) {
     return memberRepository.findByUuid(uuid)
-            .orElseThrow(() -> new MemberException(MemberExceptionType.MEMBER_NOT_FOUND));
+                           .orElseThrow(() -> new MemberException(MemberExceptionType.MEMBER_NOT_FOUND));
   }
 
-  public Member getMemberByUuidWithLock(String uuid) {
+  public MemberEntity getMemberByUuidWithLock(String uuid) {
     return memberRepository.findByUuidWithLock(uuid)
-            .orElseThrow(() -> new MemberException(MemberExceptionType.MEMBER_NOT_FOUND));
+                           .orElseThrow(() -> new MemberException(MemberExceptionType.MEMBER_NOT_FOUND));
   }
 
   @Transactional
@@ -43,10 +43,10 @@ public class MemberService {
   }
 
   public List<MemberVO> getMembers() {
-    List<Member> members = memberRepository.findRecentMembers(10000);
+    List<MemberEntity> members = memberRepository.findRecentMembers(10000);
 
     return members.stream()
-            .map(member -> new MemberVO(member.getUuid(), member.getName()))
-            .toList();
+                  .map(member -> new MemberVO(member.getUuid(), member.getName()))
+                  .toList();
   }
 }

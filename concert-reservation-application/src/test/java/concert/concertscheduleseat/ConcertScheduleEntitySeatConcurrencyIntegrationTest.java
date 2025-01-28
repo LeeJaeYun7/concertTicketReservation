@@ -10,8 +10,8 @@ import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.dao.ConcertHallEntityDAO;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.concerthall.entities.dao.ConcertHallSeatEntityDAO;
+import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.services.MemberService;
-import concert.domain.member.entities.Member;
 import concert.domain.member.entities.dao.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public class ConcertScheduleEntitySeatConcurrencyIntegrationTest {
   private ConcertHallSeatEntityDAO concertHallSeatEntityDAO;
 
   private String token;
-  private List<Member> savedMembers;
+  private List<MemberEntity> savedMembers;
   private List<String> memberUuids;
 
   private ConcertEntity savedConcert;
@@ -71,7 +71,7 @@ public class ConcertScheduleEntitySeatConcurrencyIntegrationTest {
     memberUuids = new ArrayList<>();
 
     for (int i = 0; i < 1000; i++) {
-      Member member = Member.of("Member" + i);
+      MemberEntity member = MemberEntity.of("Member" + i);
       savedMembers.add(memberRepository.save(member));
       memberUuids.add(savedMembers.get(i).getUuid());
     }

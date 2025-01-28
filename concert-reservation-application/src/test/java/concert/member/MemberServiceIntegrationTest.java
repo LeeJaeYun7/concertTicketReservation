@@ -1,7 +1,7 @@
 package concert.member;
 
+import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.services.MemberService;
-import concert.domain.member.entities.Member;
 import concert.domain.member.entities.dao.MemberRepository;
 import concert.domain.member.entities.vo.MemberVO;
 import org.junit.jupiter.api.Disabled;
@@ -48,7 +48,7 @@ public class MemberServiceIntegrationTest {
       String name = "Tom Cruise";
       MemberVO memberVO = sut.createMember(name);
 
-      Member member = sut.getMemberByUuid(memberVO.getUuid());
+      MemberEntity member = sut.getMemberByUuid(memberVO.getUuid());
       assertEquals("Tom Cruise", member.getName());
     }
 
@@ -58,7 +58,7 @@ public class MemberServiceIntegrationTest {
       String name = "Tom Cruise";
       MemberVO memberVO = sut.createMember(name);
 
-      Member member = sut.getMemberByUuidWithLock(memberVO.getUuid());
+      MemberEntity member = sut.getMemberByUuidWithLock(memberVO.getUuid());
       assertEquals("Tom Cruise", member.getName());
     }
   }

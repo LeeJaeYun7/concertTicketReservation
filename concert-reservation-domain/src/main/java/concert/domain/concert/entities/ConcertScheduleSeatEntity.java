@@ -43,11 +43,11 @@ public class ConcertScheduleSeatEntity extends BaseTimeEntity {
 
   public static ConcertScheduleSeatEntity of(long concertHallSeatId, long concertScheduleId, long seatGradeId, ConcertScheduleSeatStatus status) {
     return ConcertScheduleSeatEntity.builder()
-                              .concertHallSeatId(concertHallSeatId)
-                              .concertScheduleId(concertScheduleId)
-                              .seatGradeId(seatGradeId)
-                              .status(status)
-                              .build();
+                                    .concertHallSeatId(concertHallSeatId)
+                                    .concertScheduleId(concertScheduleId)
+                                    .seatGradeId(seatGradeId)
+                                    .status(status)
+                                    .build();
   }
 
   public void updateStatus(ConcertScheduleSeatStatus status) {
