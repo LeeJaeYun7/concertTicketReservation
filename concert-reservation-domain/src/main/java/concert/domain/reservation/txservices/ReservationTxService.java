@@ -51,7 +51,6 @@ public class ReservationTxService {
 
     ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeatWithDistributedLock(concertScheduleId, seatNumber);
 
-    memberService.decreaseBalance(uuid, price);
     updateStatus(concertScheduleId, seatNumber);
 
     createReservation(concertId, concertScheduleId, uuid, concertScheduleSeat.getId(), price);

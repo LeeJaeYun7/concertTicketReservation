@@ -1,12 +1,11 @@
 package concert.domain.concert.services;
 
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
+import concert.domain.concert.exceptions.ConcertException;
+import concert.domain.concert.exceptions.ConcertExceptionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,6 +51,6 @@ public class ConcertScheduleService {
 
     public ConcertScheduleEntity getConcertScheduleById(long concertScheduleId) {
         return concertScheduleEntityDAO.findById(concertScheduleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_SCHEDULE_NOT_FOUND, Loggable.ALWAYS));
+                .orElseThrow(() -> new ConcertException(ConcertExceptionType.CONCERT_SCHEDULE_NOT_FOUND));
     }
 }

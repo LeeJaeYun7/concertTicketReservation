@@ -2,7 +2,6 @@ package concert.commons.interceptor;
 
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +26,7 @@ public class TokenValidationInterceptor implements HandlerInterceptor {
 
         if(isTokenValidationRequired(request.getRequestURI())) {
             if (token == null) {
-                throw new CustomException(ErrorCode.NOT_VALID_TOKEN, Loggable.ALWAYS);
+                throw new CustomException(ErrorCode.NOT_VALID_TOKEN);
             }
         }
 

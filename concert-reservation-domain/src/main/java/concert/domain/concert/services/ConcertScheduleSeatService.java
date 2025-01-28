@@ -1,12 +1,11 @@
 package concert.domain.concert.services;
 
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
+import concert.domain.concert.exceptions.ConcertException;
+import concert.domain.concert.exceptions.ConcertExceptionType;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.infrastructure.distributedlock.DistributedLock;
 import lombok.RequiredArgsConstructor;
@@ -78,13 +77,13 @@ public class ConcertScheduleSeatService {
 
   public ConcertScheduleSeatEntity getConcertScheduleSeat(long concertScheduleId, long concertHallSeatId) {
     return concertScheduleSeatEntityDAO.findConcertScheduleSeatEntity(concertScheduleId, concertHallSeatId)
-            .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
+            .orElseThrow(() -> new ConcertException(ConcertExceptionType.CONCERT_SCHEDULE_SEAT_NOT_FOUND));
   }
 
 
   @DistributedLock(key = "#concertHallId + '_' + #number", waitTime = 60, leaseTime = 300000, timeUnit = TimeUnit.MILLISECONDS)
   public ConcertScheduleSeatEntity getConcertScheduleSeatWithDistributedLock(long concertScheduleId, long concertHallSeatNumber) {
     return concertScheduleSeatEntityDAO.findConcertScheduleSeatEntityWithDistributedLock(concertScheduleId, concertHallSeatNumber)
-            .orElseThrow(() -> new CustomException(ErrorCode.SEAT_NOT_FOUND, Loggable.ALWAYS));
+            .orElseThrow(() -> new ConcertException(ConcertExceptionType.CONCERT_SCHEDULE_SEAT_NOT_FOUND));
   }
 }

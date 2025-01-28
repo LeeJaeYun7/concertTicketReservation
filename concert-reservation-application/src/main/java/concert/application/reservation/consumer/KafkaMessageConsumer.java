@@ -6,7 +6,6 @@ import concert.application.reservation.ReservationConst;
 import concert.application.reservation.event.PaymentConfirmedEvent;
 import concert.commons.common.CustomException;
 import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.domain.reservation.txservices.ReservationTxService;
 import concert.domain.reservation.entities.Outbox;
 import concert.domain.reservation.entities.dao.OutboxRepository;
@@ -52,6 +51,6 @@ public class KafkaMessageConsumer {
 
   @KafkaListener(topics = ReservationConst.PAYMENT_FAILED_TOPIC)
   public void receivePaymentFailedEvent(String message) throws JsonProcessingException {
-    throw new CustomException(ErrorCode.PAYMENT_FAILED, Loggable.NEVER);
+    throw new CustomException(ErrorCode.PAYMENT_FAILED);
   }
 }

@@ -6,13 +6,12 @@ import concert.application.reservation.ReservationConst;
 import concert.application.reservation.application.kafka.ReservationEventProducer;
 import concert.application.reservation.event.PaymentConfirmedEvent;
 import concert.application.reservation.event.PaymentRequestEvent;
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.exceptions.ConcertException;
+import concert.domain.concert.exceptions.ConcertExceptionType;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concert.services.ConcertService;
 import concert.domain.concert.services.ConcertScheduleSeatService;
@@ -22,6 +21,8 @@ import concert.domain.member.services.MemberService;
 import concert.domain.reservation.command.PaymentConfirmedCommand;
 import concert.domain.reservation.entities.Outbox;
 import concert.domain.reservation.entities.dao.OutboxRepository;
+import concert.domain.reservation.exceptions.ReservationException;
+import concert.domain.reservation.exceptions.ReservationExceptionType;
 import concert.domain.reservation.txservices.ReservationTxService;
 import concert.domain.reservation.vo.ReservationVO;
 import lombok.Getter;
@@ -60,8 +61,7 @@ public class ReservationApplicationService {
     long seatGradeId = concertScheduleSeat.getSeatGradeId();
     long price = seatGradeService.getSeatGradePrice(seatGradeId);
 
-    validateSeatReservation(concertScheduleId, concertHallSeatId);
-    checkBalanceOverPrice(uuid, price);
+    validateConcertScheduleSeatReservation(concertScheduleId, concertHallSeatId);
 
     ConcertScheduleEntity concertSchedule = getConcertSchedule(concertScheduleId);
 
@@ -81,23 +81,15 @@ public class ReservationApplicationService {
     return reservationFuture;
   }
 
-  private void validateSeatReservation(long concertScheduleId, long concertHallSeatId) {
+  private void validateConcertScheduleSeatReservation(long concertScheduleId, long concertHallSeatId) {
     ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeat(concertScheduleId, concertHallSeatId);
 
     if (isFiveMinutesPassed(concertScheduleSeat.getUpdatedAt())) {
-      throw new CustomException(ErrorCode.SEAT_RESERVATION_EXPIRED, Loggable.ALWAYS);
+      throw new ConcertException(ConcertExceptionType.SEAT_RESERVATION_EXPIRED);
     }
   }
 
-  private void checkBalanceOverPrice(String uuid, long price) {
-    long balance = getMember(uuid).getBalance();
-
-    if (balance - price < 0) {
-      throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE, Loggable.NEVER);
-    }
-  }
-
-  public void handlePaymentConfirmed(PaymentConfirmedEvent event) {
+  public void handlePaymentConfirmed(PaymentConfirmedEvent event) throws ReservationException {
 
     long concertId = event.getConcertId();
     long concertScheduleId = event.getConcertScheduleId();
@@ -111,7 +103,7 @@ public class ReservationApplicationService {
       reservationTxService.handlePaymentConfirmed(command);
     } catch (Exception e) {
       reservationEventProducer.sendPaymentConfirmedEvent(event);
-      throw new CustomException(ErrorCode.RESERVATION_FAILED, Loggable.ALWAYS);
+      throw new ReservationException(ReservationExceptionType.RESERVATION_FAILED);
     }
   }
 

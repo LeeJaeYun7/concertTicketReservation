@@ -1,8 +1,5 @@
 package concert.domain.member.entities;
 
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.commons.utils.SnowFlakeGenerator;
 import concert.domain.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -46,13 +43,6 @@ public class Member extends BaseTimeEntity {
             .name(name)
             .balance(0)
             .build();
-  }
-
-  public void updateBalance(long balance) {
-    if (balance < 0) {
-      throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE, Loggable.ALWAYS);
-    }
-    this.balance = balance;
   }
 }
 

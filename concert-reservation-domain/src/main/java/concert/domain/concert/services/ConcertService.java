@@ -1,13 +1,12 @@
 package concert.domain.concert.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.cache.ConcertCache;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.dao.ConcertEntityDAO;
+import concert.domain.concert.exceptions.ConcertException;
+import concert.domain.concert.exceptions.ConcertExceptionType;
 import concert.domain.reservation.entities.dao.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,12 +28,12 @@ public class ConcertService {
 
   public ConcertEntity getConcertById(long concertId) {
     return concertEntityDAO.findById(concertId)
-            .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND, Loggable.ALWAYS));
+            .orElseThrow(() -> new ConcertException(ConcertExceptionType.CONCERT_NOT_FOUND));
   }
 
   public ConcertEntity getConcertByName(String concertName) {
     return concertEntityDAO.findByName(concertName)
-                            .orElseThrow(() -> new CustomException(ErrorCode.CONCERT_NOT_FOUND, Loggable.ALWAYS));
+                            .orElseThrow(() -> new ConcertException(ConcertExceptionType.CONCERT_NOT_FOUND));
   }
 
   public List<Long> getAllConcertIds() {

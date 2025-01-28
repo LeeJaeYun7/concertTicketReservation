@@ -1,11 +1,10 @@
 package concert.application.concert.business;
 
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
+import concert.domain.concert.exceptions.ConcertException;
+import concert.domain.concert.exceptions.ConcertExceptionType;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concert.services.ConcertService;
 import concert.domain.concerthall.services.ConcertHallSeatService;
@@ -50,7 +49,7 @@ public class ConcertScheduleSeatApplicationService {
     boolean isReservable = validateSeatWithDistributedLock(concertScheduleId, concertHallSeatNumber);
 
     if (!isReservable) {
-      throw new CustomException(ErrorCode.NOT_VALID_SEAT, Loggable.ALWAYS);
+      throw new ConcertException(ConcertExceptionType.NOT_VALID_SEAT);
     }
 
     concertScheduleSeatService.changeUpdatedAtWithDistributedLock(concertScheduleId, concertHallSeatNumber);

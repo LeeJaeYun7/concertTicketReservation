@@ -7,10 +7,7 @@ public class CustomException extends RuntimeException {
 
     private ErrorCode errorCode;
 
-    private Loggable loggable;
-
-    public CustomException(ErrorCode errorCode, Loggable loggable) {
+    public CustomException(ErrorCode errorCode) {
         this.errorCode = errorCode;
-        this.loggable = loggable;
     }
 }
