@@ -72,7 +72,6 @@ public class ConcertScheduleEntitySeatConcurrencyIntegrationTest {
 
     for (int i = 0; i < 1000; i++) {
       Member member = Member.of("Member" + i);
-      member.updateBalance(100000);
       savedMembers.add(memberRepository.save(member));
       memberUuids.add(savedMembers.get(i).getUuid());
     }

@@ -1,7 +1,6 @@
 package concert.domain.reservation.exceptions;
 
 import concert.commons.common.ErrorResponse;
-import concert.domain.concerthall.exceptions.ConcertHallException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
