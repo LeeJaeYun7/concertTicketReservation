@@ -1,7 +1,6 @@
 package concert.application.concert.business;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.application.concert.presentation.response.ConcertResponse;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.services.ConcertService;
 import concert.domain.concert.entities.vo.ConcertVO;
@@ -20,21 +19,21 @@ public class ConcertFacade {
   private final ConcertService concertService;
   private final ConcertHallService concertHallService;
 
-  public List<ConcertResponse> getTop30ConcertsFromDB() {
+  public List<ConcertVO> getTop30ConcertsFromDB() {
     List<ConcertEntity> concerts = concertService.getTop30ConcertsFromDB();
-    return getTop30ConcertResponses(concerts);
+    return getTop30ConcertVOs(concerts);
   }
 
   public void saveTop30ConcertsIntoRedis() throws JsonProcessingException {
     concertService.saveTop30ConcertsIntoRedis();
   }
 
-  public List<ConcertResponse> getTop30Concerts() throws JsonProcessingException {
+  public List<ConcertVO> getTop30Concerts() throws JsonProcessingException {
     List<ConcertEntity> concerts = concertService.getTop30Concerts();
-    return getTop30ConcertResponses(concerts);
+    return getTop30ConcertVOs(concerts);
   }
 
-  public List<ConcertResponse> getTop30ConcertResponses(List<ConcertEntity> concerts){
+  public List<ConcertVO> getTop30ConcertVOs(List<ConcertEntity> concerts){
     List<Long> concertHallIds = concerts.stream()
                                         .map(ConcertEntity::getConcertHallId)
                                         .distinct()
@@ -47,7 +46,6 @@ public class ConcertFacade {
                       String concertHallName = concertHallNames.get(concert.getConcertHallId());
                       return ConcertVO.of(concert, concertHallName); // VO 생성
                     })
-                   .map(ConcertResponse::of)
                    .collect(Collectors.toList());
   }
 }

@@ -2,7 +2,7 @@ package concert.domain.waitingqueue.services;
 
 import concert.domain.waitingqueue.entities.WaitingDTO;
 import concert.domain.waitingqueue.entities.WaitingQueueDao;
-import concert.domain.waitingqueue.entities.vo.WaitingRankVo;
+import concert.domain.waitingqueue.entities.vo.WaitingRankVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class WaitingQueueService {
     return waitingQueueDao.addToWaitingQueue(concertId, waitingDTO);
   }
 
-  public WaitingRankVo retrieveWaitingRank(long concertId, String uuid) {
+  public WaitingRankVO retrieveWaitingRank(long concertId, String uuid) {
     Collection<WaitingDTO> tokenList = waitingQueueDao.getAllWaitingTokens(concertId);
 
     long rank = 1L;
@@ -41,10 +41,10 @@ public class WaitingQueueService {
     }
 
     if (rank == -1) {
-      return WaitingRankVo.of(rank, "active");
+      return WaitingRankVO.of(rank, "active");
     }
 
-    return WaitingRankVo.of(rank, "waiting");
+    return WaitingRankVO.of(rank, "waiting");
   }
 
   public void migrateFromWaitingToActiveQueue(long concertId) {

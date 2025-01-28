@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ConcertVO {
 
-    private long id;
+    private long concertId;
     private String name;
     private String genre;
     private String location;
@@ -21,9 +21,9 @@ public class ConcertVO {
     private LocalDate startAt;
     private LocalDate endAt;
     @Builder
-    public ConcertVO(long id, String name, String genre, String location, long performanceTime,
+    public ConcertVO(long concertId, String name, String genre, String location, long performanceTime,
                      ConcertAgeRestriction ageRestriction, LocalDate startAt, LocalDate endAt) {
-        this.id = id;
+        this.concertId = concertId;
         this.name = name;
         this.genre = genre;
         this.location = location;
@@ -35,14 +35,14 @@ public class ConcertVO {
 
     public static ConcertVO of(ConcertEntity concert, String concertHallName){
         return ConcertVO.builder()
-                .id(concert.getId())
-                .name(concert.getName())
-                .location(concertHallName)
-                .genre(concert.getGenre())
-                .performanceTime(concert.getPerformanceTime())
-                .ageRestriction(concert.getAgeRestriction())
-                .startAt(concert.getStartAt())
-                .endAt(concert.getEndAt())
-                .build();
+                        .concertId(concert.getId())
+                        .name(concert.getName())
+                        .location(concertHallName)
+                        .genre(concert.getGenre())
+                        .performanceTime(concert.getPerformanceTime())
+                        .ageRestriction(concert.getAgeRestriction())
+                        .startAt(concert.getStartAt())
+                        .endAt(concert.getEndAt())
+                        .build();
     }
 }

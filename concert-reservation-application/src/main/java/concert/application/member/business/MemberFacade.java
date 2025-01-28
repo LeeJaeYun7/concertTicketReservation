@@ -1,6 +1,5 @@
 package concert.application.member.business;
 
-import concert.application.member.presentation.response.MemberResponse;
 import concert.domain.member.services.MemberService;
 import concert.domain.member.entities.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +13,8 @@ public class MemberFacade {
 
   private final MemberService memberService;
 
-  public List<MemberResponse> getMembers() {
-    List<MemberVO> members = memberService.getMembers();
-
-    return members.stream()
-            .map(memberVO -> new MemberResponse(memberVO.getUuid(), memberVO.getName()))
-            .toList();
+  public List<MemberVO> getMembers() {
+      return memberService.getMembers();
   }
 
   public MemberVO createMember(String name) {
