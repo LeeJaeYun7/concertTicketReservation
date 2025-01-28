@@ -1,4 +1,4 @@
-package main.java.concert.interfaces.concert;
+package concert.interfaces.concert;
 
 import concert.application.concert.business.ConcertScheduleSeatFacade;
 import lombok.RequiredArgsConstructor;

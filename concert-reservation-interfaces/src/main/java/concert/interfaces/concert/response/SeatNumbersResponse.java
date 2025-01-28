@@ -1,4 +1,4 @@
-package main.java.concert.interfaces.concert.response;
+package concert.interfaces.concert.response;
 
 import lombok.Builder;
 import lombok.Getter;

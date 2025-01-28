@@ -1,12 +1,13 @@
-package main.java.concert.interfaces.concert;
+package concert.interfaces.concert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.application.concertschedule.business.ConcertScheduleFacade;
-import concert.application.concertschedule.presentation.request.ConcertScheduleCreateRequest;
-import concert.application.concertschedule.presentation.response.AvailableDateTimesResponse;
+import concert.application.concert.business.ConcertScheduleFacade;
+import concert.interfaces.concert.request.ConcertScheduleCreateRequest;
+import concert.interfaces.concert.response.AvailableDateTimesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
