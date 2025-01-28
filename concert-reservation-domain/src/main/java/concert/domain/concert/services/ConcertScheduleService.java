@@ -1,11 +1,11 @@
 package concert.domain.concert.services;
 
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
 import concert.domain.concert.exceptions.ConcertException;
 import concert.domain.concert.exceptions.ConcertExceptionType;
+import concert.domain.shared.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

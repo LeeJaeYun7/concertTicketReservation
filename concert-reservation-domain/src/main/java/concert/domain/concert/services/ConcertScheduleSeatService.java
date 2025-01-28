@@ -1,12 +1,12 @@
 package concert.domain.concert.services;
 
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
 import concert.domain.concert.exceptions.ConcertException;
 import concert.domain.concert.exceptions.ConcertExceptionType;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
+import concert.domain.shared.utils.TimeProvider;
 import concert.infrastructure.distributedlock.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

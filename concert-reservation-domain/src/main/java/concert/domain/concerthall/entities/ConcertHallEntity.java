@@ -1,6 +1,6 @@
 package concert.domain.concerthall.entities;
 
-import concert.domain.global.entity.BaseTimeEntity;
+import concert.domain.shared.entities.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

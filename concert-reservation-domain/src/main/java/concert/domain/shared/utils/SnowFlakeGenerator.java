@@ -1,7 +1,7 @@
-package concert.commons.utils;
+package concert.domain.shared.utils;
 
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
+import concert.domain.shared.exceptions.CustomException;
+import concert.domain.shared.exceptions.CustomExceptionType;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -19,7 +19,7 @@ public class SnowFlakeGenerator {
 
             return timestamp + '-' + hostAddress + '-' + randomUUID;
         } catch (UnknownHostException e) {
-            throw new CustomException(ErrorCode.HOST_NOT_FOUND);
+            throw new CustomException(CustomExceptionType.HOST_NOT_FOUND);
         }
     }
 }

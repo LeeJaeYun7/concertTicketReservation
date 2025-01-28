@@ -1,7 +1,7 @@
 package concert.domain.member.entities;
 
-import concert.commons.utils.SnowFlakeGenerator;
-import concert.domain.global.entity.BaseTimeEntity;
+import concert.domain.shared.entities.BaseTimeEntity;
+import concert.domain.shared.utils.SnowFlakeGenerator;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

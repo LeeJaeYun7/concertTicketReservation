@@ -1,6 +1,6 @@
 package concert.domain.concert.entities.enums;
 
-public enum Grade {
+public enum SeatGrade {
     ALL,
     RESERVED,
 

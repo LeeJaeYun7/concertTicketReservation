@@ -1,10 +1,10 @@
 package concert.application.concert.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.cache.ConcertCache;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.reservation.entities.dao.ReservationRepository;
+import concert.domain.shared.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

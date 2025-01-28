@@ -1,6 +1,6 @@
 package concert.domain.reservation.entities;
 
-import concert.domain.global.entity.BaseTimeEntity;
+import concert.domain.shared.entities.BaseTimeEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package concert.commons.common;
+package concert.interfaces.shared.dto;
 
 
 import lombok.Value;

@@ -36,4 +36,5 @@ dependencies {
     implementation 'org.aspectj:aspectjweaver:1.9.7'
 
     api project(':concert-reservation-application')
+    api project(':concert-reservation-domain')
 }

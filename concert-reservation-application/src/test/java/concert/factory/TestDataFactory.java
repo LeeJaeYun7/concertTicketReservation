@@ -3,14 +3,14 @@ package concert.factory;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.dao.ConcertEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
 import concert.domain.concert.entities.dao.SeatGradeEntityDAO;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
-import concert.domain.concert.entities.enums.Grade;
+import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.dao.ConcertHallEntityDAO;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
@@ -80,12 +80,12 @@ public class TestDataFactory {
     return concertHallSeatEntityDAO.save(seat);
   }
 
-  public SeatGradeEntity createSeatGrade(ConcertEntity concert) {
-    SeatGradeEntity allSeatGrade = SeatGradeEntity.of(concert.getId(), Grade.ALL, 100000);
+  public ConcertSeatGradeEntity createSeatGrade(ConcertEntity concert) {
+    ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
     return seatGradeEntityDAO.save(allSeatGrade);
   }
 
-  public ConcertScheduleSeatEntity createConcertScheduleSeat(ConcertHallSeatEntity seat, ConcertScheduleEntity concertSchedule, SeatGradeEntity seatGrade) {
+  public ConcertScheduleSeatEntity createConcertScheduleSeat(ConcertHallSeatEntity seat, ConcertScheduleEntity concertSchedule, ConcertSeatGradeEntity seatGrade) {
     ConcertScheduleSeatEntity allConcertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
     return concertScheduleSeatEntityDAO.save(allConcertScheduleSeat);
   }

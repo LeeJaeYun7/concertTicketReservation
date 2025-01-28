@@ -1,18 +1,17 @@
 package concert.concertschedule;
 
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
-import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
-import concert.domain.concert.entities.enums.Grade;
+import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concert.services.ConcertScheduleSeatService;
+import concert.domain.shared.utils.TimeProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -40,9 +39,6 @@ public class ConcertScheduleServiceTest {
   private ConcertScheduleEntityDAO concertScheduleEntityDAO;
 
   @Mock
-  private ConcertScheduleSeatEntityDAO concertScheduleSeatEntityDAO;
-
-  @Mock
   private ConcertScheduleSeatService concertScheduleSeatService;
 
   @InjectMocks
@@ -65,7 +61,7 @@ public class ConcertScheduleServiceTest {
       ConcertScheduleEntity IUconcertSchedule = ConcertScheduleEntity.of(IUConcert.getId(), IUdateTime);
       setFieldUsingReflection(IUconcertSchedule, "id", 1L);
 
-      SeatGradeEntity allSeatGrade = SeatGradeEntity.of(IUConcert.getId(), Grade.ALL, 100000);
+      ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(IUConcert.getId(), SeatGrade.ALL, 100000);
       ConcertScheduleSeatEntity IUconcertScheduleSeat = ConcertScheduleSeatEntity.of(concertHallEntity.getId(), IUconcertSchedule.getId(), allSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));

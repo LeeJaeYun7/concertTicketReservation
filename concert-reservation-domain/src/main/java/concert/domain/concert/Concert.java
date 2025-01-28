@@ -3,7 +3,7 @@ package concert.domain.concert;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,5 +19,5 @@ public class Concert {
     private ConcertEntity concertEntity;
     private List<ConcertScheduleEntity> concertScheduleEntities;
     private List<ConcertScheduleSeatEntity> concertScheduleSeatEntities;
-    private List<SeatGradeEntity> seatGradeEntity;
+    private List<ConcertSeatGradeEntity> concertSeatGradeEntity;
 }

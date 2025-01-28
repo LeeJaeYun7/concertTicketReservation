@@ -1,4 +1,4 @@
-package concert.commons.common;
+package concert.interfaces.shared.exceptions;
 
 import org.springframework.http.HttpStatus;
 

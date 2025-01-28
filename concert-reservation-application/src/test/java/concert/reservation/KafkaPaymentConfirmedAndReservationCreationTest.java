@@ -6,7 +6,7 @@ import concert.application.reservation.event.PaymentConfirmedEvent;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.member.entities.Member;
@@ -80,7 +80,7 @@ public class KafkaPaymentConfirmedAndReservationCreationTest {
   private ConcertHallEntity concertHallEntity;
   private ConcertScheduleEntity concertSchedule;
   private ConcertHallSeatEntity seat;
-  private SeatGradeEntity seatGrade;
+  private ConcertSeatGradeEntity seatGrade;
   private ConcertScheduleSeatEntity concertScheduleSeat;
 
   @DynamicPropertySource

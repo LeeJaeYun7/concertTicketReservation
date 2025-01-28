@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ReservationExceptionType {
 
-    RESERVATION_FAILED(HttpStatus.BAD_REQUEST,"결제가 실패했습니다.");
+    RESERVATION_FAILED(HttpStatus.BAD_REQUEST,"예약이 실패했습니다."),
+    PAYMENT_FAILED(HttpStatus.BAD_REQUEST,"결제가 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

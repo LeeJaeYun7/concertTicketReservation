@@ -1,21 +1,21 @@
 package concert.concertscheduleseat;
 
 import concert.application.concert.business.ConcertScheduleSeatApplicationService;
-import concert.commons.common.CustomException;
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
-import concert.domain.concert.entities.enums.Grade;
+import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.member.services.MemberService;
 import concert.domain.member.entities.Member;
 import concert.domain.concert.services.ConcertScheduleSeatService;
+import concert.domain.shared.exceptions.CustomException;
+import concert.domain.shared.utils.TimeProvider;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -68,7 +68,7 @@ public class ConcertScheduleSeatApplicationServiceTest {
 
       long number = 1L;
       ConcertHallSeatEntity seat = ConcertHallSeatEntity.of(concertHallEntity.getId(), 1);
-      SeatGradeEntity seatGrade = SeatGradeEntity.of(concert.getId(), Grade.ALL, 100000);
+      ConcertSeatGradeEntity seatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
       ConcertScheduleSeatEntity concertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       given(memberService.getMemberByUuid(uuid)).willReturn(member);
@@ -99,7 +99,7 @@ public class ConcertScheduleSeatApplicationServiceTest {
 
       long number = 1L;
       ConcertHallSeatEntity seat = ConcertHallSeatEntity.of(concertHallEntity.getId(), 1);
-      SeatGradeEntity seatGrade = SeatGradeEntity.of(concert.getId(), Grade.ALL, 100000);
+      ConcertSeatGradeEntity seatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
       ConcertScheduleSeatEntity concertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       given(memberService.getMemberByUuid(uuid)).willReturn(member);

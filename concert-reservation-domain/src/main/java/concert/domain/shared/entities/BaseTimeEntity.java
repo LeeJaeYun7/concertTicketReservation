@@ -1,4 +1,4 @@
-package concert.domain.global.entity;
+package concert.domain.shared.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

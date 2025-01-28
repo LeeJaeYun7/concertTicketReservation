@@ -4,9 +4,9 @@ import concert.application.concert.business.ConcertScheduleApplicationService;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
-import concert.domain.concert.entities.enums.Grade;
+import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concert.services.ConcertService;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
@@ -65,8 +65,8 @@ public class ConcertScheduleApplicationServiceTest {
     seatNumber1 = ConcertHallSeatEntity.of(concertHallEntity.getId(), 1L);
     seatNumber100 = ConcertHallSeatEntity.of(concertHallEntity.getId(), 100L);
 
-    SeatGradeEntity allGrade = SeatGradeEntity.of(concert.getId(), Grade.ALL, 100000);
-    SeatGradeEntity standingGrade = SeatGradeEntity.of(concert.getId(), Grade.STANDING, 80000);
+    ConcertSeatGradeEntity allGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
+    ConcertSeatGradeEntity standingGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.STANDING, 80000);
 
     LocalDateTime firstDateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
     firstSchedule = ConcertScheduleEntity.of(concert.getId(), firstDateTime);

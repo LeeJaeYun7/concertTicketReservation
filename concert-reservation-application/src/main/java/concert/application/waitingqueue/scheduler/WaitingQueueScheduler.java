@@ -1,8 +1,8 @@
 package concert.application.waitingqueue.scheduler;
 
 import concert.application.waitingqueue.business.WaitingQueueMigrationApplicationService;
-import concert.commons.common.CustomException;
 import concert.domain.concert.services.ConcertService;
+import concert.domain.shared.exceptions.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

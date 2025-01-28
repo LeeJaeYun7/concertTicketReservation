@@ -1,13 +1,13 @@
 package concert.domain.concert.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.cache.ConcertCache;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.dao.ConcertEntityDAO;
 import concert.domain.concert.exceptions.ConcertException;
 import concert.domain.concert.exceptions.ConcertExceptionType;
 import concert.domain.reservation.entities.dao.ReservationRepository;
+import concert.domain.shared.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,6 @@
 package concert.domain.concert.services;
 
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.dao.SeatGradeEntityDAO;
 import concert.domain.concert.exceptions.ConcertException;
 import concert.domain.concert.exceptions.ConcertExceptionType;
@@ -14,7 +14,7 @@ public class SeatGradeService {
     private final SeatGradeEntityDAO seatGradeEntityDAO;
 
     public long getSeatGradePrice(long seatGradeId){
-        SeatGradeEntity seatGrade = seatGradeEntityDAO.findById(seatGradeId).orElseThrow(() -> new ConcertException(ConcertExceptionType.SEAT_GRADE_NOT_FOUND));
+        ConcertSeatGradeEntity seatGrade = seatGradeEntityDAO.findById(seatGradeId).orElseThrow(() -> new ConcertException(ConcertExceptionType.SEAT_GRADE_NOT_FOUND));
         return seatGrade.getPrice();
     }
 }

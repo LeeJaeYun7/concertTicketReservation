@@ -1,6 +1,5 @@
 package concert.application.concert.business;
 
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
 import concert.domain.concert.exceptions.ConcertException;
@@ -11,6 +10,7 @@ import concert.domain.concerthall.services.ConcertHallSeatService;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.member.services.MemberService;
 import concert.domain.concert.services.ConcertScheduleSeatService;
+import concert.domain.shared.utils.TimeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

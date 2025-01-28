@@ -1,7 +1,7 @@
 package concert.domain.concert.entities;
 
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
-import concert.domain.global.entity.BaseTimeEntity;
+import concert.domain.shared.entities.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

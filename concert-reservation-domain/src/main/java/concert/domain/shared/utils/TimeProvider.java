@@ -1,4 +1,4 @@
-package concert.commons.utils;
+package concert.domain.shared.utils;
 
 import org.springframework.stereotype.Component;
 

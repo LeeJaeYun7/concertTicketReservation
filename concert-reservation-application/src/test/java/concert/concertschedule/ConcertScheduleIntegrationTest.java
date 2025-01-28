@@ -1,23 +1,23 @@
 package concert.concertschedule;
 
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.dao.ConcertEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
 import concert.domain.concert.entities.dao.SeatGradeEntityDAO;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
-import concert.domain.concert.entities.enums.Grade;
+import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.dao.ConcertHallEntityDAO;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.concerthall.entities.dao.ConcertHallSeatEntityDAO;
 import concert.domain.reservation.entities.dao.ReservationRepository;
+import concert.domain.shared.utils.TimeProvider;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -97,8 +97,8 @@ public class ConcertScheduleIntegrationTest {
     ConcertHallSeatEntity savedSeat11 = concertHallSeatEntityDAO.save(seat11);
     ConcertHallSeatEntity savedSeat12 = concertHallSeatEntityDAO.save(seat12);
 
-    SeatGradeEntity allSeatGrade = SeatGradeEntity.of(savedFirstConcert.getId(), Grade.ALL, 100000); // 예시로 SeatGrade 생성
-    SeatGradeEntity savedALLSeatGrade = seatGradeEntityDAO.save(allSeatGrade);
+    ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(savedFirstConcert.getId(), SeatGrade.ALL, 100000); // 예시로 SeatGrade 생성
+    ConcertSeatGradeEntity savedALLSeatGrade = seatGradeEntityDAO.save(allSeatGrade);
 
     LocalDateTime now = timeProvider.now();
     LocalDateTime threshold = now.minusMinutes(10);
@@ -132,8 +132,8 @@ public class ConcertScheduleIntegrationTest {
     ConcertHallSeatEntity savedSeat21 = concertHallSeatEntityDAO.save(seat21);
     ConcertHallSeatEntity savedSeat22 = concertHallSeatEntityDAO.save(seat22);
 
-    SeatGradeEntity RSeatGrade = SeatGradeEntity.of(savedSecondConcert.getId(), Grade.ALL, 100000); // 예시로 SeatGrade 생성
-    SeatGradeEntity savedRSeatGrade = seatGradeEntityDAO.save(RSeatGrade);
+    ConcertSeatGradeEntity RSeatGrade = ConcertSeatGradeEntity.of(savedSecondConcert.getId(), SeatGrade.ALL, 100000); // 예시로 SeatGrade 생성
+    ConcertSeatGradeEntity savedRSeatGrade = seatGradeEntityDAO.save(RSeatGrade);
 
     ConcertScheduleSeatEntity thirdConcertScheduleSeat1 = ConcertScheduleSeatEntity.of(savedSeat21.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.RESERVED);
     ConcertScheduleSeatEntity thirdConcertScheduleSeat2 = ConcertScheduleSeatEntity.of(savedSeat22.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.RESERVED);

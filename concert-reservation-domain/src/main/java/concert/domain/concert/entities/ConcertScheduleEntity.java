@@ -1,6 +1,6 @@
 package concert.domain.concert.entities;
 
-import concert.domain.global.entity.BaseTimeEntity;
+import concert.domain.shared.entities.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,5 +36,9 @@ public class ConcertScheduleEntity extends BaseTimeEntity {
                           .concertId(concertId)
                           .dateTime(dateTime)
                           .build();
+  }
+
+  public void setConcertId(long concertId){
+    this.concertId = concertId;
   }
 }

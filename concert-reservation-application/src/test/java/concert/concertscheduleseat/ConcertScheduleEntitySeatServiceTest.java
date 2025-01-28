@@ -4,11 +4,11 @@ import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
-import concert.domain.concert.entities.SeatGradeEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
-import concert.domain.concert.entities.enums.Grade;
+import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.concert.services.ConcertScheduleSeatService;
@@ -63,10 +63,10 @@ public class ConcertScheduleEntitySeatServiceTest {
       ConcertHallSeatEntity seat11 = ConcertHallSeatEntity.of(concertHallEntity.getId(), 11);
       ConcertHallSeatEntity seat22 = ConcertHallSeatEntity.of(concertHallEntity.getId(), 22);
 
-      SeatGradeEntity allSeatGrade = SeatGradeEntity.of(concert.getId(), Grade.ALL, 100000);
+      ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
       ConcertScheduleSeatEntity vipConcertScheduleSeat = ConcertScheduleSeatEntity.of(seat11.getId(), concertSchedule.getId(), allSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
-      SeatGradeEntity standingSeatGrade = SeatGradeEntity.of(concert.getId(), Grade.STANDING, 80000);
+      ConcertSeatGradeEntity standingSeatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.STANDING, 80000);
       ConcertScheduleSeatEntity standingConcertScheduleSeat = ConcertScheduleSeatEntity.of(seat22.getId(), concertSchedule.getId(), standingSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       List<ConcertScheduleSeatEntity> availableConcertScheduleSeats = List.of(vipConcertScheduleSeat, standingConcertScheduleSeat);
@@ -98,7 +98,7 @@ public class ConcertScheduleEntitySeatServiceTest {
       ConcertScheduleEntity concertSchedule = ConcertScheduleEntity.of(concert.getId(), dateTime);
 
       ConcertHallSeatEntity seat = ConcertHallSeatEntity.of(concertHallEntity.getId(), 1);
-      SeatGradeEntity allSeatGrade = SeatGradeEntity.of(concert.getId(), Grade.ALL, 100000);
+      ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
       ConcertScheduleSeatEntity allConcertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), allSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       when(concertScheduleSeatEntityDAO.findConcertScheduleSeatEntityWithDistributedLock(1L, 1))
@@ -127,7 +127,7 @@ public class ConcertScheduleEntitySeatServiceTest {
       ConcertScheduleEntity concertSchedule = ConcertScheduleEntity.of(concert.getId(), dateTime);
 
       ConcertHallSeatEntity seat = ConcertHallSeatEntity.of(concertHallEntity.getId(), 1);
-      SeatGradeEntity allSeatGrade = SeatGradeEntity.of(concert.getId(), Grade.ALL, 100000);
+      ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
       ConcertScheduleSeatEntity allConcertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), allSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       when(concertScheduleSeatEntityDAO.findConcertScheduleSeatEntityWithDistributedLock(1L, 1))

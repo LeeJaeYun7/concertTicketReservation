@@ -1,16 +1,17 @@
 package concert.reservation;
 
-import concert.domain.concert.entities.Concert;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.entities.ConcertScheduleEntity;
+import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
 import concert.domain.concert.entities.enums.ConcertAgeRestriction;
+import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
+import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
-import concert.domain.concertschedule.domain.ConcertSchedule;
 import concert.domain.reservation.txservices.ReservationTxService;
 import concert.domain.reservation.entities.Reservation;
 import concert.domain.reservation.entities.dao.ReservationRepository;
-import concert.domain.seatgrade.domain.SeatGrade;
-import concert.domain.seatgrade.domain.enums.Grade;
-import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -48,15 +49,15 @@ public class ReservationTxServiceTest {
 
 
       ConcertHallEntity concertHallEntity = ConcertHallEntity.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
-      Concert concert = Concert.of("박효신 콘서트", concertHallEntity.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+      ConcertEntity concert = ConcertEntity.of("박효신 콘서트", concertHallEntity.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
       LocalDateTime dateTime = LocalDateTime.of(2024, 10, 16, 22, 30);
-      ConcertSchedule concertSchedule = ConcertSchedule.of(concert.getId(), dateTime);
+      ConcertScheduleEntity concertSchedule = ConcertScheduleEntity.of(concert.getId(), dateTime);
 
       String uuid = UUID.randomUUID().toString();
       ConcertHallSeatEntity seat = ConcertHallSeatEntity.of(concertHallEntity.getId(), 1);
-      SeatGrade seatGrade = SeatGrade.of(concert.getId(), Grade.ALL, 100000);
-      ConcertScheduleSeat concertScheduleSeat = ConcertScheduleSeat.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), SeatStatus.AVAILABLE);
+      ConcertSeatGradeEntity seatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
+      ConcertScheduleSeatEntity concertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       Reservation reservation = Reservation.of(concertSchedule.getConcertId(), concertSchedule.getId(), uuid, concertScheduleSeat.getId(), 50000);
 

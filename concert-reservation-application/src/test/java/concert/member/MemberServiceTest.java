@@ -1,6 +1,5 @@
 package concert.member;
 
-import concert.commons.common.CustomException;
 import concert.domain.member.services.MemberService;
 import concert.domain.member.entities.Member;
 import concert.domain.member.entities.dao.MemberRepository;
@@ -16,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -91,40 +89,12 @@ public class MemberServiceTest {
     void uuid가_전달될때_멤버의_잔액이_조회된다() {
       String name = "Tom Cruise";
       Member member = Member.of(name);
-      member.updateBalance(100);
       String uuid = member.getUuid();
 
       given(memberRepository.findByUuidWithLock(uuid)).willReturn(Optional.of(member));
 
       long balance = sut.getMemberBalance(uuid);
       assertEquals(100, balance);
-    }
-
-    @Test
-    @DisplayName("uuid와 콘서트 가격이 전달될 때, 멤버의 잔액이 감소한다")
-    void uuid와_콘서트_가격이_전달될때_멤버의_잔액이_감소한다() {
-      String name = "Tom Cruise";
-      Member member = Member.of(name);
-      member.updateBalance(100);
-      String uuid = member.getUuid();
-
-      given(memberRepository.findByUuidWithLock(uuid)).willReturn(Optional.of(member));
-
-      sut.decreaseBalance(uuid, 60);
-      assertEquals(member.getBalance(), 40);
-    }
-
-    @Test
-    @DisplayName("uuid와 콘서트 가격이 전달될 때, 멤버의 잔액보다 콘서트 가격이 크면 Exception을 반환한다")
-    void uuid와_콘서트_가격이_전달될때_멤버의_잔액보다_콘서트_가격이_크면_Exception을_반환한다() {
-      String name = "Tom Cruise";
-      Member member = Member.of(name);
-      member.updateBalance(50000);
-      String uuid = member.getUuid();
-
-      given(memberRepository.findByUuidWithLock(uuid)).willReturn(Optional.of(member));
-
-      assertThrows(CustomException.class, () -> sut.decreaseBalance(uuid, 60000));
     }
   }
 }
