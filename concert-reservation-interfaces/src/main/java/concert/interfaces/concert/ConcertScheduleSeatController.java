@@ -1,8 +1,8 @@
 package concert.interfaces.concert;
 
 import concert.application.concert.business.ConcertScheduleSeatFacade;
+import concert.interfaces.concert.response.SeatNumbersResponse;
 import lombok.RequiredArgsConstructor;
-import main.java.concert.interfaces.concert.response.SeatNumbersResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
