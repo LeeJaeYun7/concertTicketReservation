@@ -1,6 +1,5 @@
 package concert.concertscheduleseat;
 
-import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
@@ -12,6 +11,7 @@ import concert.domain.concert.entities.enums.SeatGrade;
 import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.concert.services.ConcertScheduleSeatService;
+import concert.domain.shared.utils.TimeProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

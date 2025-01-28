@@ -54,7 +54,6 @@ public class TestDataFactory {
 
   public Member createMember() {
     Member member = Member.of("Tom Cruise");
-    member.updateBalance(100000);
     return memberRepository.save(member);
   }
 
