@@ -1,6 +1,5 @@
 package concert.interfaces.member;
 
-import concert.application.member.business.MemberFacade;
 import concert.domain.member.entities.vo.MemberVO;
 import concert.domain.member.services.MemberService;
 import concert.interfaces.member.request.MemberRequest;
