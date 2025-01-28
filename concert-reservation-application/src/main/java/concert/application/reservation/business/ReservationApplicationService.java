@@ -37,7 +37,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ReservationFacade {
+public class ReservationApplicationService {
 
   private final TimeProvider timeProvider;
   private final ReservationTxService reservationTxService;

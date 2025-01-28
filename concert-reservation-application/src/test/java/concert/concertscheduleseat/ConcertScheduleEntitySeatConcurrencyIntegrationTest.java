@@ -1,6 +1,6 @@
 package concert.concertscheduleseat;
 
-import concert.application.concert.business.ConcertScheduleSeatFacade;
+import concert.application.concert.business.ConcertScheduleSeatApplicationService;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.dao.ConcertEntityDAO;
@@ -43,7 +43,7 @@ public class ConcertScheduleEntitySeatConcurrencyIntegrationTest {
   @Autowired
   ConcertScheduleEntityDAO concertScheduleEntityDAO;
   @Autowired
-  private ConcertScheduleSeatFacade concertScheduleSeatFacade;
+  private ConcertScheduleSeatApplicationService concertScheduleSeatApplicationService;
   @Autowired
   private MemberService memberService;
   @Autowired
@@ -127,7 +127,7 @@ public class ConcertScheduleEntitySeatConcurrencyIntegrationTest {
 
         executorService.submit(() -> {
           try {
-            concertScheduleSeatFacade.createConcertScheduleSeatReservationWithDistributedLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
+            concertScheduleSeatApplicationService.createConcertScheduleSeatReservationWithDistributedLock(savedMembers.get(finalI).getUuid(), savedConcertSchedule.getId(), savedSeat.getNumber());
             successCount.incrementAndGet();
           } finally {
             latch.countDown();

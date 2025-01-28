@@ -1,7 +1,7 @@
 package concert.interfaces.concert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import concert.application.concert.business.ConcertFacade;
+import concert.application.concert.business.ConcertApplicationService;
 import concert.domain.concert.entities.vo.ConcertVO;
 import concert.interfaces.concert.response.ConcertResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ConcertController {
 
-  private final ConcertFacade concertFacade;
+  private final ConcertApplicationService concertApplicationService;
 
   @GetMapping("/api/v1/concert/top30/3days/db")
   public ResponseEntity<List<ConcertResponse>> retrieveAllConcertsFromDB() throws JsonProcessingException {
-    List<ConcertVO> concertVOs = concertFacade.getTop30ConcertsFromDB();
+    List<ConcertVO> concertVOs = concertApplicationService.getTop30ConcertsFromDB();
 
     List<ConcertResponse> concertResponses = concertVOs.stream()
                                                        .map(ConcertResponse::of)
@@ -32,13 +32,13 @@ public class ConcertController {
 
   @GetMapping("/api/v1/concert/save/top30/3days")
   public ResponseEntity<Void> saveTop30ConcertsIntoRedis() throws JsonProcessingException {
-    concertFacade.saveTop30ConcertsIntoRedis();
+    concertApplicationService.saveTop30ConcertsIntoRedis();
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
   @GetMapping("/api/v1/concert/top30/3days")
   public ResponseEntity<List<ConcertResponse>> retrieveTop30Concerts() throws JsonProcessingException {
-    List<ConcertVO> concertVOs = concertFacade.getTop30Concerts();
+    List<ConcertVO> concertVOs = concertApplicationService.getTop30Concerts();
 
     List<ConcertResponse> concertResponses = concertVOs.stream()
                                                        .map(ConcertResponse::of)

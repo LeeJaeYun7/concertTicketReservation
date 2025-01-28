@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class WaitingQueueFacade {
+public class WaitingQueueApplicationService {
 
   private final MemberService memberService;
   private final WaitingQueueService waitingQueueService;

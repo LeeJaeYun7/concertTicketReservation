@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ConcertScheduleFacade {
+public class ConcertScheduleApplicationService {
 
   private final ConcertService concertService;
   private final ConcertScheduleService concertScheduleService;

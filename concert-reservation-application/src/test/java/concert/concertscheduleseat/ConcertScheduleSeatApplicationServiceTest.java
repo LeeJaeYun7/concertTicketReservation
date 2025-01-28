@@ -1,6 +1,6 @@
 package concert.concertscheduleseat;
 
-import concert.application.concert.business.ConcertScheduleSeatFacade;
+import concert.application.concert.business.ConcertScheduleSeatApplicationService;
 import concert.commons.common.CustomException;
 import concert.commons.utils.TimeProvider;
 import concert.domain.concert.entities.ConcertEntity;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ConcertScheduleSeatFacadeTest {
+public class ConcertScheduleSeatApplicationServiceTest {
   @Mock
   private TimeProvider timeProvider;
   @Mock
@@ -42,7 +42,7 @@ public class ConcertScheduleSeatFacadeTest {
   @Mock
   private ConcertScheduleSeatService concertScheduleSeatService;
   @InjectMocks
-  private ConcertScheduleSeatFacade sut;
+  private ConcertScheduleSeatApplicationService sut;
 
   @Nested
   @DisplayName("좌석 예약을 할 때")

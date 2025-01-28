@@ -1,6 +1,6 @@
 package concert.interfaces.waitingqueue;
 
-import concert.application.waitingqueue.business.WaitingQueueFacade;
+import concert.application.waitingqueue.business.WaitingQueueApplicationService;
 import concert.domain.waitingqueue.entities.vo.TokenVO;
 import concert.domain.waitingqueue.entities.vo.WaitingRankVO;
 import concert.interfaces.waitingqueue.response.TokenResponse;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class WaitingQueueController {
 
-  private final WaitingQueueFacade waitingQueueFacade;
+  private final WaitingQueueApplicationService waitingQueueApplicationService;
 
   @GetMapping("/api/v1/waitingQueue/token")
   public ResponseEntity<TokenResponse> retrieveToken(@RequestParam(value = "concertId") long concertId, @RequestParam(value = "uuid") String uuid) {
-    TokenVO tokenVO = waitingQueueFacade.retrieveToken(concertId, uuid);
+    TokenVO tokenVO = waitingQueueApplicationService.retrieveToken(concertId, uuid);
     TokenResponse tokenResponse = TokenResponse.of(tokenVO.getToken());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
@@ -29,7 +29,7 @@ public class WaitingQueueController {
   @GetMapping("/api/v1/waitingQueue/rank")
   public ResponseEntity<WaitingRankResponse> retrieveWaitingRank(@RequestParam(value = "concertId") long concertId, @RequestParam(value = "token") String token) {
     String uuid = token.split(":")[1];
-    WaitingRankVO waitingRankVo = waitingQueueFacade.retrieveWaitingRank(concertId, uuid);
+    WaitingRankVO waitingRankVo = waitingQueueApplicationService.retrieveWaitingRank(concertId, uuid);
     WaitingRankResponse waitingRankResponse = WaitingRankResponse.of(waitingRankVo.getWaitingRank(), waitingRankVo.getStatus());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(waitingRankResponse);

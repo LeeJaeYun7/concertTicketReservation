@@ -23,7 +23,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ConcertScheduleSeatFacade {
+public class ConcertScheduleSeatApplicationService {
 
   private final TimeProvider timeProvider;
   private final MemberService memberService;

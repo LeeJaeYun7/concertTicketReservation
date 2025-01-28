@@ -2,6 +2,7 @@ package concert.interfaces.member;
 
 import concert.application.member.business.MemberFacade;
 import concert.domain.member.entities.vo.MemberVO;
+import concert.domain.member.services.MemberService;
 import concert.interfaces.member.request.MemberRequest;
 import concert.interfaces.member.response.MemberBalanceResponse;
 import concert.interfaces.member.response.MemberResponse;
@@ -17,12 +18,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberController {
 
-  private final MemberFacade memberFacade;
+  private final MemberService memberService;
 
   @PostMapping("/api/v1/member")
   public ResponseEntity<MemberResponse> createMember(@RequestBody MemberRequest memberRequest) {
     String name = memberRequest.getName();
-    MemberVO memberVO = memberFacade.createMember(name);
+    MemberVO memberVO = memberService.createMember(name);
     MemberResponse memberResponse = MemberResponse.of(memberVO.getUuid(), memberVO.getName());
 
     return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
@@ -30,7 +31,7 @@ public class MemberController {
 
   @GetMapping("/api/v1/member/balance")
   public ResponseEntity<MemberBalanceResponse> getMemberBalance(@RequestParam(value = "uuid") String uuid) {
-    long balance = memberFacade.getMemberBalance(uuid);
+    long balance = memberService.getMemberBalance(uuid);
     MemberBalanceResponse memberBalanceResponse = MemberBalanceResponse.of(balance);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(memberBalanceResponse);
@@ -38,7 +39,7 @@ public class MemberController {
 
   @GetMapping("/api/v1/member/download")
   public ResponseEntity<List<MemberResponse>> getMembers() {
-    List<MemberVO> memberVOs = memberFacade.getMembers();
+    List<MemberVO> memberVOs = memberService.getMembers();
     List<MemberResponse> memberResponses = memberVOs.stream()
                                                     .map(MemberResponse::of)
                                                     .collect(Collectors.toList());

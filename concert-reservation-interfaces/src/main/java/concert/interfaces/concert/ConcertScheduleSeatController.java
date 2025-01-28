@@ -1,6 +1,6 @@
 package concert.interfaces.concert;
 
-import concert.application.concert.business.ConcertScheduleSeatFacade;
+import concert.application.concert.business.ConcertScheduleSeatApplicationService;
 import concert.interfaces.concert.response.SeatNumbersResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,11 +14,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ConcertScheduleSeatController {
-  private final ConcertScheduleSeatFacade concertScheduleSeatFacade;
+  private final ConcertScheduleSeatApplicationService concertScheduleSeatApplicationService;
 
   @GetMapping("/api/v1/concertScheduleSeat/available")
   public ResponseEntity<SeatNumbersResponse> retrieveAvailableConcertScheduleSeats(@RequestParam(value = "concertScheduleId") long concertScheduleId) {
-    List<Long> availableConcertScheduleSeatNumbers = concertScheduleSeatFacade.getAvailableConcertScheduleSeatNumbers(concertScheduleId);
+    List<Long> availableConcertScheduleSeatNumbers = concertScheduleSeatApplicationService.getAvailableConcertScheduleSeatNumbers(concertScheduleId);
     SeatNumbersResponse seatsResponse = SeatNumbersResponse.of(availableConcertScheduleSeatNumbers);
 
     return ResponseEntity.status(HttpStatus.OK).body(seatsResponse);

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ConcertFacade {
+public class ConcertApplicationService {
 
   private final ConcertService concertService;
   private final ConcertHallService concertHallService;

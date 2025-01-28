@@ -1,6 +1,6 @@
 package concert.concertschedule;
 
-import concert.application.concert.business.ConcertScheduleFacade;
+import concert.application.concert.business.ConcertScheduleApplicationService;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ConcertScheduleFacadeTest {
+public class ConcertScheduleApplicationServiceTest {
 
   @Mock
   private ConcertService concertService;
@@ -38,7 +38,7 @@ public class ConcertScheduleFacadeTest {
   private ConcertScheduleService concertScheduleService;
 
   @InjectMocks
-  private ConcertScheduleFacade sut;
+  private ConcertScheduleApplicationService sut;
 
   private long concertId;
   private ConcertEntity concert;
