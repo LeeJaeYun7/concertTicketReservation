@@ -13,7 +13,6 @@ import concert.domain.concerthall.entities.ConcertHallEntity;
 import concert.domain.concerthall.entities.ConcertHallSeatEntity;
 import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.services.MemberService;
-import concert.domain.member.entities.Member;
 import concert.domain.concert.services.ConcertScheduleSeatService;
 import concert.domain.shared.exceptions.CustomException;
 import concert.domain.shared.utils.TimeProvider;
