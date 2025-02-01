@@ -104,7 +104,7 @@ public class ConcertScheduleEntitySeatServiceTest {
       when(concertScheduleSeatEntityDAO.findConcertScheduleSeatEntity(1L)).thenReturn(Optional.of(allConcertScheduleSeat));
       when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
 
-      sut.changeUpdatedAt(1L);
+      sut.changeStatusAndUpdatedAt(1L);
 
       assertEquals(allConcertScheduleSeat.getUpdatedAt(), LocalDateTime.of(2024, 10, 18, 0, 0));
     }
