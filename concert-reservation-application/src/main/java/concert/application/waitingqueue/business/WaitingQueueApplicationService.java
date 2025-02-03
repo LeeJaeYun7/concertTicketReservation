@@ -1,5 +1,6 @@
 package concert.application.waitingqueue.business;
 
+import concert.application.shared.utils.TokenParser;
 import concert.domain.member.services.MemberService;
 import concert.domain.waitingqueue.entities.vo.TokenVO;
 import concert.domain.waitingqueue.services.WaitingQueueService;
@@ -13,6 +14,7 @@ public class WaitingQueueApplicationService {
 
   private final MemberService memberService;
   private final WaitingQueueService waitingQueueService;
+  private final TokenParser tokenParser;
 
   public TokenVO retrieveToken(long concertId, String uuid) {
     memberService.getMemberByUuid(uuid);
@@ -20,7 +22,8 @@ public class WaitingQueueApplicationService {
     return TokenVO.of(token);
   }
 
-  public WaitingRankVO retrieveWaitingRank(long concertId, String uuid) {
+  public WaitingRankVO retrieveWaitingRank(long concertId, String token) {
+    String uuid = tokenParser.getUuidFromToken(token);
     return waitingQueueService.retrieveWaitingRank(concertId, uuid);
   }
 }
