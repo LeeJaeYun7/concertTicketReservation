@@ -19,10 +19,10 @@ public class ReservationService {
     private final ConcertSeatGradeService concertSeatGradeService;
     private final ReservationEntityDAO reservationEntityDAO;
 
-    public long createReservation(long concertId, long concertScheduleSeatId){
+    public long createReservation(long orderId, long concertId, long concertScheduleSeatId){
         ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeat(concertScheduleSeatId);
         long concertSeatGradePrice = concertSeatGradeService.getConcertSeatGradePrice(concertScheduleSeat.getConcertSeatGradeId());
-        ReservationEntity reservation = ReservationEntity.of(concertId, concertScheduleSeatId, ReservationStatus.ACTIVE, concertSeatGradePrice);
+        ReservationEntity reservation = ReservationEntity.of(orderId, concertId, concertScheduleSeatId, ReservationStatus.ACTIVE, concertSeatGradePrice);
         return reservationEntityDAO.save(reservation).getId();
     }
 }

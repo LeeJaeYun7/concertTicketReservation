@@ -30,7 +30,7 @@ public class WaitingDTO {
   }
 
   public String getToken() {
-    if (this.token == null) {
+    if (null == this.token) {
       this.token = new StringBuilder(timestamp).append(":").append(uuid).toString();
     }
     return token;

@@ -19,6 +19,9 @@ public class ReservationEntity extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
+  @Column(name = "order_id")
+  private long orderId;
+
   @Column(name = "concert_id")
   private long concertId;
 
@@ -32,7 +35,8 @@ public class ReservationEntity extends BaseTimeEntity {
   private long price;
 
   @Builder
-  public ReservationEntity(long concertId, long concertScheduleSeatId, ReservationStatus reservationStatus, long price) {
+  public ReservationEntity(long orderId, long concertId, long concertScheduleSeatId, ReservationStatus reservationStatus, long price) {
+    this.orderId = orderId;
     this.concertId = concertId;
     this.concertScheduleSeatId = concertScheduleSeatId;
     this.reservationStatus = reservationStatus;
@@ -41,8 +45,9 @@ public class ReservationEntity extends BaseTimeEntity {
     this.setUpdatedAt(LocalDateTime.now());
   }
 
-  public static ReservationEntity of(long concertId, long concertScheduleSeatId, ReservationStatus reservationStatus, long price) {
+  public static ReservationEntity of(long orderId, long concertId, long concertScheduleSeatId, ReservationStatus reservationStatus, long price) {
     return ReservationEntity.builder()
+                            .orderId(orderId)
                             .concertId(concertId)
                             .concertScheduleSeatId(concertScheduleSeatId)
                             .reservationStatus(reservationStatus)

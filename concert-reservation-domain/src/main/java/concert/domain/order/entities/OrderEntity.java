@@ -28,9 +28,6 @@ public class OrderEntity extends BaseTimeEntity {
 
     private String uuid;
 
-    @Column(name = "reservation_ids")
-    private String reservationIds;
-
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -38,23 +35,21 @@ public class OrderEntity extends BaseTimeEntity {
     private long totalPrice;
 
     @Builder
-    public OrderEntity(long concertId, long concertScheduleId, String uuid, String reservationIds, OrderStatus orderStatus, long totalPrice) {
+    public OrderEntity(long concertId, long concertScheduleId, String uuid, OrderStatus orderStatus, long totalPrice) {
         this.concertId = concertId;
         this.concertScheduleId = concertScheduleId;
         this.uuid = uuid;
-        this.reservationIds = reservationIds;
         this.orderStatus = orderStatus;
         this.totalPrice = totalPrice;
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static OrderEntity of(long concertId, long concertScheduleId, String uuid, String reservationIds, OrderStatus orderStatus, long totalPrice) {
+    public static OrderEntity of(long concertId, long concertScheduleId, String uuid, OrderStatus orderStatus, long totalPrice) {
         return OrderEntity.builder()
                           .concertId(concertId)
                           .concertScheduleId(concertScheduleId)
                           .uuid(uuid)
-                          .reservationIds(reservationIds)
                           .orderStatus(orderStatus)
                           .totalPrice(totalPrice)
                           .build();

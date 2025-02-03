@@ -33,10 +33,18 @@ public class OrderEventScheduler {
     }
 
     for (OutboxEntity event : events) {
-      String eventJson = event.getMessage();
-      OrderRequestEvent orderRequestEvent = applicationJsonConverter.convertFromJson(eventJson, OrderRequestEvent.class);
-      orderEventProducer.sendOrderRequestEvent(orderRequestEvent);
-      log.info("OrderPaymentEvent Sent");
+      try {
+        String eventJson = event.getMessage();
+        OrderRequestEvent orderRequestEvent = applicationJsonConverter.convertFromJson(eventJson, OrderRequestEvent.class);
+        orderEventProducer.sendOrderRequestEvent(orderRequestEvent);
+
+        event.updateSent(true);
+        outboxEntityDAO.save(event);
+
+        log.info("OrderPaymentEvent Sent: eventId={}", event.getId());
+      } catch (Exception e) {
+        log.error("Failed to send OrderPaymentEvent: eventId={}, error={}", event.getId(), e.getMessage(), e);
+      }
     }
   }
 }

@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,7 +29,6 @@ import java.util.List;
 @Slf4j
 public class OrderTxService {
 
-  private final DomainJsonConverter domainJsonConverter;
   private final MemberService memberService;
   private final ConcertService concertService;
   private final ConcertScheduleSeatService concertScheduleSeatService;
@@ -39,23 +37,18 @@ public class OrderTxService {
   private final OrderEntityDAO orderEntityDAO;
 
   @Transactional
-  public OrderEntity createOrder(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice) throws JsonProcessingException {
+  public void createOrder(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice) {
 
-    List<Long> reservationIds = new ArrayList<>();
+    OrderEntity order = OrderEntity.of(concertId, concertScheduleId, uuid, OrderStatus.ACTIVE, totalPrice);
+    OrderEntity savedOrder = orderEntityDAO.save(order);
 
     for(long concertScheduleSeatId: concertScheduleSeatIds){
-        long reservationId = reservationService.createReservation(concertId, concertScheduleSeatId);
-        reservationIds.add(reservationId);
+        reservationService.createReservation(savedOrder.getId(), concertId, concertScheduleSeatId);
     }
-
-    String reservationIdsJson = domainJsonConverter.convertToJson(reservationIds);
-
-    OrderEntity order = OrderEntity.of(concertId, concertScheduleId, uuid, reservationIdsJson, OrderStatus.ACTIVE, totalPrice);
-    return orderEntityDAO.save(order);
   }
 
   @Transactional
-  public OrderVO handlePaymentConfirmed(PaymentConfirmedCommand command) throws JsonProcessingException {
+  public OrderVO handlePaymentConfirmed(PaymentConfirmedCommand command) {
 
     long concertScheduleId = command.getConcertScheduleId();
     String uuid = command.getUuid();

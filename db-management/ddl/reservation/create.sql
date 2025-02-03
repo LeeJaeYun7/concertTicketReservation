@@ -1,5 +1,6 @@
 CREATE TABLE reservation (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
     concert_id BIGINT NOT NULL,
     concert_schedule_seat_id BIGINT NOT NULL,
     reservation_status VARCHAR(50) NOT NULL,

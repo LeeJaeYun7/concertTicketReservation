@@ -75,8 +75,8 @@ public class OrderTxServiceTest {
       ConcertScheduleSeatEntity concertScheduleSeat1 = ConcertScheduleSeatEntity.of(seat1.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
       ConcertScheduleSeatEntity concertScheduleSeat2 = ConcertScheduleSeatEntity.of(seat2.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
-      ReservationEntity reservation1 = ReservationEntity.of(concertScheduleSeat1.getId(), ReservationStatus.ACTIVE, 50000);
-      ReservationEntity reservation2 = ReservationEntity.of(concertScheduleSeat2.getId(), ReservationStatus.ACTIVE, 50000);
+      ReservationEntity reservation1 = ReservationEntity.of(1L, concert.getId(), concertScheduleSeat1.getId(), ReservationStatus.ACTIVE, 50000);
+      ReservationEntity reservation2 = ReservationEntity.of(1L, concert.getId(), concertScheduleSeat2.getId(), ReservationStatus.ACTIVE, 50000);
 
       sut.createOrder(concertSchedule.getConcertId(), concertSchedule.getId(), uuid, List.of(concertScheduleSeat1.getId(), concertScheduleSeat2.getId()), 100000);
 

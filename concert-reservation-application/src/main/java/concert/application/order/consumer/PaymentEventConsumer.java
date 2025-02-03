@@ -25,10 +25,15 @@ public class PaymentEventConsumer {
   private final OutboxEntityDAO outboxEntityDAO;
 
   @KafkaListener(topics = OrderConst.PAYMENT_CONFIRMED_TOPIC)
-  public void receivePaymentConfirmedEvent(String message) throws OrderException{
+  public void receivePaymentConfirmedEvent(String message){
 
     PaymentConfirmedEvent event = applicationJsonConverter.convertFromJson(message, PaymentConfirmedEvent.class);
-    orderApplicationService.handlePaymentConfirmed(event);
+
+    try {
+      orderApplicationService.handlePaymentConfirmed(event);
+    }catch(OrderException e){
+      log.error("handlePaymentConfirmed has an exception", e);
+    }
 
     Optional<OutboxEntity> outboxEvent = outboxEntityDAO.findByMessage(message);
 
