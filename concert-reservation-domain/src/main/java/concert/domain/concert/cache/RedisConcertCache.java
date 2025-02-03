@@ -2,7 +2,7 @@ package concert.domain.concert.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.domain.concert.domain.Concert;
+import concert.domain.concert.entities.ConcertEntity;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class RedisConcertCache implements ConcertCache {
     private final ObjectMapper objectMapper;
 
     @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcerts")
-    public void saveTop30Concerts(List<Concert> concerts) throws JsonProcessingException {
+    public void saveTop30Concerts(List<ConcertEntity> concerts) throws JsonProcessingException {
         RMap<String, String> top30concertMap = redisson.getMap(TOP30_CONCERTS);
         String top30concertListJson = objectMapper.writeValueAsString(concerts);
 
@@ -37,14 +37,14 @@ public class RedisConcertCache implements ConcertCache {
     }
 
     @CircuitBreaker(name = "redisCircuitBreaker", fallbackMethod = "fallbackSaveConcerts")
-    public List<Concert> findTop30Concerts() throws JsonProcessingException {
+    public List<ConcertEntity> findTop30Concerts() throws JsonProcessingException {
         RMap<String, String> top30concertMap = redisson.getMap(TOP30_CONCERTS);
 
         String top30concertListJson = top30concertMap.get("top30concerts");
 
         if (top30concertListJson != null && !top30concertListJson.isEmpty()) {
             log.info("Retrieved top 30 concerts from Redis.");
-            return objectMapper.readValue(top30concertListJson, objectMapper.getTypeFactory().constructCollectionType(List.class, Concert.class));
+            return objectMapper.readValue(top30concertListJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ConcertEntity.class));
         } else {
             log.warn("No top 30 concerts found in Redis.");
             return null;

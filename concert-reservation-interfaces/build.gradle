@@ -1,0 +1,40 @@
+plugins {
+    id 'java-library'  // 기존 'java' 플러그인에서 'java-library'로 변경
+}
+
+// jar로 생성 (기본적으로 라이브러리 모듈에서 jar는 활성화 상태)
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = false
+}
+
+dependencies {
+    // Lombok
+    implementation 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    // Spring Boot Starters (Data JPA, Web, Logging, AOP)
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka:3.2.4'
+
+    // Redisson
+    implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
+
+    // OpenAPI (Swagger UI)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+    // AspectJ (AOP 관련)
+    implementation 'org.aspectj:aspectjweaver:1.9.7'
+
+    api project(':concert-reservation-application')
+    api project(':concert-reservation-domain')
+}

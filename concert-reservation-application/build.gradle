@@ -40,7 +40,6 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.28'
 
     api project(':concert-reservation-domain')
-    api project(':commons')
 }
 
 task wrapper(type: Wrapper) {

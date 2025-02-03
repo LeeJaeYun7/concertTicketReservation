@@ -1,9 +1,9 @@
 package concert.concert;
 
-import concert.concert.fixtures.ConcertFixtureFactory;
-import concert.domain.concert.application.ConcertService;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concert.domain.ConcertRepository;
+import concert.concert.fixtures.ConcertEntityFixtureFactory;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.services.ConcertService;
+import concert.domain.concert.entities.dao.ConcertEntityDAO;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,7 +23,7 @@ import static org.mockito.BDDMockito.given;
 public class ConcertServiceTest {
 
   @Mock
-  private ConcertRepository concertRepository;
+  private ConcertEntityDAO concertEntityDAO;
 
   @InjectMocks
   private ConcertService sut;
@@ -33,11 +33,11 @@ public class ConcertServiceTest {
     @Test
     @DisplayName("콘서트를 가져온다")
     void 콘서트를_가져온다() {
-      Concert concert = ConcertFixtureFactory.createConcertWithIdAndName(1L, "박효신 콘서트");
+      ConcertEntity concert = ConcertEntityFixtureFactory.createConcertWithIdAndName(1L, "박효신 콘서트");
       long concertId = 1L;
-      given(concertRepository.findById(concertId)).willReturn(Optional.of(concert));
+      given(concertEntityDAO.findById(concertId)).willReturn(Optional.of(concert));
 
-      Concert foundConcert = sut.getConcertById(concertId);
+      ConcertEntity foundConcert = sut.getConcertById(concertId);
 
       assertEquals(1L, foundConcert.getId());
       assertEquals("박효신 콘서트", foundConcert.getName());
