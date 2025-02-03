@@ -19,11 +19,11 @@ public class OrderEventProducerImpl implements OrderEventProducer {
 
   public void sendOrderRequestEvent(OrderRequestEvent event) {
     String eventJson = applicationJsonConverter.convertToJson(event);
-    kafkaTemplate.send(OrderConst.ORDER_PAYMENT_REQUEST_TOPIC, eventJson);
+    kafkaTemplate.send(OrderConst.ORDER_REQUEST_TOPIC, eventJson);
   }
 
   public void sendOrderCompensationEvent(OrderCompensationEvent event) {
     String eventJson = applicationJsonConverter.convertToJson(event);
-    kafkaTemplate.send(OrderConst.ORDER_PAYMENT_COMPENSATION_TOPIC, eventJson);
+    kafkaTemplate.send(OrderConst.ORDER_COMPENSATION_TOPIC, eventJson);
   }
 }

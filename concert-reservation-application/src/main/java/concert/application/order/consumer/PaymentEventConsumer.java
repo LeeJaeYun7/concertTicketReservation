@@ -24,7 +24,7 @@ public class PaymentEventConsumer {
   private final OrderApplicationService orderApplicationService;
   private final OutboxEntityDAO outboxEntityDAO;
 
-  @KafkaListener(topics = OrderConst.PAYMENT_ORDER_CONFIRMED_TOPIC)
+  @KafkaListener(topics = OrderConst.PAYMENT_CONFIRMED_TOPIC)
   public void receivePaymentConfirmedEvent(String message) throws OrderException{
 
     PaymentConfirmedEvent event = applicationJsonConverter.convertFromJson(message, PaymentConfirmedEvent.class);
@@ -39,7 +39,7 @@ public class PaymentEventConsumer {
     }
   }
 
-  @KafkaListener(topics = OrderConst.PAYMENT_ORDER_FAILED_TOPIC)
+  @KafkaListener(topics = OrderConst.PAYMENT_FAILED_TOPIC)
   public void receivePaymentFailedEvent(String message) throws OrderException {
     throw new OrderException(OrderExceptionType.PAYMENT_FAILED);
   }

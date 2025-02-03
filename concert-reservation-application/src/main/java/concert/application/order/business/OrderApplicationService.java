@@ -5,6 +5,8 @@ import concert.application.order.application.kafka.OrderEventProducer;
 import concert.application.order.event.OrderCompensationEvent;
 import concert.application.order.event.PaymentConfirmedEvent;
 import concert.application.order.event.OrderRequestEvent;
+import concert.application.shared.enums.EventType;
+import concert.application.shared.enums.SenderType;
 import concert.application.shared.utils.ApplicationJsonConverter;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
@@ -41,40 +43,20 @@ public class OrderApplicationService {
   @Transactional
   public void createOrder(String uuid, long concertScheduleId, List<Long> concertScheduleSeatIds) {
 
-    long totalPrice = 0;
-
-    for(long concertScheduleSeatId: concertScheduleSeatIds){
-      ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeat(concertScheduleSeatId);
-      long concertSeatGradeId = concertScheduleSeat.getConcertSeatGradeId();
-      long price = concertSeatGradeService.getConcertSeatGradePrice(concertSeatGradeId);
-      totalPrice += price;
-    }
+    long totalPrice = calculateTotalPrice(concertScheduleSeatIds);
 
     ConcertScheduleEntity concertSchedule = getConcertSchedule(concertScheduleId);
 
-    OrderRequestEvent event = OrderRequestEvent.builder()
-                                                             .concertId(concertSchedule.getConcertId())
-                                                             .concertScheduleId(concertSchedule.getId())
-                                                             .uuid(uuid)
-                                                             .concertScheduleSeatIds(concertScheduleSeatIds)
-                                                             .totalPrice(totalPrice)
-                                                             .build();
-
+    OrderRequestEvent event = createOrderRequestEvent(concertSchedule, uuid, concertScheduleSeatIds, totalPrice);
     String eventJson = applicationJsonConverter.convertToJson(event);
 
-    OutboxEntity outbox = OutboxEntity.of("order", OrderConst.ORDER_PAYMENT_REQUEST_TOPIC, "OrderPaymentRequest", eventJson, false);
+    OutboxEntity outbox = OutboxEntity.of(SenderType.ORDER, OrderConst.ORDER_REQUEST_TOPIC, EventType.ORDER_REQUEST, eventJson, false);
     outboxEntityDAO.save(outbox);
   }
 
   public void handlePaymentConfirmed(PaymentConfirmedEvent event) throws OrderException {
 
-    long concertId = event.getConcertId();
-    long concertScheduleId = event.getConcertScheduleId();
-    String uuid = event.getUuid();
-    List<Long> concertScheduleSeatIds = event.getConcertScheduleSeatIds();
-    long totalPrice = event.getTotalPrice();
-
-    PaymentConfirmedCommand command = PaymentConfirmedCommand.of(concertId, concertScheduleId, uuid, concertScheduleSeatIds, totalPrice);
+    PaymentConfirmedCommand command = createPaymentConfirmedCommand(event);
 
     try {
       orderTxService.handlePaymentConfirmed(command);
@@ -91,11 +73,44 @@ public class OrderApplicationService {
 
   private OrderCompensationEvent getOrderCompensationEvent(PaymentConfirmedEvent event){
     return OrderCompensationEvent.builder()
-                                        .concertId(event.getConcertId())
-                                        .concertScheduleId(event.getConcertScheduleId())
-                                        .uuid(event.getUuid())
-                                        .concertScheduleSeatIds(event.getConcertScheduleSeatIds())
-                                        .totalPrice(event.getTotalPrice())
-                                        .build();
+                                 .concertId(event.getConcertId())
+                                 .concertScheduleId(event.getConcertScheduleId())
+                                 .uuid(event.getUuid())
+                                 .concertScheduleSeatIds(event.getConcertScheduleSeatIds())
+                                 .totalPrice(event.getTotalPrice())
+                                 .build();
+  }
+
+  public long calculateTotalPrice(List<Long> concertScheduleSeatIds){
+        long totalPrice = 0;
+
+        for(long concertScheduleSeatId: concertScheduleSeatIds){
+            ConcertScheduleSeatEntity concertScheduleSeat = concertScheduleSeatService.getConcertScheduleSeat(concertScheduleSeatId);
+            long concertSeatGradeId = concertScheduleSeat.getConcertSeatGradeId();
+            long price = concertSeatGradeService.getConcertSeatGradePrice(concertSeatGradeId);
+            totalPrice += price;
+        }
+
+        return totalPrice;
+  }
+
+  public OrderRequestEvent createOrderRequestEvent(ConcertScheduleEntity concertSchedule, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
+      return OrderRequestEvent.builder()
+                              .concertId(concertSchedule.getConcertId())
+                              .concertScheduleId(concertSchedule.getId())
+                              .uuid(uuid)
+                              .concertScheduleSeatIds(concertScheduleSeatIds)
+                              .totalPrice(totalPrice)
+                              .build();
+  }
+
+  public PaymentConfirmedCommand createPaymentConfirmedCommand(PaymentConfirmedEvent event){
+        long concertId = event.getConcertId();
+        long concertScheduleId = event.getConcertScheduleId();
+        String uuid = event.getUuid();
+        List<Long> concertScheduleSeatIds = event.getConcertScheduleSeatIds();
+        long totalPrice = event.getTotalPrice();
+
+        return PaymentConfirmedCommand.of(concertId, concertScheduleId, uuid, concertScheduleSeatIds, totalPrice);
   }
 }
