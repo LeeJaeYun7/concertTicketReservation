@@ -1,8 +1,6 @@
 package concert.interfaces.order;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import concert.application.order.business.OrderApplicationService;
-import concert.domain.order.vo.OrderVO;
 import concert.interfaces.order.request.OrderRequest;
 import concert.interfaces.order.response.OrderResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor

@@ -3,7 +3,6 @@ package concert.application.concert.scheduler;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
