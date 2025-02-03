@@ -2,7 +2,7 @@ package concert.reservation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.application.order.event.PaymentOrderConfirmedEvent;
+import concert.application.order.event.PaymentConfirmedEvent;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
@@ -109,15 +109,15 @@ public class KafkaOrderPaymentConfirmedAndOrderCreationTest {
   }
 
   @Test
-  @DisplayName("OrderPaymentConfirmedEvent를_전달받은_후_주문을_생성한다")
-  void OrderPaymentConfirmedEvent를_전달받은_후_주문을_생성한다() throws JsonProcessingException {
-    PaymentOrderConfirmedEvent event = new PaymentOrderConfirmedEvent(concert.getId(), concertSchedule.getId(), memberUuid, List.of(concertScheduleSeat.getId()), seatGrade.getPrice());
+  @DisplayName("PaymentConfirmedEvent를_전달받은_후_주문을_생성한다")
+  void PaymentConfirmedEvent를_전달받은_후_주문을_생성한다() throws JsonProcessingException {
+    PaymentConfirmedEvent event = new PaymentConfirmedEvent(concert.getId(), concertSchedule.getId(), memberUuid, List.of(concertScheduleSeat.getId()), seatGrade.getPrice());
 
     String eventJson = objectMapper.writeValueAsString(event);
     kafkaTemplate.send("order-payment-confirmed-event", eventJson);
     String consumedMessage = pollMessageFromKafka("order-payment-confirmed-event");
 
-    PaymentOrderConfirmedEvent consumedEvent = objectMapper.readValue(consumedMessage, PaymentOrderConfirmedEvent.class);
+    PaymentConfirmedEvent consumedEvent = objectMapper.readValue(consumedMessage, PaymentConfirmedEvent.class);
 
     // sut.handlePaymentConfirmed(consumedEvent);
 

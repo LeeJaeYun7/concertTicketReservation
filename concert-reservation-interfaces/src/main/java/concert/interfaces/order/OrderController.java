@@ -22,14 +22,13 @@ public class OrderController {
   private final OrderApplicationService orderApplicationService;
 
   @PostMapping("/api/v1/order")
-  public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) throws ExecutionException, InterruptedException, JsonProcessingException {
+  public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
     String uuid = orderRequest.getUuid();
     long concertScheduleId = orderRequest.getConcertScheduleId();
     List<Long> concertScheduleSeatIds = orderRequest.getConcertScheduleSeatIds();
 
-    OrderVO orderVO = orderApplicationService.createOrder(uuid, concertScheduleId, concertScheduleSeatIds).get();
-    OrderResponse orderResponse = OrderResponse.of(orderVO.getName(), orderVO.getConcertName(), orderVO.getDateTime(), orderVO.getTotalPrice());
+    orderApplicationService.createOrder(uuid, concertScheduleId, concertScheduleSeatIds);
 
-    return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

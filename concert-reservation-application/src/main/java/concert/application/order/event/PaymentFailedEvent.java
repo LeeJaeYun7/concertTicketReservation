@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentOrderFailedEvent {
+public class PaymentFailedEvent {
 
     private long concertId;
     private long concertScheduleId;

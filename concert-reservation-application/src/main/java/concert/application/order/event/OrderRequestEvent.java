@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class OrderPaymentRequestEvent {
+public class OrderRequestEvent {
 
     private long concertId;
     private long concertScheduleId;
@@ -17,7 +17,7 @@ public class OrderPaymentRequestEvent {
     private long totalPrice;
 
     @Builder
-    public OrderPaymentRequestEvent(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
+    public OrderRequestEvent(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
         this.concertId = concertId;
         this.concertScheduleId = concertScheduleId;
         this.uuid = uuid;
@@ -25,8 +25,8 @@ public class OrderPaymentRequestEvent {
         this.totalPrice = totalPrice;
     }
 
-    public static OrderPaymentRequestEvent of(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
-        return OrderPaymentRequestEvent.builder()
+    public static OrderRequestEvent of(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
+        return OrderRequestEvent.builder()
                                   .concertId(concertId)
                                   .concertScheduleId(concertScheduleId)
                                   .uuid(uuid)

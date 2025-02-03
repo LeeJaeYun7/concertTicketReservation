@@ -19,17 +19,21 @@ import java.util.List;
 public class ConcertSeatReservationCleanupService {
 
     private final ConcertScheduleSeatEntityDAO concertScheduleSeatEntityDAO;
-    private final EntityManager entityManager;
 
     @Scheduled(fixedRate = 5000) // 5초마다 실행
     @Transactional
     public void restoreConcertScheduleSeatReservations() {
-        LocalDateTime threshold = LocalDateTime.now().minusMinutes(5);
+        try {
+            LocalDateTime threshold = LocalDateTime.now().minusMinutes(5);
+            List<ConcertScheduleSeatEntity> concertScheduleSeats =
+                    concertScheduleSeatEntityDAO.updateExpiredConcertScheduleSeats(ConcertScheduleSeatStatus.PENDING, threshold);
 
-        List<ConcertScheduleSeatEntity> concertScheduleSeats = concertScheduleSeatEntityDAO.updateExpiredConcertScheduleSeats(ConcertScheduleSeatStatus.PENDING, threshold);
-        concertScheduleSeats.forEach(seat -> seat.updateStatus(ConcertScheduleSeatStatus.AVAILABLE));
+            concertScheduleSeats.forEach(seat -> seat.updateStatus(ConcertScheduleSeatStatus.AVAILABLE));
+            concertScheduleSeatEntityDAO.saveAll(concertScheduleSeats);
 
-        entityManager.flush();
-        entityManager.clear();
+            log.info("Restored ConcertScheduleSeatReservations");
+        } catch (Exception e) {
+            log.error("An exception occurred while restoring concert seat reservations", e);
+        }
     }
 }

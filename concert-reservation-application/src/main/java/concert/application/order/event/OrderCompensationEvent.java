@@ -1,5 +1,6 @@
 package concert.application.order.event;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PaymentOrderConfirmedEvent {
+public class OrderCompensationEvent {
 
     private long concertId;
     private long concertScheduleId;
@@ -15,7 +16,8 @@ public class PaymentOrderConfirmedEvent {
     private List<Long> concertScheduleSeatIds;
     private long totalPrice;
 
-    public PaymentOrderConfirmedEvent(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
+    @Builder
+    public OrderCompensationEvent(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
         this.concertId = concertId;
         this.concertScheduleId = concertScheduleId;
         this.uuid = uuid;

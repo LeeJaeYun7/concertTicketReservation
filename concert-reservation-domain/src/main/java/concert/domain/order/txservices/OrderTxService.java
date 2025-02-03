@@ -1,7 +1,6 @@
 package concert.domain.order.txservices;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import concert.domain.concert.entities.ConcertEntity;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
@@ -9,13 +8,14 @@ import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concert.services.ConcertService;
 import concert.domain.member.entities.MemberEntity;
 import concert.domain.member.services.MemberService;
-import concert.domain.order.command.PaymentOrderConfirmedCommand;
+import concert.domain.order.command.PaymentConfirmedCommand;
 import concert.domain.order.entities.OrderEntity;
 import concert.domain.order.entities.dao.OrderEntityDAO;
 import concert.domain.order.entities.enums.OrderStatus;
 import concert.domain.order.services.ReservationService;
 import concert.domain.order.vo.OrderVO;
 import concert.domain.concert.services.ConcertScheduleSeatService;
+import concert.domain.shared.utils.DomainJsonConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,7 @@ import java.util.List;
 @Slf4j
 public class OrderTxService {
 
+  private final DomainJsonConverter domainJsonConverter;
   private final MemberService memberService;
   private final ConcertService concertService;
   private final ConcertScheduleSeatService concertScheduleSeatService;
@@ -42,26 +43,19 @@ public class OrderTxService {
 
     List<Long> reservationIds = new ArrayList<>();
 
-    log.info("createOrder 실행!!!");
-    System.out.println(concertId);
-    System.out.println(concertScheduleId);
-    System.out.println(uuid);
-    System.out.println(totalPrice);
-
     for(long concertScheduleSeatId: concertScheduleSeatIds){
         long reservationId = reservationService.createReservation(concertId, concertScheduleSeatId);
         reservationIds.add(reservationId);
     }
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    String reservationIdsJson = objectMapper.writeValueAsString(reservationIds);
+    String reservationIdsJson = domainJsonConverter.convertToJson(reservationIds);
 
     OrderEntity order = OrderEntity.of(concertId, concertScheduleId, uuid, reservationIdsJson, OrderStatus.ACTIVE, totalPrice);
     return orderEntityDAO.save(order);
   }
 
   @Transactional
-  public OrderVO handlePaymentOrderConfirmed(PaymentOrderConfirmedCommand command) throws JsonProcessingException {
+  public OrderVO handlePaymentConfirmed(PaymentConfirmedCommand command) throws JsonProcessingException {
 
     long concertScheduleId = command.getConcertScheduleId();
     String uuid = command.getUuid();

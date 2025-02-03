@@ -1,54 +1,45 @@
 package concert.application.order.business;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import concert.application.order.OrderConst;
-import concert.application.order.application.kafka.OrderPaymentEventProducer;
-import concert.application.order.event.OrderPaymentCompensationEvent;
-import concert.application.order.event.PaymentOrderConfirmedEvent;
-import concert.application.order.event.OrderPaymentRequestEvent;
+import concert.application.order.application.kafka.OrderEventProducer;
+import concert.application.order.event.OrderCompensationEvent;
+import concert.application.order.event.PaymentConfirmedEvent;
+import concert.application.order.event.OrderRequestEvent;
+import concert.application.shared.utils.ApplicationJsonConverter;
 import concert.domain.concert.entities.ConcertScheduleEntity;
 import concert.domain.concert.entities.ConcertScheduleSeatEntity;
 import concert.domain.concert.services.ConcertScheduleService;
 import concert.domain.concert.services.ConcertScheduleSeatService;
 import concert.domain.concert.services.ConcertSeatGradeService;
-import concert.domain.order.command.PaymentOrderConfirmedCommand;
+import concert.domain.order.command.PaymentConfirmedCommand;
 import concert.domain.order.entities.OutboxEntity;
 import concert.domain.order.entities.dao.OutboxEntityDAO;
 import concert.domain.order.exceptions.OrderException;
 import concert.domain.order.exceptions.OrderExceptionType;
 import concert.domain.order.txservices.OrderTxService;
-import concert.domain.order.vo.OrderVO;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class OrderApplicationService {
 
+  private final ApplicationJsonConverter applicationJsonConverter;
   private final OrderTxService orderTxService;
   private final ConcertScheduleSeatService concertScheduleSeatService;
   private final ConcertSeatGradeService concertSeatGradeService;
 
   private final ConcertScheduleService concertScheduleService;
   private final OutboxEntityDAO outboxEntityDAO;
-  private final OrderPaymentEventProducer orderPaymentEventProducer;
-
-  private ConcurrentMap<String, CompletableFuture<OrderVO>> orderFutures = new ConcurrentHashMap<>();
-
+  private final OrderEventProducer orderEventProducer;
 
   @Transactional
-  public CompletableFuture<OrderVO> createOrder(String uuid, long concertScheduleId, List<Long> concertScheduleSeatIds) throws JsonProcessingException {
+  public void createOrder(String uuid, long concertScheduleId, List<Long> concertScheduleSeatIds) {
 
     long totalPrice = 0;
 
@@ -61,7 +52,7 @@ public class OrderApplicationService {
 
     ConcertScheduleEntity concertSchedule = getConcertSchedule(concertScheduleId);
 
-    OrderPaymentRequestEvent event = OrderPaymentRequestEvent.builder()
+    OrderRequestEvent event = OrderRequestEvent.builder()
                                                              .concertId(concertSchedule.getConcertId())
                                                              .concertScheduleId(concertSchedule.getId())
                                                              .uuid(uuid)
@@ -69,19 +60,13 @@ public class OrderApplicationService {
                                                              .totalPrice(totalPrice)
                                                              .build();
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    String eventJson = objectMapper.writeValueAsString(event);
+    String eventJson = applicationJsonConverter.convertToJson(event);
 
     OutboxEntity outbox = OutboxEntity.of("order", OrderConst.ORDER_PAYMENT_REQUEST_TOPIC, "OrderPaymentRequest", eventJson, false);
     outboxEntityDAO.save(outbox);
-
-    CompletableFuture<OrderVO> future = new CompletableFuture<>();
-    orderFutures.put(uuid, future);
-
-    return future;
   }
 
-  public void handlePaymentOrderConfirmed(PaymentOrderConfirmedEvent event) throws OrderException {
+  public void handlePaymentConfirmed(PaymentConfirmedEvent event) throws OrderException {
 
     long concertId = event.getConcertId();
     long concertScheduleId = event.getConcertScheduleId();
@@ -89,22 +74,13 @@ public class OrderApplicationService {
     List<Long> concertScheduleSeatIds = event.getConcertScheduleSeatIds();
     long totalPrice = event.getTotalPrice();
 
-    PaymentOrderConfirmedCommand command = PaymentOrderConfirmedCommand.of(concertId, concertScheduleId, uuid, concertScheduleSeatIds, totalPrice);
+    PaymentConfirmedCommand command = PaymentConfirmedCommand.of(concertId, concertScheduleId, uuid, concertScheduleSeatIds, totalPrice);
 
     try {
-      OrderVO orderVO = orderTxService.handlePaymentOrderConfirmed(command);
-
-      CompletableFuture<OrderVO> future = orderFutures.remove(uuid);
-      if (future != null) {
-        future.complete(orderVO);
-        log.info("OrderFuture completed for uuid: " + uuid);
-      } else {
-        log.error("No pending order found for uuid: " + uuid);
-      }
-
+      orderTxService.handlePaymentConfirmed(command);
     } catch (Exception e) {
-      OrderPaymentCompensationEvent compensationEvent = getOrderPaymentCompensationEvent(event);
-      orderPaymentEventProducer.sendOrderPaymentCompensationEvent(compensationEvent);
+      OrderCompensationEvent compensationEvent = getOrderCompensationEvent(event);
+      orderEventProducer.sendOrderCompensationEvent(compensationEvent);
       throw new OrderException(OrderExceptionType.ORDER_FAILED);
     }
   }
@@ -113,8 +89,8 @@ public class OrderApplicationService {
     return concertScheduleService.getConcertScheduleById(concertScheduleId);
   }
 
-  private OrderPaymentCompensationEvent getOrderPaymentCompensationEvent(PaymentOrderConfirmedEvent event){
-    return OrderPaymentCompensationEvent.builder()
+  private OrderCompensationEvent getOrderCompensationEvent(PaymentConfirmedEvent event){
+    return OrderCompensationEvent.builder()
                                         .concertId(event.getConcertId())
                                         .concertScheduleId(event.getConcertScheduleId())
                                         .uuid(event.getUuid())

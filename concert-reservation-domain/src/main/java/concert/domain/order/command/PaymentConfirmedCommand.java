@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PaymentOrderConfirmedCommand {
+public class PaymentConfirmedCommand {
 
     private long concertId;
     private long concertScheduleId;
@@ -17,7 +17,7 @@ public class PaymentOrderConfirmedCommand {
     private long totalPrice;
 
     @Builder
-    public PaymentOrderConfirmedCommand(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
+    public PaymentConfirmedCommand(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
         this.concertId = concertId;
         this.concertScheduleId = concertScheduleId;
         this.uuid = uuid;
@@ -25,8 +25,8 @@ public class PaymentOrderConfirmedCommand {
         this.totalPrice = totalPrice;
     }
 
-    public static PaymentOrderConfirmedCommand of(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
-        return PaymentOrderConfirmedCommand.builder()
+    public static PaymentConfirmedCommand of(long concertId, long concertScheduleId, String uuid, List<Long> concertScheduleSeatIds, long totalPrice){
+        return PaymentConfirmedCommand.builder()
                                            .concertId(concertId)
                                            .concertScheduleId(concertScheduleId)
                                            .uuid(uuid)

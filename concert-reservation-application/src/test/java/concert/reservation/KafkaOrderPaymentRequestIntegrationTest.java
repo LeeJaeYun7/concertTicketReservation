@@ -2,7 +2,7 @@ package concert.reservation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import concert.application.order.event.OrderPaymentRequestEvent;
+import concert.application.order.event.OrderRequestEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -22,6 +22,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,13 +59,13 @@ public class KafkaOrderPaymentRequestIntegrationTest {
   @Test
   @DisplayName("OrderPaymentRequestEvent를 Kafka에 발행 후 구독한다")
   void OrderPaymentRequestEvent를_Kafka에_발행_후_구독한다() throws JsonProcessingException {
-    OrderPaymentRequestEvent event = new OrderPaymentRequestEvent(11L, 11L, "abcd", 50000);
+    OrderRequestEvent event = new OrderRequestEvent(11L, 11L, "abcd", List.of(1L, 2L), 50000);
 
     String eventJson = objectMapper.writeValueAsString(event);
     kafkaTemplate.send("order-payment-request-event", eventJson);
     String consumedMessage = pollMessageFromKafka("order-payment-request-event");
 
-    OrderPaymentRequestEvent consumedEvent = objectMapper.readValue(consumedMessage, OrderPaymentRequestEvent.class);
+    OrderRequestEvent consumedEvent = objectMapper.readValue(consumedMessage, OrderRequestEvent.class);
 
     assertEquals(event.getConcertId(), consumedEvent.getConcertId());
     assertEquals(event.getConcertScheduleId(), consumedEvent.getConcertScheduleId());
