@@ -12,5 +12,4 @@
 
 
 ### 좌석 선점 예약 및 좌석 예약 요청 API
-![image](https://github.com/user-attachments/assets/85d2a009-3887-4111-ad97-644067035b03)
-
+![콘서트 대기열2 drawio](https://github.com/user-attachments/assets/61eda918-5cd2-49e0-8b25-01cb091490ee)
