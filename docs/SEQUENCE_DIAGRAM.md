@@ -11,8 +11,7 @@
 
 
 ### 대기열 -> 활성화열 변환 API 
-![대기열 drawio](https://github.com/user-attachments/assets/78a711e6-096e-415d-91ca-2b74e23fbe14)
-
+![대기열 drawio (1)](https://github.com/user-attachments/assets/624bafc8-6cf6-48b8-86cc-7a500ce47fb9)
 
 
 ### 좌석 선점 예약 및 좌석 예약 요청 API
