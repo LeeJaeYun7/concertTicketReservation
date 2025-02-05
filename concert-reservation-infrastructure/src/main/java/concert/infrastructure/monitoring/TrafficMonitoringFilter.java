@@ -29,7 +29,6 @@ public class TrafficMonitoringFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException {
         if (request instanceof HttpServletRequest httpServletRequest) {
             String apiName = httpServletRequest.getRequestURI();
-            log.info("apiName?" + apiName);
             incrementTraffic(apiName);
         }
 
@@ -58,7 +57,7 @@ public class TrafficMonitoringFilter implements Filter {
         return totalTraffic;
     }
 
-    // 트래픽을 증가시키는 메서드 (슬라이딩 윈도우 적용)
+    // 트래픽을 증가시키는 메서드
     public void incrementTraffic(String apiName) {
         long currentSecond = Instant.now().getEpochSecond(); // 현재 초 단위로 시간 구하기
 
