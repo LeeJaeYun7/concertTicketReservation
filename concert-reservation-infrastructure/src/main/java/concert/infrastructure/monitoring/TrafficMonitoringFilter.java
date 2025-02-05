@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.LongCodec;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -44,14 +45,14 @@ public class TrafficMonitoringFilter implements Filter {
         long currentSecond = Instant.now().getEpochSecond(); // 현재 초 단위로 시간 구하기
 
         // 트래픽 데이터를 저장하는 RMap
-        RMap<String, String> trafficMap = redissonClient.getMap("traffic:" + apiName);
+        RMap<String, Long> trafficMap = redissonClient.getMap("traffic:" + apiName, LongCodec.INSTANCE);
 
         long totalTraffic = 0;
 
         // 최근 1분의 데이터를 계산
         for (long i = currentSecond - 60; i < currentSecond; i++) {
             String key = "second:" + i;
-            totalTraffic += Long.parseLong(trafficMap.getOrDefault(key, "0"));
+            totalTraffic += trafficMap.getOrDefault(key, 0L);
         }
 
         return totalTraffic;
@@ -62,11 +63,9 @@ public class TrafficMonitoringFilter implements Filter {
         long currentSecond = Instant.now().getEpochSecond(); // 현재 초 단위로 시간 구하기
 
         // 트래픽 데이터를 저장하는 RMap
-        RMap<String, String> trafficMap = redissonClient.getMap("traffic:" + apiName);
+        RMap<String, Long> trafficMap = redissonClient.getMap("traffic:" + apiName, LongCodec.INSTANCE);
 
         String key = "second:" + currentSecond; // 초 단위 키
-        long currentCount = Long.parseLong(trafficMap.getOrDefault(key, "0")); // 문자열을 Long으로 변환
-        trafficMap.put(key, String.valueOf(currentCount + 1));
+        trafficMap.addAndGet(key, 1L); // 내부적으로 Redis HINCRBY 실행
     }
 }
-
