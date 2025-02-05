@@ -18,14 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConcertScheduleSeatApplicationService {
 
-  private final TimeProvider timeProvider;
-  private final MemberService memberService;
   private final ConcertService concertService;
   private final ConcertHallSeatService concertHallSeatService;
   private final ConcertScheduleService concertScheduleService;
   private final ConcertScheduleSeatService concertScheduleSeatService;
 
-  public List<Long> getAvailableConcertScheduleSeatNumbers(long concertScheduleId) {
+  public List<Long> getActiveConcertScheduleSeatNumbers(long concertScheduleId) {
     concertScheduleService.getConcertScheduleById(concertScheduleId);
 
     long concertId = concertScheduleService.getConcertScheduleById(concertScheduleId).getConcertId();
