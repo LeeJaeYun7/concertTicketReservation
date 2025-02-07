@@ -46,6 +46,4 @@ public class WaitingDTO {
 
     return waitingDTO;
   }
-
-
 }
