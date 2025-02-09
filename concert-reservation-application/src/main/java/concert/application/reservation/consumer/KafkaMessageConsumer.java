@@ -4,12 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import concert.application.reservation.ReservationConst;
 import concert.application.reservation.event.PaymentConfirmedEvent;
-import concert.commons.common.CustomException;
-import concert.commons.common.ErrorCode;
-import concert.commons.common.Loggable;
-import concert.domain.reservation.txservice.ReservationTxService;
-import concert.domain.reservation.domain.Outbox;
-import concert.domain.reservation.domain.OutboxRepository;
+import concert.domain.reservation.exceptions.ReservationException;
+import concert.domain.reservation.exceptions.ReservationExceptionType;
+import concert.domain.reservation.txservices.ReservationTxService;
+import concert.domain.reservation.entities.Outbox;
+import concert.domain.reservation.entities.dao.OutboxRepository;
 import concert.domain.reservation.command.PaymentConfirmedCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +50,7 @@ public class KafkaMessageConsumer {
   }
 
   @KafkaListener(topics = ReservationConst.PAYMENT_FAILED_TOPIC)
-  public void receivePaymentFailedEvent(String message) throws JsonProcessingException {
-    throw new CustomException(ErrorCode.PAYMENT_FAILED, Loggable.NEVER);
+  public void receivePaymentFailedEvent(String message) throws ReservationException {
+    throw new ReservationException(ReservationExceptionType.PAYMENT_FAILED);
   }
 }

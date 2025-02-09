@@ -14,7 +14,6 @@ bootJar {
 dependencies {
     // Lombok
     implementation 'org.projectlombok:lombok:1.18.28'
-    implementation project(path: ':concert-reservation-application')
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
     // Spring Boot Starters (Data JPA, Web, Logging, AOP)
@@ -36,6 +35,4 @@ dependencies {
     // AspectJ (AOP 관련)
     implementation 'org.aspectj:aspectjweaver:1.9.7'
 
-    // 프로젝트 내부 의존성
-    api project(':commons')
 }
