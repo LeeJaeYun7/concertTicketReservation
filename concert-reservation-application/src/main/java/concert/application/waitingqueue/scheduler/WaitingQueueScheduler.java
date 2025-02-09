@@ -19,7 +19,7 @@ public class WaitingQueueScheduler {
 
   private final WaitingQueueMigrationApplicationService waitingQueueMigrationApplicationService;
 
-  @Scheduled(fixedRate = 100000)
+  @Scheduled(fixedRate = 10000)
   public void processWaitingQueue() {
     List<Long> concertIds = concertService.getAllConcertIds();
 
