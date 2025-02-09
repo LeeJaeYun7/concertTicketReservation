@@ -1,18 +1,17 @@
 package concert.concertschedule;
 
-import concert.commons.utils.TimeProvider;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concert.domain.enums.ConcertAgeRestriction;
-import concert.domain.concerthall.domain.ConcertHall;
-import concert.domain.concertschedule.application.ConcertScheduleService;
-import concert.domain.concertschedule.domain.ConcertSchedule;
-import concert.domain.concertschedule.domain.ConcertScheduleRepository;
-import concert.domain.concertscheduleseat.application.ConcertScheduleSeatService;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeatRepository;
-import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
-import concert.domain.seatgrade.domain.SeatGrade;
-import concert.domain.seatgrade.domain.enums.Grade;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.entities.ConcertScheduleEntity;
+import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
+import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
+import concert.domain.concert.entities.enums.ConcertAgeRestriction;
+import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
+import concert.domain.concert.entities.enums.SeatGrade;
+import concert.domain.concert.services.ConcertScheduleService;
+import concert.domain.concerthall.entities.ConcertHallEntity;
+import concert.domain.concert.services.ConcertScheduleSeatService;
+import concert.domain.shared.utils.TimeProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,10 +36,7 @@ public class ConcertScheduleServiceTest {
   private TimeProvider timeProvider;
 
   @Mock
-  private ConcertScheduleRepository concertScheduleRepository;
-
-  @Mock
-  private ConcertScheduleSeatRepository concertScheduleSeatRepository;
+  private ConcertScheduleEntityDAO concertScheduleEntityDAO;
 
   @Mock
   private ConcertScheduleSeatService concertScheduleSeatService;
@@ -58,25 +54,25 @@ public class ConcertScheduleServiceTest {
       LocalDate IUstartAt = LocalDate.of(2024, 10, 16);
       LocalDate IUendAt = LocalDate.of(2024, 10, 18);
 
-      ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
-      Concert IUConcert = Concert.of("아이유 콘서트", concertHall.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, IUstartAt, IUendAt);
+      ConcertHallEntity concertHallEntity = ConcertHallEntity.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
+      ConcertEntity IUConcert = ConcertEntity.of("아이유 콘서트", concertHallEntity.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, IUstartAt, IUendAt);
 
       LocalDateTime IUdateTime = LocalDateTime.of(2024, 10, 18, 22, 30);
-      ConcertSchedule IUconcertSchedule = ConcertSchedule.of(IUConcert.getId(), IUdateTime);
+      ConcertScheduleEntity IUconcertSchedule = ConcertScheduleEntity.of(IUConcert.getId(), IUdateTime);
       setFieldUsingReflection(IUconcertSchedule, "id", 1L);
 
-      SeatGrade allSeatGrade = SeatGrade.of(IUConcert.getId(), Grade.ALL, 100000);
-      ConcertScheduleSeat IUconcertScheduleSeat = ConcertScheduleSeat.of(concertHall.getId(), IUconcertSchedule.getId(), allSeatGrade.getId(), SeatStatus.AVAILABLE);
+      ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(IUConcert.getId(), SeatGrade.ALL, 100000);
+      ConcertScheduleSeatEntity IUconcertScheduleSeat = ConcertScheduleSeatEntity.of(concertHallEntity.getId(), IUconcertSchedule.getId(), allSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
 
       when(timeProvider.now()).thenReturn(LocalDateTime.of(2024, 10, 18, 0, 0));
 
       setFieldUsingReflection(IUconcertScheduleSeat, "id", 1L);
       setFieldUsingReflection(IUconcertScheduleSeat, "updatedAt", timeProvider.now().minusMinutes(10));
 
-      given(concertScheduleRepository.findAllAfterNowByConcertId(1L, timeProvider.now())).willReturn(List.of(IUconcertSchedule));
+      given(concertScheduleEntityDAO.findAllAfterNowByConcertId(1L, timeProvider.now())).willReturn(List.of(IUconcertSchedule));
       given(concertScheduleSeatService.getAllAvailableConcertScheduleSeats(IUconcertSchedule.getId())).willReturn(List.of(IUconcertScheduleSeat));
 
-      List<LocalDateTime> result = sut.getAllAvailableDateTimes(1L);
+      List<LocalDateTime> result = sut.getActiveConcertSchedules(1L);
 
       assertEquals(1, result.size());
     }
