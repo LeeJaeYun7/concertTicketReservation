@@ -1,23 +1,23 @@
 package concert.factory;
 
-import concert.domain.concert.domain.Concert;
-import concert.domain.concert.domain.ConcertRepository;
-import concert.domain.concert.domain.enums.ConcertAgeRestriction;
-import concert.domain.concerthall.domain.ConcertHall;
-import concert.domain.concerthall.domain.ConcertHallRepository;
-import concert.domain.concerthallseat.domain.ConcertHallSeat;
-import concert.domain.concerthallseat.domain.ConcertHallSeatRepository;
-import concert.domain.concertschedule.domain.ConcertSchedule;
-import concert.domain.concertschedule.domain.ConcertScheduleRepository;
-import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
-import concert.domain.member.entity.Member;
-import concert.domain.member.entity.dao.MemberRepository;
-import concert.domain.reservation.domain.ReservationRepository;
-import concert.domain.seatgrade.domain.SeatGrade;
-import concert.domain.seatgrade.domain.SeatGradeRepository;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeatRepository;
-import concert.domain.seatgrade.domain.enums.Grade;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.entities.ConcertScheduleEntity;
+import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
+import concert.domain.concert.entities.dao.ConcertEntityDAO;
+import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
+import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
+import concert.domain.concert.entities.dao.ConcertSeatGradeEntityDAO;
+import concert.domain.concert.entities.enums.ConcertAgeRestriction;
+import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
+import concert.domain.concert.entities.enums.SeatGrade;
+import concert.domain.concerthall.entities.ConcertHallEntity;
+import concert.domain.concerthall.entities.dao.ConcertHallEntityDAO;
+import concert.domain.concerthall.entities.ConcertHallSeatEntity;
+import concert.domain.concerthall.entities.dao.ConcertHallSeatEntityDAO;
+import concert.domain.member.entities.MemberEntity;
+import concert.domain.member.entities.dao.MemberRepository;
+import concert.domain.order.entities.dao.ReservationEntityDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
@@ -33,60 +33,59 @@ public class TestDataFactory {
   private MemberRepository memberRepository;
 
   @Autowired
-  private ConcertRepository concertRepository;
+  private ConcertEntityDAO concertEntityDAO;
 
   @Autowired
-  private ConcertHallRepository concertHallRepository;
+  private ConcertHallEntityDAO concertHallEntityDAO;
   @Autowired
-  private ConcertScheduleRepository concertScheduleRepository;
+  private ConcertScheduleEntityDAO concertScheduleEntityDAO;
   @Autowired
-  private ConcertHallSeatRepository concertHallSeatRepository;
+  private ConcertHallSeatEntityDAO concertHallSeatEntityDAO;
 
   @Autowired
-  private SeatGradeRepository seatGradeRepository;
+  private ConcertSeatGradeEntityDAO concertSeatGradeEntityDAO;
 
   @Autowired
-  private ConcertScheduleSeatRepository concertScheduleSeatRepository;
+  private ConcertScheduleSeatEntityDAO concertScheduleSeatEntityDAO;
 
   @Autowired
-  private ReservationRepository reservationRepository;
+  private ReservationEntityDAO reservationEntityDAO;
 
 
-  public Member createMember() {
-    Member member = Member.of("Tom Cruise");
-    member.updateBalance(100000);
+  public MemberEntity createMember() {
+    MemberEntity member = MemberEntity.of("Tom Cruise");
     return memberRepository.save(member);
   }
 
-  public ConcertHall createConcertHall() {
-    ConcertHall concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
-    return concertHallRepository.save(concertHall);
+  public ConcertHallEntity createConcertHall() {
+    ConcertHallEntity concertHallEntity = ConcertHallEntity.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
+    return concertHallEntityDAO.save(concertHallEntity);
   }
 
-  public Concert createConcert(ConcertHall concertHall) {
+  public ConcertEntity createConcert(ConcertHallEntity concertHallEntity) {
     LocalDate startAt = LocalDate.of(2024, 11, 25);
     LocalDate endAt = LocalDate.of(2024, 11, 28);
-    Concert concert = Concert.of("브루노마스 콘서트", concertHall.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
-    return concertRepository.save(concert);
+    ConcertEntity concert = ConcertEntity.of("브루노마스 콘서트", concertHallEntity.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+    return concertEntityDAO.save(concert);
   }
 
-  public ConcertSchedule createConcertSchedule(Concert concert) {
+  public ConcertScheduleEntity createConcertSchedule(ConcertEntity concert) {
     LocalDateTime dateTime = LocalDateTime.of(2024, 11, 25, 22, 30);
-    return concertScheduleRepository.save(ConcertSchedule.of(concert.getId(), dateTime));
+    return concertScheduleEntityDAO.save(ConcertScheduleEntity.of(concert.getId(), dateTime));
   }
 
-  public ConcertHallSeat createSeat(ConcertHall concertHall) {
-    ConcertHallSeat seat = ConcertHallSeat.of(concertHall.getId(), 1);
-    return concertHallSeatRepository.save(seat);
+  public ConcertHallSeatEntity createSeat(ConcertHallEntity concertHallEntity) {
+    ConcertHallSeatEntity seat = ConcertHallSeatEntity.of(concertHallEntity.getId(), 1);
+    return concertHallSeatEntityDAO.save(seat);
   }
 
-  public SeatGrade createSeatGrade(Concert concert) {
-    SeatGrade allSeatGrade = SeatGrade.of(concert.getId(), Grade.ALL, 100000);
-    return seatGradeRepository.save(allSeatGrade);
+  public ConcertSeatGradeEntity createSeatGrade(ConcertEntity concert) {
+    ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(concert.getId(), SeatGrade.ALL, 100000);
+    return concertSeatGradeEntityDAO.save(allSeatGrade);
   }
 
-  public ConcertScheduleSeat createConcertScheduleSeat(ConcertHallSeat seat, ConcertSchedule concertSchedule, SeatGrade seatGrade) {
-    ConcertScheduleSeat allConcertScheduleSeat = ConcertScheduleSeat.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), SeatStatus.AVAILABLE);
-    return concertScheduleSeatRepository.save(allConcertScheduleSeat);
+  public ConcertScheduleSeatEntity createConcertScheduleSeat(ConcertHallSeatEntity seat, ConcertScheduleEntity concertSchedule, ConcertSeatGradeEntity seatGrade) {
+    ConcertScheduleSeatEntity allConcertScheduleSeat = ConcertScheduleSeatEntity.of(seat.getId(), concertSchedule.getId(), seatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
+    return concertScheduleSeatEntityDAO.save(allConcertScheduleSeat);
   }
 }

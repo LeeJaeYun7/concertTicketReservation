@@ -1,24 +1,23 @@
 package concert.concertschedule;
 
-
-import concert.commons.utils.TimeProvider;
-import concert.domain.concert.domain.Concert;
-import concert.domain.concert.domain.ConcertRepository;
-import concert.domain.concert.domain.enums.ConcertAgeRestriction;
-import concert.domain.concerthall.domain.ConcertHall;
-import concert.domain.concerthall.domain.ConcertHallRepository;
-import concert.domain.concerthallseat.domain.ConcertHallSeat;
-import concert.domain.concerthallseat.domain.ConcertHallSeatRepository;
-import concert.domain.concertschedule.application.ConcertScheduleService;
-import concert.domain.concertschedule.domain.ConcertSchedule;
-import concert.domain.concertschedule.domain.ConcertScheduleRepository;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeat;
-import concert.domain.reservation.domain.ReservationRepository;
-import concert.domain.seatgrade.domain.SeatGrade;
-import concert.domain.seatgrade.domain.SeatGradeRepository;
-import concert.domain.seatgrade.domain.enums.Grade;
-import concert.domain.concertscheduleseat.domain.ConcertScheduleSeatRepository;
-import concert.domain.concertscheduleseat.domain.enums.SeatStatus;
+import concert.domain.concert.entities.ConcertEntity;
+import concert.domain.concert.entities.ConcertScheduleEntity;
+import concert.domain.concert.entities.ConcertScheduleSeatEntity;
+import concert.domain.concert.entities.ConcertSeatGradeEntity;
+import concert.domain.concert.entities.dao.ConcertEntityDAO;
+import concert.domain.concert.entities.dao.ConcertScheduleEntityDAO;
+import concert.domain.concert.entities.dao.ConcertScheduleSeatEntityDAO;
+import concert.domain.concert.entities.dao.ConcertSeatGradeEntityDAO;
+import concert.domain.concert.entities.enums.ConcertAgeRestriction;
+import concert.domain.concert.entities.enums.ConcertScheduleSeatStatus;
+import concert.domain.concert.entities.enums.SeatGrade;
+import concert.domain.concert.services.ConcertScheduleService;
+import concert.domain.concerthall.entities.ConcertHallEntity;
+import concert.domain.concerthall.entities.dao.ConcertHallEntityDAO;
+import concert.domain.concerthall.entities.ConcertHallSeatEntity;
+import concert.domain.concerthall.entities.dao.ConcertHallSeatEntityDAO;
+import concert.domain.order.entities.dao.ReservationEntityDAO;
+import concert.domain.shared.utils.TimeProvider;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,38 +36,38 @@ public class ConcertScheduleIntegrationTest {
   TimeProvider timeProvider;
   LocalDate startAt;
   LocalDate endAt;
-  ConcertHall concertHall;
-  ConcertHall savedConcertHall;
-  Concert firstConcert;
-  Concert secondConcert;
-  Concert savedFirstConcert;
-  Concert savedSecondConcert;
-  ConcertSchedule firstConcertSchedule;
-  ConcertSchedule secondConcertSchedule;
-  ConcertSchedule savedFirstConcertSchedule;
-  ConcertSchedule savedSecondConcertSchedule;
-  ConcertSchedule thirdConcertSchedule;
-  ConcertSchedule fourthConcertSchedule;
-  ConcertSchedule savedThirdConcertSchedule;
-  ConcertSchedule savedFourthConcertSchedule;
+  ConcertHallEntity concertHallEntity;
+  ConcertHallEntity savedConcertHallEntity;
+  ConcertEntity firstConcert;
+  ConcertEntity secondConcert;
+  ConcertEntity savedFirstConcert;
+  ConcertEntity savedSecondConcert;
+  ConcertScheduleEntity firstConcertSchedule;
+  ConcertScheduleEntity secondConcertSchedule;
+  ConcertScheduleEntity savedFirstConcertSchedule;
+  ConcertScheduleEntity savedSecondConcertSchedule;
+  ConcertScheduleEntity thirdConcertSchedule;
+  ConcertScheduleEntity fourthConcertSchedule;
+  ConcertScheduleEntity savedThirdConcertSchedule;
+  ConcertScheduleEntity savedFourthConcertSchedule;
   LocalDateTime firstDateTime;
   LocalDateTime secondDateTime;
   @Autowired
   private ConcertScheduleService sut;
   @Autowired
-  private ConcertHallSeatRepository concertHallSeatRepository;
+  private ConcertHallSeatEntityDAO concertHallSeatEntityDAO;
   @Autowired
-  private ReservationRepository reservationRepository;
+  private ReservationEntityDAO reservationEntityDAO;
   @Autowired
-  private ConcertRepository concertRepository;
+  private ConcertEntityDAO concertEntityDAO;
   @Autowired
-  private ConcertHallRepository concertHallRepository;
+  private ConcertHallEntityDAO concertHallEntityDAO;
   @Autowired
-  private ConcertScheduleRepository concertScheduleRepository;
+  private ConcertScheduleEntityDAO concertScheduleEntityDAO;
   @Autowired
-  private ConcertScheduleSeatRepository concertScheduleSeatRepository;
+  private ConcertScheduleSeatEntityDAO concertScheduleSeatEntityDAO;
   @Autowired
-  private SeatGradeRepository seatGradeRepository;
+  private ConcertSeatGradeEntityDAO concertSeatGradeEntityDAO;
 
   @BeforeEach
   void setUp() {
@@ -77,79 +76,79 @@ public class ConcertScheduleIntegrationTest {
 
     startAt = LocalDate.of(2024, 12, 1);
     endAt = LocalDate.of(2024, 12, 31);
-    concertHall = ConcertHall.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
-    savedConcertHall = concertHallRepository.save(concertHall);
+    concertHallEntity = ConcertHallEntity.of("KSPO DOME", "서울특별시 송파구 올림픽로 424 (방이동 88-2) 올림픽공원", "02-410-1114", null);
+    savedConcertHallEntity = concertHallEntityDAO.save(concertHallEntity);
 
-    firstConcert = Concert.of("김연우 콘서트", savedConcertHall.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
-    secondConcert = Concert.of("박효신 콘서트", savedConcertHall.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+    firstConcert = ConcertEntity.of("김연우 콘서트", savedConcertHallEntity.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
+    secondConcert = ConcertEntity.of("박효신 콘서트", savedConcertHallEntity.getId(), "ballad", 120, ConcertAgeRestriction.OVER_15, startAt, endAt);
 
     firstDateTime = LocalDateTime.of(2024, 12, 11, 22, 30);
     secondDateTime = LocalDateTime.of(2024, 12, 12, 22, 30);
 
-    savedFirstConcert = concertRepository.save(firstConcert);
-    firstConcertSchedule = ConcertSchedule.of(savedFirstConcert.getId(), firstDateTime);
-    secondConcertSchedule = ConcertSchedule.of(savedFirstConcert.getId(), secondDateTime);
+    savedFirstConcert = concertEntityDAO.save(firstConcert);
+    firstConcertSchedule = ConcertScheduleEntity.of(savedFirstConcert.getId(), firstDateTime);
+    secondConcertSchedule = ConcertScheduleEntity.of(savedFirstConcert.getId(), secondDateTime);
 
-    savedFirstConcertSchedule = concertScheduleRepository.save(firstConcertSchedule);
-    savedSecondConcertSchedule = concertScheduleRepository.save(secondConcertSchedule);
+    savedFirstConcertSchedule = concertScheduleEntityDAO.save(firstConcertSchedule);
+    savedSecondConcertSchedule = concertScheduleEntityDAO.save(secondConcertSchedule);
 
-    ConcertHallSeat seat11 = ConcertHallSeat.of(savedConcertHall.getId(), 11); // 예시로 Seat 객체를 생성
-    ConcertHallSeat seat12 = ConcertHallSeat.of(savedConcertHall.getId(), 12);
-    ConcertHallSeat savedSeat11 = concertHallSeatRepository.save(seat11);
-    ConcertHallSeat savedSeat12 = concertHallSeatRepository.save(seat12);
+    ConcertHallSeatEntity seat11 = ConcertHallSeatEntity.of(savedConcertHallEntity.getId(), 11); // 예시로 Seat 객체를 생성
+    ConcertHallSeatEntity seat12 = ConcertHallSeatEntity.of(savedConcertHallEntity.getId(), 12);
+    ConcertHallSeatEntity savedSeat11 = concertHallSeatEntityDAO.save(seat11);
+    ConcertHallSeatEntity savedSeat12 = concertHallSeatEntityDAO.save(seat12);
 
-    SeatGrade allSeatGrade = SeatGrade.of(savedFirstConcert.getId(), Grade.ALL, 100000); // 예시로 SeatGrade 생성
-    SeatGrade savedALLSeatGrade = seatGradeRepository.save(allSeatGrade);
+    ConcertSeatGradeEntity allSeatGrade = ConcertSeatGradeEntity.of(savedFirstConcert.getId(), SeatGrade.ALL, 100000); // 예시로 SeatGrade 생성
+    ConcertSeatGradeEntity savedALLSeatGrade = concertSeatGradeEntityDAO.save(allSeatGrade);
 
     LocalDateTime now = timeProvider.now();
     LocalDateTime threshold = now.minusMinutes(10);
 
-    ConcertScheduleSeat firstScheduleConcertScheduleSeat1 = ConcertScheduleSeat.of(savedSeat11.getId(), savedFirstConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
-    ConcertScheduleSeat firstScheduleConcertScheduleSeat2 = ConcertScheduleSeat.of(savedSeat12.getId(), savedFirstConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
+    ConcertScheduleSeatEntity firstScheduleConcertScheduleSeat1 = ConcertScheduleSeatEntity.of(savedSeat11.getId(), savedFirstConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
+    ConcertScheduleSeatEntity firstScheduleConcertScheduleSeat2 = ConcertScheduleSeatEntity.of(savedSeat12.getId(), savedFirstConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
     firstScheduleConcertScheduleSeat1.changeUpdatedAt(threshold);
     firstScheduleConcertScheduleSeat2.changeUpdatedAt(threshold);
 
-    ConcertScheduleSeat secondScheduleSeatInfo1 = ConcertScheduleSeat.of(savedSeat11.getId(), savedSecondConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
-    ConcertScheduleSeat secondScheduleSeatInfo2 = ConcertScheduleSeat.of(savedSeat12.getId(), savedSecondConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.AVAILABLE);
+    ConcertScheduleSeatEntity secondScheduleSeatInfo1 = ConcertScheduleSeatEntity.of(savedSeat11.getId(), savedSecondConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
+    ConcertScheduleSeatEntity secondScheduleSeatInfo2 = ConcertScheduleSeatEntity.of(savedSeat12.getId(), savedSecondConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
     secondScheduleSeatInfo1.changeUpdatedAt(threshold);
     secondScheduleSeatInfo2.changeUpdatedAt(threshold);
 
-    concertScheduleSeatRepository.save(firstScheduleConcertScheduleSeat1);
-    concertScheduleSeatRepository.save(firstScheduleConcertScheduleSeat2);
-    concertScheduleSeatRepository.save(secondScheduleSeatInfo1);
-    concertScheduleSeatRepository.save(secondScheduleSeatInfo2);
+    concertScheduleSeatEntityDAO.save(firstScheduleConcertScheduleSeat1);
+    concertScheduleSeatEntityDAO.save(firstScheduleConcertScheduleSeat2);
+    concertScheduleSeatEntityDAO.save(secondScheduleSeatInfo1);
+    concertScheduleSeatEntityDAO.save(secondScheduleSeatInfo2);
 
     // 두번째 테스트
 
-    savedSecondConcert = concertRepository.save(secondConcert);
-    thirdConcertSchedule = ConcertSchedule.of(savedSecondConcert.getId(), firstDateTime);
-    fourthConcertSchedule = ConcertSchedule.of(savedSecondConcert.getId(), secondDateTime);
+    savedSecondConcert = concertEntityDAO.save(secondConcert);
+    thirdConcertSchedule = ConcertScheduleEntity.of(savedSecondConcert.getId(), firstDateTime);
+    fourthConcertSchedule = ConcertScheduleEntity.of(savedSecondConcert.getId(), secondDateTime);
 
-    ConcertSchedule savedThirdConcertSchedule = concertScheduleRepository.save(thirdConcertSchedule);
-    ConcertSchedule savedFourthConcertSchedule = concertScheduleRepository.save(fourthConcertSchedule);
+    ConcertScheduleEntity savedThirdConcertSchedule = concertScheduleEntityDAO.save(thirdConcertSchedule);
+    ConcertScheduleEntity savedFourthConcertSchedule = concertScheduleEntityDAO.save(fourthConcertSchedule);
 
-    ConcertHallSeat seat21 = ConcertHallSeat.of(savedConcertHall.getId(), 21); // 예시로 Seat 객체를 생성
-    ConcertHallSeat seat22 = ConcertHallSeat.of(savedConcertHall.getId(), 22);
-    ConcertHallSeat savedSeat21 = concertHallSeatRepository.save(seat21);
-    ConcertHallSeat savedSeat22 = concertHallSeatRepository.save(seat22);
+    ConcertHallSeatEntity seat21 = ConcertHallSeatEntity.of(savedConcertHallEntity.getId(), 21); // 예시로 Seat 객체를 생성
+    ConcertHallSeatEntity seat22 = ConcertHallSeatEntity.of(savedConcertHallEntity.getId(), 22);
+    ConcertHallSeatEntity savedSeat21 = concertHallSeatEntityDAO.save(seat21);
+    ConcertHallSeatEntity savedSeat22 = concertHallSeatEntityDAO.save(seat22);
 
-    SeatGrade RSeatGrade = SeatGrade.of(savedSecondConcert.getId(), Grade.ALL, 100000); // 예시로 SeatGrade 생성
-    SeatGrade savedRSeatGrade = seatGradeRepository.save(RSeatGrade);
+    ConcertSeatGradeEntity RSeatGrade = ConcertSeatGradeEntity.of(savedSecondConcert.getId(), SeatGrade.ALL, 100000); // 예시로 SeatGrade 생성
+    ConcertSeatGradeEntity savedRSeatGrade = concertSeatGradeEntityDAO.save(RSeatGrade);
 
-    ConcertScheduleSeat thirdConcertScheduleSeat1 = ConcertScheduleSeat.of(savedSeat21.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.RESERVED);
-    ConcertScheduleSeat thirdConcertScheduleSeat2 = ConcertScheduleSeat.of(savedSeat22.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), SeatStatus.RESERVED);
+    ConcertScheduleSeatEntity thirdConcertScheduleSeat1 = ConcertScheduleSeatEntity.of(savedSeat21.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.RESERVED);
+    ConcertScheduleSeatEntity thirdConcertScheduleSeat2 = ConcertScheduleSeatEntity.of(savedSeat22.getId(), savedThirdConcertSchedule.getId(), savedALLSeatGrade.getId(), ConcertScheduleSeatStatus.RESERVED);
     thirdConcertScheduleSeat1.changeUpdatedAt(threshold);
     thirdConcertScheduleSeat2.changeUpdatedAt(threshold);
 
-    ConcertScheduleSeat fourthConcertScheduleSeat1 = ConcertScheduleSeat.of(savedSeat21.getId(), savedFourthConcertSchedule.getId(), savedRSeatGrade.getId(), SeatStatus.AVAILABLE);
-    ConcertScheduleSeat fourthConcertScheduleSeat2 = ConcertScheduleSeat.of(savedSeat22.getId(), savedFourthConcertSchedule.getId(), savedRSeatGrade.getId(), SeatStatus.AVAILABLE);
+    ConcertScheduleSeatEntity fourthConcertScheduleSeat1 = ConcertScheduleSeatEntity.of(savedSeat21.getId(), savedFourthConcertSchedule.getId(), savedRSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
+    ConcertScheduleSeatEntity fourthConcertScheduleSeat2 = ConcertScheduleSeatEntity.of(savedSeat22.getId(), savedFourthConcertSchedule.getId(), savedRSeatGrade.getId(), ConcertScheduleSeatStatus.AVAILABLE);
     fourthConcertScheduleSeat1.changeUpdatedAt(threshold);
     fourthConcertScheduleSeat2.changeUpdatedAt(threshold);
 
-    concertScheduleSeatRepository.save(thirdConcertScheduleSeat1);
-    concertScheduleSeatRepository.save(thirdConcertScheduleSeat2);
-    concertScheduleSeatRepository.save(fourthConcertScheduleSeat1);
-    concertScheduleSeatRepository.save(fourthConcertScheduleSeat2);
+    concertScheduleSeatEntityDAO.save(thirdConcertScheduleSeat1);
+    concertScheduleSeatEntityDAO.save(thirdConcertScheduleSeat2);
+    concertScheduleSeatEntityDAO.save(fourthConcertScheduleSeat1);
+    concertScheduleSeatEntityDAO.save(fourthConcertScheduleSeat2);
   }
 
 
@@ -159,14 +158,14 @@ public class ConcertScheduleIntegrationTest {
     @Test
     @DisplayName("총 스케줄이_2개인 경우 2개를 가져온다.")
     void 총_스케줄이_2개인_경우_2개를_가져온다() {
-      List<LocalDateTime> result = sut.getAllAvailableDateTimes(savedFirstConcert.getId());
+      List<LocalDateTime> result = sut.getActiveConcertSchedules(savedFirstConcert.getId());
       assertEquals(2, result.size());
     }
 
     @Test
     @DisplayName("총 스케줄이_2개인 경우 해당하는 1개를 가져온다.")
     void 총_스케줄이_2개인_경우_해당하는_1개를_가져온다() {
-      List<LocalDateTime> result = sut.getAllAvailableDateTimes(savedSecondConcert.getId());
+      List<LocalDateTime> result = sut.getActiveConcertSchedules(savedSecondConcert.getId());
       assertEquals(1, result.size());
     }
   }
