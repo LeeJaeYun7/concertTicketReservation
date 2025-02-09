@@ -39,8 +39,8 @@ public class WaitingQueueDao {
     Collection<String> tokenList = waitingQueue.readAll();
 
     Collection<String> limitedList = tokenList.stream()
-            .limit(limit)
-            .toList();
+                                              .limit(limit)
+                                              .toList();
 
     return limitedList.stream().map(WaitingDTO::parse).collect(Collectors.toList());
   }
@@ -67,7 +67,7 @@ public class WaitingQueueDao {
     for (WaitingDTO waitingDTO : tokens) {
       String uuid = waitingDTO.getUuid();
       String token = waitingDTO.getToken();
-      activeQueue.putIfAbsent(uuid, token, 5, TimeUnit.SECONDS);
+      activeQueue.putIfAbsent(uuid, token, 300, TimeUnit.SECONDS);
     }
   }
 
