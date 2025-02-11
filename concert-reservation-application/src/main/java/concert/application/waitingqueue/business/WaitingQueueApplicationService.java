@@ -18,14 +18,15 @@ public class WaitingQueueApplicationService {
   private final MemberService memberService;
   private final WaitingQueueService waitingQueueService;
   private static final String QUEUE_ACTIVE_KEY = "waiting_queue_active";
+  private static final String QUEUE_ACTIVE_VALUE = "true";
   private final RedissonClient redissonClient;
 
   public void activateWaitingQueue() {
     RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
-    if ("true".equals(queueActiveBucket.get())) {
+    if (QUEUE_ACTIVE_VALUE.equals(queueActiveBucket.get())) {
       log.info("[QUEUE] Waiting queue is already active.");
     } else {
-      queueActiveBucket.set("true"); // TTL 없이 저장
+      queueActiveBucket.set(QUEUE_ACTIVE_VALUE); // TTL 없이 저장
       log.info("[QUEUE] Waiting queue has been activated!");
     }
   }
@@ -42,16 +43,16 @@ public class WaitingQueueApplicationService {
 
   public boolean isQueueActive() {
     RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
-    return "true".equals(queueActiveBucket.get());
+    return QUEUE_ACTIVE_VALUE.equals(queueActiveBucket.get());
   }
 
-  public TokenVO retrieveToken(long concertId, String uuid) {
+  public TokenVO retrieveToken(String uuid) {
     memberService.getMemberByUuid(uuid);
-    String token = waitingQueueService.retrieveToken(concertId, uuid);
+    String token = waitingQueueService.retrieveToken(uuid);
     return TokenVO.of(token);
   }
 
-  public WaitingRankVO retrieveWaitingRank(long concertId, String uuid) {
-    return waitingQueueService.retrieveWaitingRank(concertId, uuid);
+  public WaitingRankVO retrieveWaitingRank(String uuid) {
+    return waitingQueueService.retrieveWaitingRank(uuid);
   }
 }

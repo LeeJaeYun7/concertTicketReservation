@@ -21,14 +21,10 @@ public class WaitingQueueScheduler {
 
   @Scheduled(fixedRate = 10000)
   public void processWaitingQueue() {
-    List<Long> concertIds = concertService.getAllConcertIds();
-
-    for (long concertId : concertIds) {
       try {
-        waitingQueueMigrationApplicationService.migrateFromWaitingToActiveQueue(concertId);
+        waitingQueueMigrationApplicationService.migrateFromWaitingToActiveQueue();
       } catch (CustomException e) {
         log.error("대기열을 처리하는 중 에러 발생: " + e.getMessage());
       }
-    }
   }
 }

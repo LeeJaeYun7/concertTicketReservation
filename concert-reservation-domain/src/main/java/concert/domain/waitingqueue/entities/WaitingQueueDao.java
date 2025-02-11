@@ -15,54 +15,55 @@ import java.util.stream.Collectors;
 public class WaitingQueueDao {
 
   private final RedissonClient redisson;
+  private static final String WAITING_QUEUE_KEY = "waitingQueue";
+  private static final String ACTIVE_QUEUE_KEY = "activeQueue";
 
   public WaitingQueueDao(RedissonClient redisson) {
     this.redisson = redisson;
   }
 
-  public String addToWaitingQueue(long concertId, WaitingDTO waitingDTO) {
-    RSortedSet<String> waitingQueue = redisson.getSortedSet(getWaitingQueueKey(concertId));
+  public String addToWaitingQueue(WaitingDTO waitingDTO) {
+    RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
     String token = waitingDTO.getToken();
     waitingQueue.add(token);
     return token;
   }
 
-  public Collection<WaitingDTO> getAllWaitingTokens(long concertId) {
-    RSortedSet<String> waitingQueue = redisson.getSortedSet(getWaitingQueueKey(concertId));
+  public Collection<WaitingDTO> getAllWaitingTokens() {
+    RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
     Collection<String> tokenList = waitingQueue.readAll();
 
     return tokenList.stream().map(WaitingDTO::parse).collect(Collectors.toList());
   }
 
-  public Collection<WaitingDTO> getAllWaitingTokens(long concertId, long limit) {
-    RSortedSet<String> waitingQueue = redisson.getSortedSet(getWaitingQueueKey(concertId));
+  public Collection<WaitingDTO> getAllWaitingTokens(long transferCount) {
+    RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
     Collection<String> tokenList = waitingQueue.readAll();
 
     Collection<String> limitedList = tokenList.stream()
-                                              .limit(limit)
+                                              .limit(transferCount)
                                               .toList();
 
     return limitedList.stream().map(WaitingDTO::parse).collect(Collectors.toList());
   }
 
 
-  public String getActiveQueueToken(long concertId, String uuid) {
-    RMapCache<String, String> activeQueue = redisson.getMapCache(getActiveQueueKey(concertId));  // RMapCache 사용
+  public String getActiveQueueToken(String uuid) {
+    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
 
     return activeQueue.get(uuid);
   }
 
-  public void deleteActiveQueueToken(long concertId, String uuid) {
-    RMapCache<String, String> activeQueue = redisson.getMapCache(getActiveQueueKey(concertId));  // RMapCache 사용
+  public void deleteActiveQueueToken(String uuid) {
+    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
     activeQueue.remove(uuid);
   }
 
   /**
-   * @param concertId
    * @param tokens    <uuid, token>
    */
-  public void putActiveQueueToken(long concertId, Collection<WaitingDTO> tokens) {
-    RMapCache<String, String> activeQueue = redisson.getMapCache(getActiveQueueKey(concertId));  // RMapCache 사용
+  public void putActiveQueueToken(Collection<WaitingDTO> tokens) {
+    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
 
     for (WaitingDTO waitingDTO : tokens) {
       String uuid = waitingDTO.getUuid();
@@ -71,22 +72,17 @@ public class WaitingQueueDao {
     }
   }
 
-  public void deleteWaitQueueTokens(long concertId, Collection<WaitingDTO> tokens) {
-    RSortedSet<String> waitingQueue = redisson.getSortedSet(getWaitingQueueKey(concertId));
+  public int getActiveQueueSize() {
+    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);
+    return activeQueue.size();
+  }
+
+  public void deleteWaitQueueTokens(Collection<WaitingDTO> tokens) {
+    RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
 
     tokens.forEach(waitingDTO -> {
       String token = waitingDTO.getToken();
       waitingQueue.remove(token);
     });
   }
-
-  private static String getWaitingQueueKey(long concertId) {
-    return "waitingQueue:" + concertId;
-  }
-
-  private static String getActiveQueueKey(long concertId) {
-    return "activeQueue:" + concertId;
-  }
-
-
 }

@@ -38,17 +38,17 @@ public class WaitingQueueController {
   }
 
   @GetMapping("/api/v1/waitingQueue/token")
-  public ResponseEntity<TokenResponse> retrieveToken(@RequestParam(value = "concertId") long concertId, @RequestParam(value = "uuid") String uuid) {
-      TokenVO tokenVO = waitingQueueApplicationService.retrieveToken(concertId, uuid);
+  public ResponseEntity<TokenResponse> retrieveToken(@RequestParam(value = "uuid") String uuid) {
+      TokenVO tokenVO = waitingQueueApplicationService.retrieveToken(uuid);
       TokenResponse tokenResponse = TokenResponse.of(tokenVO.getToken());
 
       return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
   }
 
   @GetMapping("/api/v1/waitingQueue/rank")
-  public ResponseEntity<WaitingRankResponse> retrieveWaitingRank(@RequestParam(value = "concertId") long concertId, @RequestParam(value = "token") String token) {
+  public ResponseEntity<WaitingRankResponse> retrieveWaitingRank(@RequestParam(value = "token") String token) {
       String uuid = token.split(":")[1];
-      WaitingRankVO waitingRankVo = waitingQueueApplicationService.retrieveWaitingRank(concertId, uuid);
+      WaitingRankVO waitingRankVo = waitingQueueApplicationService.retrieveWaitingRank(uuid);
       WaitingRankResponse waitingRankResponse = WaitingRankResponse.of(waitingRankVo.getWaitingRank(), waitingRankVo.getStatus());
 
       return ResponseEntity.status(HttpStatus.CREATED).body(waitingRankResponse);
