@@ -47,18 +47,6 @@ public class WaitingQueueDao {
     return limitedList.stream().map(WaitingDTO::parse).collect(Collectors.toList());
   }
 
-
-  public String getActiveQueueToken(String uuid) {
-    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
-
-    return activeQueue.get(uuid);
-  }
-
-  public void deleteActiveQueueToken(String uuid) {
-    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
-    activeQueue.remove(uuid);
-  }
-
   /**
    * @param tokens    <uuid, token>
    */
@@ -77,6 +65,16 @@ public class WaitingQueueDao {
     return activeQueue.size();
   }
 
+  public boolean isTokenExistsInWaitingQueue(String token){
+      RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
+      return waitingQueue.contains(token);
+  }
+
+  public void deleteWaitingQueueToken(String token){
+      RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
+      waitingQueue.remove(token);
+  }
+
   public void deleteWaitQueueTokens(Collection<WaitingDTO> tokens) {
     RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
 
@@ -84,5 +82,16 @@ public class WaitingQueueDao {
       String token = waitingDTO.getToken();
       waitingQueue.remove(token);
     });
+  }
+
+  public boolean isTokenExistsInActiveQueue(WaitingDTO waitingDTO){
+    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
+    String uuid = waitingDTO.getUuid();
+    return activeQueue.containsKey(uuid);
+  }
+
+  public void deleteActiveQueueToken(String uuid) {
+    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
+    activeQueue.remove(uuid);
   }
 }

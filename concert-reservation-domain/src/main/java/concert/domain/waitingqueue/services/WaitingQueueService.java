@@ -95,4 +95,20 @@ public class WaitingQueueService {
       log.error("Error while attempting to acquire lock: {}", e.getMessage());
     }
   }
+
+  public void removeUserFromQueues(String token) {
+    boolean waitingQueueExists = waitingQueueDao.isTokenExistsInWaitingQueue(token);
+
+    if(waitingQueueExists){
+      waitingQueueDao.deleteWaitingQueueToken(token);
+      return;
+    }
+
+    WaitingDTO waitingDTO = WaitingDTO.parse(token);
+    boolean activeQueueExists = waitingQueueDao.isTokenExistsInActiveQueue(waitingDTO);
+
+    if(activeQueueExists){
+      waitingQueueDao.deleteActiveQueueToken(token);
+    }
+  }
 }
