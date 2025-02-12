@@ -111,4 +111,18 @@ public class WaitingQueueService {
       waitingQueueDao.deleteActiveQueueToken(token);
     }
   }
+
+  public void removeActivatedToken(String token){
+    boolean activatedTokenExists = waitingQueueDao.isActivatedTokenExists(token);
+    if(activatedTokenExists){
+      waitingQueueDao.removeActivatedToken(token);
+    }
+  }
+
+  public void removeSession(String token){
+    boolean sessionExists = waitingQueueDao.isSessionExists(token);
+    if(sessionExists){
+      waitingQueueDao.removeSession(token);
+    }
+  }
 }

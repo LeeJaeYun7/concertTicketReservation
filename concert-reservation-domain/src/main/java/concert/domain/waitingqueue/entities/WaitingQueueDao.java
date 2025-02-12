@@ -1,9 +1,7 @@
 package concert.domain.waitingqueue.entities;
 
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RMapCache;
-import org.redisson.api.RSortedSet;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -17,6 +15,10 @@ public class WaitingQueueDao {
   private final RedissonClient redisson;
   private static final String WAITING_QUEUE_KEY = "waitingQueue";
   private static final String ACTIVE_QUEUE_KEY = "activeQueue";
+
+  private static final String ACTIVATED_TOKENS_KEY = "activatedTokens";
+  private static final String TOKEN_SESSION_ID_MAP = "tokenSessionId";
+
 
   public WaitingQueueDao(RedissonClient redisson) {
     this.redisson = redisson;
@@ -94,4 +96,25 @@ public class WaitingQueueDao {
     RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);  // RMapCache 사용
     activeQueue.remove(uuid);
   }
+
+  public boolean isActivatedTokenExists(String token){
+    RSet<String> activatedTokensSet = redisson.getSet(ACTIVATED_TOKENS_KEY);
+    return activatedTokensSet.contains(token);
+  }
+
+  public void removeActivatedToken(String token){
+    RSet<String> activatedTokensSet = redisson.getSet(ACTIVATED_TOKENS_KEY);
+    activatedTokensSet.remove(token);
+  }
+
+  public boolean isSessionExists(String token){
+      RMap<String, String> sessionsMap = redisson.getMap(TOKEN_SESSION_ID_MAP);
+      return sessionsMap.containsKey(token);
+  }
+
+  public void removeSession(String token){
+    RMap<String, String> sessionsMap = redisson.getMap(TOKEN_SESSION_ID_MAP);
+    sessionsMap.remove(token);  // 해당 토큰에 대한 세션 정보 삭제
+  }
 }
+

@@ -44,6 +44,8 @@ public class InactiveUserCleanerScheduler {
                         // 이탈한 사용자 처리 (예: 대기열에서 제거)
                         iterator.remove();  // 해당 토큰 삭제
                         waitingQueueService.removeUserFromQueues(token);
+                        waitingQueueService.removeActivatedToken(token);
+                        waitingQueueService.removeSession(token);
                         log.info("User with token " + token + " has become inactive and was removed from the queue.");
                     }
                 } catch (NumberFormatException e) {
