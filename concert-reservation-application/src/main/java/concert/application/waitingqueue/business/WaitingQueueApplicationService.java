@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class WaitingQueueApplicationService {
 
   private final MemberService memberService;
+
   private final WaitingQueueService waitingQueueService;
   private static final String WAITING_QUEUE_STATUS_KEY = "waitingQueueStatusKey";
   private static final String WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL = "waitingQueueStatusChannel";
@@ -33,7 +34,7 @@ public class WaitingQueueApplicationService {
     RMap<String, String> waitingQueueStatusMap = redissonClient.getMap(WAITING_QUEUE_STATUS_KEY);
     long now = System.currentTimeMillis();
 
-    String currentStatus = waitingQueueStatusMap.getOrDefault("status", "inactive");
+    String currentStatus = waitingQueueStatusMap.getOrDefault("status", WAITING_QUEUE_STATUS_INACTIVE);
     String lastChangedStr = waitingQueueStatusMap.get("lastChanged");
     long lastChanged = lastChangedStr != null ? Long.parseLong(lastChangedStr) : 0;
 
@@ -71,6 +72,8 @@ public class WaitingQueueApplicationService {
 
       RTopic topic = redissonClient.getTopic(WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL);
       topic.publish(WAITING_QUEUE_STATUS_INACTIVE);
+
+      waitingQueueService.clearAllQueues();
 
       log.info("[QUEUE] Waiting queue has been deactivated!");
     }

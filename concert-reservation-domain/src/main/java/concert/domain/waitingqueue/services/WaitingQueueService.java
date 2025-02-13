@@ -141,4 +141,7 @@ public class WaitingQueueService {
       waitingQueueDao.removeSession(token);
     }
   }
+  public void clearAllQueues(){
+     waitingQueueDao.clearAllQueues();
+  }
 }

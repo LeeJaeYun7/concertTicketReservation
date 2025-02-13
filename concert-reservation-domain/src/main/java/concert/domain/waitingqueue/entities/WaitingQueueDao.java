@@ -116,5 +116,19 @@ public class WaitingQueueDao {
     RMap<String, String> sessionsMap = redisson.getMap(TOKEN_SESSION_ID_MAP);
     sessionsMap.remove(token);  // 해당 토큰에 대한 세션 정보 삭제
   }
+
+  public void clearAllQueues() {
+    // 대기열 비우기 (RSortedSet)
+    RSortedSet<String> waitingQueue = redisson.getSortedSet(WAITING_QUEUE_KEY);
+    waitingQueue.clear();  // 대기열의 모든 데이터 삭제
+
+    // 활성화된 대기열 비우기 (RMapCache)
+    RMapCache<String, String> activeQueue = redisson.getMapCache(ACTIVE_QUEUE_KEY);
+    activeQueue.clear();  // 활성화된 대기열의 모든 데이터 삭제
+
+    // 활성화된 토큰 비우기 (RSet)
+    RSet<String> activatedTokensSet = redisson.getSet(ACTIVATED_TOKENS_KEY);
+    activatedTokensSet.clear();  // 활성화된 토큰의 모든 데이터 삭제
+  }
 }
 
