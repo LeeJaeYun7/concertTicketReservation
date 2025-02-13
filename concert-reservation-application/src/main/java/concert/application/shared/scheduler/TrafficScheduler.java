@@ -25,8 +25,8 @@ public class TrafficScheduler {
             "/api/v1/order"
     );
 
-    // 매 1초마다 실행 (1,000ms)
-    @Scheduled(fixedRate = 1000)
+    // 매 5초마다 실행 (5,000ms)
+    @Scheduled(fixedRate = 5000)
     public void aggregateTraffic() {
 
         long totalTraffic = 0;
@@ -37,12 +37,12 @@ public class TrafficScheduler {
             log.info("[TRAFFIC] API: {}, Calls in Last 1 Min: {}", api, traffic);
         }
 
-        if (totalTraffic > 1000) {
-            log.info("[QUEUE] Traffic exceeded 1000! Activating waiting queue...");
-            waitingQueueApplicationService.activateWaitingQueue(); // 대기열 활성화
+        if (totalTraffic > 1200) {
+            log.info("[QUEUE] Traffic exceeded 1200! Activating waiting queue...");
+            waitingQueueApplicationService.activateWaitingQueue(totalTraffic); // 대기열 활성화
         } else if (totalTraffic < 800) {
             log.info("[QUEUE] Traffic dropped below 800! Deactivating waiting queue...");
-            waitingQueueApplicationService.deactivateWaitingQueue();
+            waitingQueueApplicationService.deactivateWaitingQueue(totalTraffic);
         }
     }
 }

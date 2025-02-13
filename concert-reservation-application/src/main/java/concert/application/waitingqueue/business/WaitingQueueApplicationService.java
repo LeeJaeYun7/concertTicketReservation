@@ -6,7 +6,8 @@ import concert.domain.waitingqueue.services.WaitingQueueService;
 import concert.domain.waitingqueue.entities.vo.WaitingRankVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RBucket;
+import org.redisson.api.RMap;
+import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
@@ -16,42 +17,75 @@ import org.springframework.stereotype.Component;
 public class WaitingQueueApplicationService {
 
   private final MemberService memberService;
+
   private final WaitingQueueService waitingQueueService;
-  private static final String QUEUE_ACTIVE_KEY = "waiting_queue_active";
+  private static final String WAITING_QUEUE_STATUS_KEY = "waitingQueueStatusKey";
+  private static final String WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL = "waitingQueueStatusChannel";
+  private static final String WAITING_QUEUE_STATUS_ACTIVE = "active";
+  private static final String WAITING_QUEUE_STATUS_INACTIVE = "inactive";
+
+  private static final long activationTriggerTraffic = 1500L;
+  private static final long deactivationTriggerTraffic = 300L;
+  private static final long COOLDOWN_TIME = 180_000; // 3분 (밀리초)
+
   private final RedissonClient redissonClient;
 
-  public void activateWaitingQueue() {
-    RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
-    if ("true".equals(queueActiveBucket.get())) {
+  public void activateWaitingQueue(long totalTraffic) {
+    RMap<String, String> waitingQueueStatusMap = redissonClient.getMap(WAITING_QUEUE_STATUS_KEY);
+    long now = System.currentTimeMillis();
+
+    String currentStatus = waitingQueueStatusMap.getOrDefault("status", WAITING_QUEUE_STATUS_INACTIVE);
+    String lastChangedStr = waitingQueueStatusMap.get("lastChanged");
+    long lastChanged = lastChangedStr != null ? Long.parseLong(lastChangedStr) : 0;
+
+    if (WAITING_QUEUE_STATUS_ACTIVE.equals(currentStatus)) {
       log.info("[QUEUE] Waiting queue is already active.");
-    } else {
-      queueActiveBucket.set("true"); // TTL 없이 저장
+    } else if(
+            (WAITING_QUEUE_STATUS_INACTIVE.equals(currentStatus) && (now - lastChanged > COOLDOWN_TIME))
+          || (WAITING_QUEUE_STATUS_INACTIVE.equals(currentStatus) && (now - lastChanged < COOLDOWN_TIME) && totalTraffic >= activationTriggerTraffic)
+    ){
+      waitingQueueStatusMap.put("status", WAITING_QUEUE_STATUS_ACTIVE);
+      waitingQueueStatusMap.put("lastChanged", String.valueOf(now));
+
+      RTopic topic = redissonClient.getTopic(WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL);
+      topic.publish(WAITING_QUEUE_STATUS_ACTIVE);
+
       log.info("[QUEUE] Waiting queue has been activated!");
     }
   }
 
-  public void deactivateWaitingQueue() {
-    RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
-    if (queueActiveBucket.isExists()) {
-      queueActiveBucket.delete();
-      log.info("[QUEUE] Waiting queue has been deactivated!");
-    } else {
+  public void deactivateWaitingQueue(long totalTraffic) {
+    RMap<String, String> waitingQueueStatusMap = redissonClient.getMap(WAITING_QUEUE_STATUS_KEY);
+    long now = System.currentTimeMillis();
+
+    String currentStatus = waitingQueueStatusMap.get("status");
+    String lastChangedStr = waitingQueueStatusMap.get("lastChanged");
+    long lastChanged = lastChangedStr != null ? Long.parseLong(lastChangedStr) : 0;
+
+    if (WAITING_QUEUE_STATUS_INACTIVE.equals(currentStatus)) {
       log.info("[QUEUE] Waiting queue is already inactive.");
+    } else if( (WAITING_QUEUE_STATUS_ACTIVE.equals(currentStatus) && (now - lastChanged > COOLDOWN_TIME))
+            || (WAITING_QUEUE_STATUS_ACTIVE.equals(currentStatus) && (now - lastChanged < COOLDOWN_TIME) && (totalTraffic <= deactivationTriggerTraffic))
+    ) {
+      waitingQueueStatusMap.put("status", WAITING_QUEUE_STATUS_INACTIVE);
+      waitingQueueStatusMap.put("lastChanged", String.valueOf(now));
+
+      RTopic topic = redissonClient.getTopic(WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL);
+      topic.publish(WAITING_QUEUE_STATUS_INACTIVE);
+
+      waitingQueueService.clearAllQueues();
+
+      log.info("[QUEUE] Waiting queue has been deactivated!");
     }
   }
 
-  public boolean isQueueActive() {
-    RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
-    return "true".equals(queueActiveBucket.get());
-  }
-
-  public TokenVO retrieveToken(long concertId, String uuid) {
+  public TokenVO retrieveToken(String uuid) {
     memberService.getMemberByUuid(uuid);
-    String token = waitingQueueService.retrieveToken(concertId, uuid);
+    String token = waitingQueueService.retrieveToken(uuid);
     return TokenVO.of(token);
   }
 
-  public WaitingRankVO retrieveWaitingRank(long concertId, String uuid) {
-    return waitingQueueService.retrieveWaitingRank(concertId, uuid);
+  public WaitingRankVO retrieveWaitingRank(String uuid) {
+    return waitingQueueService.retrieveWaitingRank(uuid);
   }
 }
