@@ -7,6 +7,7 @@ import concert.domain.waitingqueue.entities.vo.WaitingRankVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBucket;
+import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
@@ -17,33 +18,34 @@ public class WaitingQueueApplicationService {
 
   private final MemberService memberService;
   private final WaitingQueueService waitingQueueService;
-  private static final String QUEUE_ACTIVE_KEY = "waiting_queue_active";
-  private static final String QUEUE_ACTIVE_VALUE = "true";
+  private static final String WAITING_QUEUE_STATUS_KEY = "waitingQueueStatusKey";
+  private static final String WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL = "waitingQueueStatusChannel";
+  private static final String WAITING_QUEUE_STATUS_VALUE = "active";
+
   private final RedissonClient redissonClient;
 
   public void activateWaitingQueue() {
-    RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
-    if (QUEUE_ACTIVE_VALUE.equals(queueActiveBucket.get())) {
+    RBucket<String> queueActiveBucket = redissonClient.getBucket(WAITING_QUEUE_STATUS_KEY);
+    if (WAITING_QUEUE_STATUS_VALUE.equals(queueActiveBucket.get())) {
       log.info("[QUEUE] Waiting queue is already active.");
     } else {
-      queueActiveBucket.set(QUEUE_ACTIVE_VALUE); // TTL 없이 저장
+      queueActiveBucket.set(WAITING_QUEUE_STATUS_VALUE); // TTL 없이 저장
+      RTopic topic = redissonClient.getTopic(WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL);
+      topic.publish("active");
       log.info("[QUEUE] Waiting queue has been activated!");
     }
   }
 
   public void deactivateWaitingQueue() {
-    RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
+    RBucket<String> queueActiveBucket = redissonClient.getBucket(WAITING_QUEUE_STATUS_KEY);
     if (queueActiveBucket.isExists()) {
       queueActiveBucket.delete();
+      RTopic topic = redissonClient.getTopic(WAITING_QUEUE_STATUS_PUB_SUB_CHANNEL);
+      topic.publish("inactive");
       log.info("[QUEUE] Waiting queue has been deactivated!");
     } else {
       log.info("[QUEUE] Waiting queue is already inactive.");
     }
-  }
-
-  public boolean isQueueActive() {
-    RBucket<String> queueActiveBucket = redissonClient.getBucket(QUEUE_ACTIVE_KEY);
-    return QUEUE_ACTIVE_VALUE.equals(queueActiveBucket.get());
   }
 
   public TokenVO retrieveToken(String uuid) {

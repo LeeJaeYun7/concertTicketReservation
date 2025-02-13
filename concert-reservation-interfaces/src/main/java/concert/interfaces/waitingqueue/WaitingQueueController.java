@@ -19,12 +19,6 @@ public class WaitingQueueController {
 
   private final WaitingQueueApplicationService waitingQueueApplicationService;
 
-  @GetMapping("/api/v1/waitingQueue/status")
-  public ResponseEntity<Boolean> getQueueStatus() {
-      boolean isQueueActive = waitingQueueApplicationService.isQueueActive();
-      return ResponseEntity.ok(isQueueActive);
-  }
-
   @PostMapping("/api/v1/waitingQueue/activate")
   public ResponseEntity<Void> activateQueue() {
       waitingQueueApplicationService.activateWaitingQueue();
