@@ -27,21 +27,21 @@ public class WaitingQueueService {
   private static final int MAX_TRANSFER_COUNT = 250;
   private static final String TOKEN_PUB_SUB_CHANNEL = "tokenChannel";  // Pub/Sub 채널 이름
   private static final String WAITING_QUEUE_STATUS_KEY = "waitingQueueStatusKey";
-  private static final String WAITING_QUEUE_STATUS_VALUE = "active";
+  private static final String WAITING_QUEUE_STATUS_ACTIVE = "active";
   private static final String ACTIVE_QUEUE_LOCK_KEY = "activeQueueLock";  // 분산 락을 위한 키
 
   public String retrieveToken(String uuid) {
     WaitingDTO waitingDTO = WaitingDTO.of(uuid);
 
     // 대기열 활성화 정보를 관리하는 Redis 버킷
-    RBucket<String> queueActiveBucket = redissonClient.getBucket(WAITING_QUEUE_STATUS_KEY);
+    RBucket<String> waitingQueueStatusBucket = redissonClient.getBucket(WAITING_QUEUE_STATUS_KEY);
 
     // 대기열이 비활성화일 때(트래픽 800이하), 대기열에 토큰을 저장하지 않고, 반환만 한다
-    if (!WAITING_QUEUE_STATUS_VALUE.equals(queueActiveBucket.get())) {
+    if (!WAITING_QUEUE_STATUS_ACTIVE.equals(waitingQueueStatusBucket.get())) {
       return waitingDTO.getToken();
     }
 
-    // 대기열이 활성화일 때(트래픽 1000 이상), 대기열에 토큰을 저장한다
+    // 대기열이 활성화일 때(트래픽 1200 이상), 대기열에 토큰을 저장한다
     return waitingQueueDao.addToWaitingQueue(waitingDTO);
   }
 

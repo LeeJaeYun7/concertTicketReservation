@@ -18,16 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class WaitingQueueController {
 
   private final WaitingQueueApplicationService waitingQueueApplicationService;
+  private static final long activationTriggerTraffic = 1500L;
+  private static final long deactivationTriggerTraffic = 300L;
 
   @PostMapping("/api/v1/waitingQueue/activate")
   public ResponseEntity<Void> activateQueue() {
-      waitingQueueApplicationService.activateWaitingQueue();
+      waitingQueueApplicationService.activateWaitingQueue(activationTriggerTraffic);
       return ResponseEntity.ok().build();
   }
 
   @PostMapping("/api/v1/waitingQueue/deactivate")
   public ResponseEntity<Void> deactivateQueue() {
-      waitingQueueApplicationService.deactivateWaitingQueue();
+      waitingQueueApplicationService.deactivateWaitingQueue(deactivationTriggerTraffic);
       return ResponseEntity.ok().build();
   }
 
