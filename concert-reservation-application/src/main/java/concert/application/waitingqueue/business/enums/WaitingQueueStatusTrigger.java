@@ -1,6 +1,6 @@
 package concert.application.waitingqueue.business.enums;
 
-public enum QueueStatusTrigger {
+public enum WaitingQueueStatusTrigger {
 
     ACTIVATION_TRIGGER_TRAFFIC(1500L),
     DEACTIVATION_TRIGGER_TRAFFIC(300L),
@@ -8,7 +8,7 @@ public enum QueueStatusTrigger {
 
     private final long value;
 
-    QueueStatusTrigger(long value) {
+    WaitingQueueStatusTrigger(long value) {
         this.value = value;
     }
 

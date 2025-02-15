@@ -1,4 +1,4 @@
-package concert.domain.waitingqueue.entities;
+package concert.domain.waitingqueue.entities.enums;
 
 public enum RedisKey {
 

@@ -1,13 +1,13 @@
 package concert.application.waitingqueue.business.enums;
 
-public enum QueueStatus {
+public enum WaitingQueueStatus {
 
     ACTIVE("active"),
     INACTIVE("inactive");
 
     private final String value;
 
-    QueueStatus(String value) {
+    WaitingQueueStatus(String value) {
         this.value = value;
     }
 

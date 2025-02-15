@@ -1,6 +1,6 @@
 package concert.domain.waitingqueue.entities.dao;
 
-import concert.domain.waitingqueue.entities.RedisKey;
+import concert.domain.waitingqueue.entities.enums.RedisKey;
 import concert.domain.waitingqueue.entities.WaitingDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
