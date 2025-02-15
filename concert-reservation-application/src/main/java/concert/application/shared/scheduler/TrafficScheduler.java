@@ -16,6 +16,8 @@ public class TrafficScheduler {
 
     private final WaitingQueueApplicationService waitingQueueApplicationService;
     private final TrafficMonitoringFilter trafficMonitoringFilter;
+    private static final long queueActivationTrafficThreshold = 1200L;
+    private static final long queueDeactivationTrafficThreshold = 800L;
 
     // 모니터링할 API 목록
     private final List<String> apiList = List.of(
@@ -37,10 +39,10 @@ public class TrafficScheduler {
             log.info("[TRAFFIC] API: {}, Calls in Last 1 Min: {}", api, traffic);
         }
 
-        if (totalTraffic > 1200) {
+        if (totalTraffic > queueActivationTrafficThreshold) {
             log.info("[QUEUE] Traffic exceeded 1200! Activating waiting queue...");
             waitingQueueApplicationService.activateWaitingQueue(totalTraffic); // 대기열 활성화
-        } else if (totalTraffic < 800) {
+        } else if (totalTraffic < queueDeactivationTrafficThreshold) {
             log.info("[QUEUE] Traffic dropped below 800! Deactivating waiting queue...");
             waitingQueueApplicationService.deactivateWaitingQueue(totalTraffic);
         }
