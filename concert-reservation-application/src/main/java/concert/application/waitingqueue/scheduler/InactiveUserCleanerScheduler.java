@@ -8,7 +8,9 @@ import org.redisson.api.RedissonClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +32,8 @@ public class InactiveUserCleanerScheduler {
         // Map을 순회하면서 이탈한 사용자 감지
         Iterator<String> iterator = heartbeatMap.keySet().iterator();
 
+        List<String> tokensToRemove = new ArrayList<>();
+
         while (iterator.hasNext()) {
             String token = iterator.next();
             String timestampStr = heartbeatMap.get(token);
@@ -42,16 +46,17 @@ public class InactiveUserCleanerScheduler {
                     // 만약 30초 이상 경과한 사용자라면 이탈한 사용자로 간주하고 삭제
                     if (currentTime - timestamp > INACTIVITY_THRESHOLD) {
                         // 이탈한 사용자 처리 (예: 대기열에서 제거)
-                        iterator.remove();  // 해당 토큰 삭제
-                        waitingQueueService.removeUserFromQueues(token);
-                        waitingQueueService.removeActivatedToken(token);
-                        waitingQueueService.removeSession(token);
-                        log.info("User with token " + token + " has become inactive and was removed from the queue.");
+                        tokensToRemove.add(token);
                     }
                 } catch (NumberFormatException e) {
                     log.error("Wrong timestamp number format", e);
                 }
             }
+        }
+
+        for (String token : tokensToRemove) {
+            heartbeatMap.remove(token);
+            waitingQueueService.removeUserTokenAndSession(token);
         }
     }
 }

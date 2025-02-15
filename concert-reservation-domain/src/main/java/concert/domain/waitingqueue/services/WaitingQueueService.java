@@ -1,17 +1,14 @@
 package concert.domain.waitingqueue.services;
 
+import concert.domain.waitingqueue.entities.RedisKey;
 import concert.domain.waitingqueue.entities.WaitingDTO;
-import concert.domain.waitingqueue.entities.WaitingQueueDao;
+import concert.domain.waitingqueue.entities.dao.*;
 import concert.domain.waitingqueue.entities.vo.WaitingRankVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RBucket;
-import org.redisson.api.RTopic;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -21,32 +18,33 @@ import org.redisson.api.RedissonClient;
 @RequiredArgsConstructor
 public class WaitingQueueService {
 
-  private final WaitingQueueDao waitingQueueDao;
+  private final RedissonClient redissonClient;
 
-  private final RedissonClient redissonClient;  // RedissonClient 추가
-  private static final int MAX_TRANSFER_COUNT = 250;
-  private static final String TOKEN_PUB_SUB_CHANNEL = "tokenChannel";  // Pub/Sub 채널 이름
-  private static final String WAITING_QUEUE_STATUS_KEY = "waitingQueueStatusKey";
-  private static final String WAITING_QUEUE_STATUS_ACTIVE = "active";
-  private static final String ACTIVE_QUEUE_LOCK_KEY = "activeQueueLock";  // 분산 락을 위한 키
+  private final WaitingQueueDAO waitingQueueDAO;
+
+  private final ActiveQueueDAO activeQueueDAO;
+
+  private final TokenSessionDAO tokenSessionDAO;
+
+  private final ActivatedTokenDAO activatedTokenDAO;
+
+  private final WaitingQueueStatusPublisher waitingQueueStatusPublisher;
+
+  private final WaitingQueueStatusDAO waitingQueueStatusDAO;
+
+  private final TokenPublisher tokenPublisher;
+
+  private static final String WAITING_QUEUE_STATUS_INACTIVE = "inactive";
+  private static final long MAX_ACTIVE_QUEUE_SIZE = 5000L;
+  private static final long MAX_TRANSFER_COUNT = 250L;
 
   public String retrieveToken(String uuid) {
     WaitingDTO waitingDTO = WaitingDTO.of(uuid);
-
-    // 대기열 활성화 정보를 관리하는 Redis 버킷
-    RBucket<String> waitingQueueStatusBucket = redissonClient.getBucket(WAITING_QUEUE_STATUS_KEY);
-
-    // 대기열이 비활성화일 때(트래픽 800이하), 대기열에 토큰을 저장하지 않고, 반환만 한다
-    if (!WAITING_QUEUE_STATUS_ACTIVE.equals(waitingQueueStatusBucket.get())) {
-      return waitingDTO.getToken();
-    }
-
-    // 대기열이 활성화일 때(트래픽 1200 이상), 대기열에 토큰을 저장한다
-    return waitingQueueDao.addToWaitingQueue(waitingDTO);
+    return waitingQueueDAO.storeTokenIfWaitingQueueActive(waitingDTO);
   }
 
   public WaitingRankVO retrieveWaitingRank(String uuid) {
-    Collection<WaitingDTO> tokenList = waitingQueueDao.getAllWaitingTokens();
+    Collection<WaitingDTO> tokenList = waitingQueueDAO.getAllWaitingTokens();
     long rank = 1L;
 
     // rank 계산
@@ -71,77 +69,94 @@ public class WaitingQueueService {
 
   public void migrateFromWaitingToActiveQueue() {
     // 분산 락을 사용하여 동시에 한 서버만 작업을 하도록 함
-    RLock lock = redissonClient.getLock(ACTIVE_QUEUE_LOCK_KEY);
+    RLock lock = redissonClient.getLock(RedisKey.ACTIVE_QUEUE_LOCK.getKey());
+    lock.lock();
+
     try {
-      // 락을 얻을 때까지 대기, 최대 5초 대기
-      if (lock.tryLock(5, 10, TimeUnit.SECONDS)) {
-        try {
-          long activeQueueSize = waitingQueueDao.getActiveQueueSize();
-          long transferCount = Math.min(5000 - activeQueueSize, MAX_TRANSFER_COUNT);
+          long activeQueueSize = activeQueueDAO.getActiveQueueSize();
+          long transferCount = Math.min(MAX_ACTIVE_QUEUE_SIZE - activeQueueSize, MAX_TRANSFER_COUNT);
 
           if(transferCount == 0){
              return;
           }
 
-          Collection<WaitingDTO> tokenList = waitingQueueDao.getAllWaitingTokens(transferCount);
+          Collection<WaitingDTO> tokenList = waitingQueueDAO.getAllWaitingTokens(transferCount);
 
           if (tokenList.isEmpty()) {
             return;
           }
 
           // 토큰 목록을 활성화열로 이동시킨다.
-          waitingQueueDao.putActiveQueueToken(tokenList);
+          activeQueueDAO.putActiveQueueToken(tokenList);
 
           // 토큰 목록을 Redis Pub/Sub을 통해 발행한다
           // 발행한 토큰 목록은 WebSocket 서버에서 Redis Pub/Sub을 통해 구독한다
           // 토큰 Pub/Sub의 목적은, 토큰이 활성화되었을 때, 웹소켓 클라이언트에게 알림을 주기 위함이다.
-          RTopic topic = redissonClient.getTopic(TOKEN_PUB_SUB_CHANNEL);
-          topic.publish(tokenList.stream().map(WaitingDTO::getToken).collect(Collectors.toList()));  // tokenList를 발행
+          tokenPublisher.publishAllActiveTokens(tokenList);
 
           // 토큰 목록을 대기열에서 삭제처리한다
-          waitingQueueDao.deleteWaitQueueTokens(tokenList);
+          waitingQueueDAO.deleteWaitingQueueTokens(tokenList);
         } finally {
           lock.unlock();  // 작업 완료 후 락을 해제
         }
-      } else {
-        log.warn("Unable to acquire lock for migrating waiting queue.");
-      }
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      log.error("Error while attempting to acquire lock: {}", e.getMessage());
-    }
   }
 
-  public void removeUserFromQueues(String token) {
-    boolean waitingQueueExists = waitingQueueDao.isTokenExistsInWaitingQueue(token);
+
+  public void removeTokenFromQueues(String token) {
+    boolean waitingQueueExists = waitingQueueDAO.isTokenExistsInWaitingQueue(token);
 
     if(waitingQueueExists){
-      waitingQueueDao.deleteWaitingQueueToken(token);
+      waitingQueueDAO.deleteWaitingQueueToken(token);
       return;
     }
 
     WaitingDTO waitingDTO = WaitingDTO.parse(token);
-    boolean activeQueueExists = waitingQueueDao.isTokenExistsInActiveQueue(waitingDTO);
+    boolean activeQueueExists = activeQueueDAO.isTokenExistsInActiveQueue(waitingDTO);
 
     if(activeQueueExists){
-      waitingQueueDao.deleteActiveQueueToken(token);
+      activeQueueDAO.deleteActiveQueueToken(token);
     }
   }
 
   public void removeActivatedToken(String token){
-    boolean activatedTokenExists = waitingQueueDao.isActivatedTokenExists(token);
+    boolean activatedTokenExists = activatedTokenDAO.isActivatedTokenExists(token);
     if(activatedTokenExists){
-      waitingQueueDao.removeActivatedToken(token);
+      activatedTokenDAO.removeActivatedToken(token);
     }
   }
 
-  public void removeSession(String token){
-    boolean sessionExists = waitingQueueDao.isSessionExists(token);
-    if(sessionExists){
-      waitingQueueDao.removeSession(token);
+  public void removeTokenSession(String token){
+    boolean tokenSessionExists = tokenSessionDAO.isTokenSessionExists(token);
+    if(tokenSessionExists){
+      tokenSessionDAO.removeTokenSession(token);
     }
   }
   public void clearAllQueues(){
-     waitingQueueDao.clearAllQueues();
+     waitingQueueDAO.clearWaitingQueue();
+     activeQueueDAO.clearActiveQueue();
+     activatedTokenDAO.clearActivatedTokens();
+  }
+  public void removeUserTokenAndSession(String token) {
+      removeTokenFromQueues(token);
+      removeActivatedToken(token);
+      removeTokenSession(token);
+  }
+
+  public String getWaitingQueueStatus(){
+    return waitingQueueStatusDAO.getWaitingQueueStatus();
+  }
+
+  public String getWaitingQueueStatusLastChanged(){
+    return waitingQueueStatusDAO.getWaitingQueueStatusLastChanged();
+  }
+
+  public void changeWaitingQueueStatus(String status, long now){
+    waitingQueueStatusDAO.changeWaitingQueueStatus(status, now);
+    waitingQueueStatusPublisher.publishWaitingQueueStatus(status);
+    // 대기열이 비활성화되면, 대기열, 활성화열, 그리고 활성화토큰 정보를 모두 삭제처리하였습니다
+    if(WAITING_QUEUE_STATUS_INACTIVE.equals(status)) {
+       clearAllQueues();
+    }
+    log.info("[QUEUE] Waiting queue status has been changed!");
   }
 }
